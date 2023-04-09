@@ -1,0 +1,24 @@
+# Java class files
+*.class
+
+# generated files
+/bin
+/gen
+**/build
+/captures
+/testReport
+out/
+*.log
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+#idea settings
+.idea
+*.iml
+
+#gradle generated files
+.gradle/
+
+#Mac OS X System files
+.DS_Store
