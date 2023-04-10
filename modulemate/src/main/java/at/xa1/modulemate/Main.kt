@@ -4,9 +4,7 @@ import at.xa1.modulemate.command.BrowserCommand
 import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.command.Variables
 import at.xa1.modulemate.command.addDefault
-import at.xa1.modulemate.config.Config
-import at.xa1.modulemate.config.ModuleClassificationConfig
-import at.xa1.modulemate.config.ModuleConfig
+import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.ModulesScanner
 import at.xa1.modulemate.system.RuntimeShell
@@ -19,14 +17,15 @@ fun main(args: Array<String>) {
     val cliArgs = CliArgs(args)
 
     val shell = RuntimeShell(File("."))
-    val repositoryFolder = File(cliArgs.getValueOrNull("--repository") ?: ".")
-    val repository = GitRepository(shell, repositoryFolder)
+    val folder = File(cliArgs.getValueOrNull("--repository") ?: ".")
+    val repository = GitRepository(shell, folder)
+    val repositoryRoot = repository.getRepositoryRoot()
 
-    println("Repository: ${repository.getRepositoryRoot().canonicalFile.absolutePath}")
+    println("Repository: ${repositoryRoot.canonicalFile.absolutePath}")
     println("Name:       ${repository.getRemoteOrigin().repositoryName}")
     println("Branch:     ${repository.getBranch()}")
 
-    val config = Config(ModuleConfig(ModuleClassificationConfig()), listOf())
+    val config = ConfigResolver(repositoryRoot).getConfig()
 
     val modules = ModulesScanner(config.module.classification).scan(repository.getRepositoryRoot())
 

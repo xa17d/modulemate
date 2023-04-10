@@ -14,7 +14,7 @@ data class ModuleConfig(
 
 @Serializable
 data class ModuleClassificationConfig(
-    val javaLibrary: String = Regex.escape("apply plugin: \"java-library\""),
-    val androidLibrary: String = Regex.escape("apply plugin: \"com.android.library\""),
-    val androidApp: String = Regex.escape("apply plugin: \"com.android.application\""),
+    val javaLibrary: String,
+    val androidLibrary: String,
+    val androidApp: String,
 )
