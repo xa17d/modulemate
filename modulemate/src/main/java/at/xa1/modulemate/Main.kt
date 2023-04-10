@@ -1,6 +1,12 @@
 package at.xa1.modulemate
 
+import at.xa1.modulemate.command.BrowserCommand
+import at.xa1.modulemate.command.CommandList
+import at.xa1.modulemate.command.Variables
+import at.xa1.modulemate.command.addDefault
 import at.xa1.modulemate.git.GitRepository
+import at.xa1.modulemate.system.RuntimeShell
+import at.xa1.modulemate.system.ShellOpenBrowser
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -8,10 +14,33 @@ fun main(args: Array<String>) {
 
     val cliArgs = CliArgs(args)
 
+    val shell = RuntimeShell(File("."))
     val repositoryFolder = File(cliArgs.getValueOrNull("--repository") ?: ".")
-    val repository = GitRepository(repositoryFolder)
+    val repository = GitRepository(shell, repositoryFolder)
 
     println("Repository: ${repository.getRepositoryRoot().canonicalFile.absolutePath}")
     println("Name:       ${repository.getRemoteOrigin().repositoryName}")
     println("Branch:     ${repository.getBranch()}")
+
+    val shortcut = cliArgs.nextOrNull() ?: return
+    val browser = ShellOpenBrowser(shell)
+    val variables = Variables().apply {
+        addDefault(repository)
+    }
+
+    val commandList = CommandList(
+        listOf(
+            BrowserCommand(
+                "pr",
+                browser,
+                variables,
+                "https://{GIT_HOST}/{GIT_OWNER}/{GIT_REPOSITORY_NAME}/pull/{GIT_BRANCH_NAME}"
+            )
+        )
+    )
+
+    val command = commandList.runOrNull(shortcut)
+    if (command == null) {
+        error("Cannot find command with shortcut: ${shortcut}")
+    }
 }

@@ -1,34 +1,25 @@
 package at.xa1.modulemate.git
 
+import at.xa1.modulemate.system.Shell
+import at.xa1.modulemate.system.getSingleLine
+import at.xa1.modulemate.system.run
 import java.io.File
-import java.io.InputStreamReader
 
 class GitRepository(
-    private val folder: File
+    shell: Shell,
+    folder: File
 ) {
+    private val shell: Shell = shell.folder(folder)
+
     fun getRepositoryRoot(): File {
-        return File(execGetLine0("git rev-parse --show-toplevel"))
+        return File(shell.run("git", "rev-parse", "--show-toplevel").getSingleLine())
     }
 
     fun getBranch(): String {
-        return execGetLine0("git rev-parse --abbrev-ref HEAD")
+        return shell.run("git", "rev-parse", "--abbrev-ref", "HEAD").getSingleLine()
     }
 
     fun getRemoteOrigin(): GitRemote {
-        return GitRemote.create(execGetLine0("git remote get-url origin"))
-    }
-
-    private fun exec(command: String): String {
-        val process = Runtime.getRuntime().exec(command, null, folder)
-        val result = InputStreamReader(process.inputStream).use { it.readText() }
-        return result
-    }
-
-    private fun execGetLine0(command: String): String {
-        val lines = exec(command).lines()
-        if (lines.size > 1 && lines[1].isNotEmpty()) {
-            error("Expected result to have only one line with a \\n at the end, but lines were: $lines")
-        }
-        return lines[0]
+        return GitRemote.create(shell.run("git", "remote", "get-url", "origin").getSingleLine())
     }
 }
