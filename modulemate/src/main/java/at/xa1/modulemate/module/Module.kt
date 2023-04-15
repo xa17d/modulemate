@@ -9,7 +9,7 @@ data class Module(
 
 enum class ModuleType {
     OTHER,
-    JAVA_LIB,
+    KOTLIN_LIB,
     ANDROID_LIB,
     ANDROID_APP,
 }

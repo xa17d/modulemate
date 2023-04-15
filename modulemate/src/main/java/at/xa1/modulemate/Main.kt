@@ -3,10 +3,10 @@ package at.xa1.modulemate
 import at.xa1.modulemate.cli.CliArgs
 import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.command.*
+import at.xa1.modulemate.command.Command
+import at.xa1.modulemate.config.*
 import at.xa1.modulemate.config.CommandStep
-import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
-import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.ModulesScanner
@@ -14,8 +14,6 @@ import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
 import at.xa1.modulemate.system.ShellOpenBrowser
 import java.io.File
-import java.time.Duration
-import java.time.Instant
 
 fun main(args: Array<String>) {
     println("\uD83E\uDDF0 modulemate")
@@ -50,7 +48,7 @@ fun main(args: Array<String>) {
     modules.modules.forEach { module ->
         val formatting = when (module.type) {
             ModuleType.OTHER -> CliColor.CYAN
-            ModuleType.JAVA_LIB -> CliColor.BLUE
+            ModuleType.KOTLIN_LIB -> CliColor.BLUE
             ModuleType.ANDROID_LIB -> CliColor.GREEN
             ModuleType.ANDROID_APP -> CliColor.YELLOW
         }
@@ -71,10 +69,12 @@ fun main(args: Array<String>) {
                         is CommandStep.Gradle -> GradleCommandStep(
                             shell = printingShell,
                             modules = modules,
-                            flags = step.flags,
-                            javaLibraryTasks = step.tasks + step.javaLibTasks,
-                            androidLibTasks = step.tasks + step.androidTasks + step.androidLibTasks,
-                            androidAppTasks = step.tasks + step.androidTasks + step.androidAppTasks
+                            kotlinLibFlags = step.flags.getForKotlinLib(),
+                            androidLibFlags = step.flags.getForAndroidLib(),
+                            androidAppFlags = step.flags.getForAndroidApp(),
+                            kotlinLibTasks = step.tasks.getForKotlinLib(),
+                            androidLibTasks = step.tasks.getForAndroidLib(),
+                            androidAppTasks = step.tasks.getForAndroidApp()
                         )
                     }
                 }

@@ -6,8 +6,8 @@ import java.io.File
 class ModulesScanner(
     config: ModuleClassificationConfig
 ) {
-    private val javaLibraryRegex = Regex(config.javaLibrary)
-    private val androidLibraryRegex = Regex(config.androidLibrary)
+    private val javaLibraryRegex = Regex(config.kotlinLib)
+    private val androidLibraryRegex = Regex(config.androidLib)
     private val androidAppRegex = Regex(config.androidApp)
     fun scan(root: File): Modules {
         val buildGradleFiles = mutableListOf<File>()
@@ -47,7 +47,7 @@ class ModulesScanner(
 
     private fun getType(buildGradleContent: String): ModuleType {
         return when {
-            javaLibraryRegex.containsMatchIn(buildGradleContent) -> ModuleType.JAVA_LIB
+            javaLibraryRegex.containsMatchIn(buildGradleContent) -> ModuleType.KOTLIN_LIB
             androidLibraryRegex.containsMatchIn(buildGradleContent) -> ModuleType.ANDROID_LIB
             androidAppRegex.containsMatchIn(buildGradleContent) -> ModuleType.ANDROID_APP
             else -> ModuleType.OTHER

@@ -16,8 +16,8 @@ data class ModuleConfig(
 
 @Serializable
 data class ModuleClassificationConfig(
-    val javaLibrary: String,
-    val androidLibrary: String,
+    val kotlinLib: String,
+    val androidLib: String,
     val androidApp: String,
 )
 
@@ -39,11 +39,20 @@ sealed interface CommandStep {
     @Serializable
     @SerialName("gradle")
     data class Gradle(
-        val flags: List<String> = emptyList(),
-        val tasks: List<String> = emptyList(),
-        val javaLibTasks: List<String> = emptyList(),
-        val androidTasks: List<String> = emptyList(),
-        val androidLibTasks: List<String> = emptyList(),
-        val androidAppTasks: List<String> = emptyList(),
+        val flags: TypeSpecificStringList = TypeSpecificStringList(),
+        val tasks: TypeSpecificStringList = TypeSpecificStringList(),
     ) : CommandStep
 }
+
+@Serializable
+data class TypeSpecificStringList(
+    val all: List<String> = emptyList(),
+    val kotlinLib: List<String> = emptyList(),
+    val android: List<String> = emptyList(),
+    val androidLib: List<String> = emptyList(),
+    val androidApp: List<String> = emptyList(),
+)
+
+fun TypeSpecificStringList.getForKotlinLib(): List<String> = all + kotlinLib
+fun TypeSpecificStringList.getForAndroidLib(): List<String> = all + android + androidLib
+fun TypeSpecificStringList.getForAndroidApp(): List<String> = all + android + androidApp
