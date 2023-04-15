@@ -2,7 +2,7 @@ package at.xa1.modulemate.command
 
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.ModuleType
-import at.xa1.modulemate.module.Modules
+import at.xa1.modulemate.module.testModules
 import at.xa1.modulemate.system.FakeShell
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
@@ -21,13 +21,11 @@ class GradleCommandStepTest {
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),
             androidAppFlags = listOf("-PandroidAppFlag1", "-PandroidAppFlag2"),
-            modules = Modules(
-                listOf(
-                    Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
-                    Module(":test-android", "", "", ModuleType.ANDROID_LIB),
-                    Module(":test-app", "", "", ModuleType.ANDROID_APP),
-                    Module(":test-other", "", "", ModuleType.OTHER),
-                )
+            modules = testModules(
+                Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
+                Module(":test-android", "", "", ModuleType.ANDROID_LIB),
+                Module(":test-app", "", "", ModuleType.ANDROID_APP),
+                Module(":test-other", "", "", ModuleType.OTHER),
             ),
             kotlinLibTasks = listOf("javaTask1", "javaTask2"),
             androidLibTasks = listOf("androidLibTask1", "androidLibTask2"),
@@ -62,10 +60,8 @@ class GradleCommandStepTest {
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),
             androidAppFlags = listOf("-PandroidAppFlag1", "-PandroidAppFlag2"),
-            modules = Modules(
-                listOf(
-                    Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
-                )
+            modules = testModules(
+                Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
             ),
             kotlinLibTasks = listOf("javaTask1", "javaTask2"),
             androidLibTasks = listOf("androidLibTask1", "androidLibTask2"),

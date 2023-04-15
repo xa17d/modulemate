@@ -22,6 +22,7 @@ import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.ModulesScanner
+import at.xa1.modulemate.module.RepositoryModulesScanner
 import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
 import at.xa1.modulemate.system.ShellOpenBrowser
@@ -46,7 +47,7 @@ fun main(args: Array<String>) {
 
     val config = ConfigResolver(repositoryRoot).getConfig()
     val modules = Modules(
-        scanner = ModulesScanner(config.module.classification, repositoryRoot)
+        scanner = RepositoryModulesScanner(config.module.classification, repositoryRoot)
     )
     modules.filter = filter
     val browser = ShellOpenBrowser(shell)
