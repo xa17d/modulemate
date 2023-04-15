@@ -12,6 +12,10 @@ class Variables {
         variables[variable.name] = variable
     }
 
+    fun remove(variableName: String) {
+        variables.remove(variableName)
+    }
+
     fun replacePlaceholders(patternString: String, encoder: VariableEncoder = NopVariableEncoder): String {
         return patternString.replace(Regex("\\{([^\\}]+)\\}")) { matchResult ->
             val variableName = matchResult.groupValues[1]

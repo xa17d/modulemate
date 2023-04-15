@@ -48,6 +48,18 @@ internal fun createCommandList(
                             variables = variables,
                             command = step.command,
                         )
+
+                        is CommandStep.Report -> ReportCommandStep(
+                            shell = shell,
+                            variables = variables,
+                            modules = modules,
+                            pathKotlinLib = step.path.getForKotlinLib().singleOrNull()
+                                ?: error("pathKotlinLib is not unique"),
+                            pathAndroidLib = step.path.getForAndroidLib().singleOrNull()
+                                ?: error("pathAndroidLib is not unique"),
+                            pathAndroidApp = step.path.getForAndroidApp().singleOrNull()
+                                ?: error("pathAndroidApp is not unique"),
+                        )
                     }
                 }
             )

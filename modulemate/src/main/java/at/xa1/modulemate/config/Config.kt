@@ -49,6 +49,12 @@ sealed interface CommandStep {
     data class Shell(
         val command: List<String> = emptyList(),
     ) : CommandStep
+
+    @Serializable
+    @SerialName("report")
+    data class Report(
+        val path: TypeSpecificStringList = TypeSpecificStringList(),
+    ) : CommandStep
 }
 
 @Serializable
