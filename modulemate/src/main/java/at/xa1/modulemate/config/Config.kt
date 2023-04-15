@@ -43,6 +43,12 @@ sealed interface CommandStep {
         val flags: TypeSpecificStringList = TypeSpecificStringList(),
         val tasks: TypeSpecificStringList = TypeSpecificStringList(),
     ) : CommandStep
+
+    @Serializable
+    @SerialName("shell")
+    data class Shell(
+        val command: List<String> = emptyList(),
+    ) : CommandStep
 }
 
 @Serializable

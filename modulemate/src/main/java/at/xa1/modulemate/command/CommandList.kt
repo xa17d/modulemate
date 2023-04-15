@@ -42,6 +42,12 @@ internal fun createCommandList(
                             androidLibTasks = step.tasks.getForAndroidLib(),
                             androidAppTasks = step.tasks.getForAndroidApp()
                         )
+
+                        is CommandStep.Shell -> ShellCommandStep(
+                            shell = shell,
+                            variables = variables,
+                            command = step.command,
+                        )
                     }
                 }
             )
