@@ -7,5 +7,6 @@ val defaultConfig: Config = Config(
             androidLibrary = Regex.escape("apply plugin: \"com.android.library\""),
             androidApp = Regex.escape("apply plugin: \"com.android.application\""),
         )
-    )
+    ),
+    commands = listOf(),
 )

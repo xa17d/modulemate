@@ -1,4 +1,4 @@
-package at.xa1.modulemate
+package at.xa1.modulemate.cli
 
 /**
  * Helper class to read CLI arguments.

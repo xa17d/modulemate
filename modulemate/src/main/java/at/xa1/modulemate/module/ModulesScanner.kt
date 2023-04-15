@@ -10,21 +10,39 @@ class ModulesScanner(
     private val androidLibraryRegex = Regex(config.androidLibrary)
     private val androidAppRegex = Regex(config.androidApp)
     fun scan(root: File): Modules {
-        val buildGradleFiles = root.walk()
-            .filter { it.isFile && it.name == "build.gradle" }
+        val buildGradleFiles = mutableListOf<File>()
+        scanFolderForBuildGradle(buildGradleFiles, root)
 
         val modules = buildGradleFiles.map { buildGradleFile ->
-            val modulePath = buildGradleFile.parentFile.toRelativeString(root)
-            val path = ":" + modulePath.replace("/", ":")
+            val moduleFile = buildGradleFile.parentFile
+            val relativePath = moduleFile.toRelativeString(root)
+            val absolutePath = moduleFile.absolutePath
+            val path = ":" + relativePath.replace("/", ":")
 
             Module(
                 path = path,
-                modulePath = modulePath,
+                relativePath = relativePath,
+                absolutePath = absolutePath,
                 type = getType(buildGradleFile.readText())
             )
         }
 
         return Modules(modules.toList())
+    }
+
+    private fun scanFolderForBuildGradle(result: MutableList<File>, folder: File) {
+        if (folder.name in setOf("build", "src", ".git")) return // skip for performance
+
+        (folder.listFiles() ?: emptyArray())
+            .forEach { file ->
+                if (file.name == "build.gradle") {
+                    result.add(file)
+                }
+
+                if (file.isDirectory) {
+                    scanFolderForBuildGradle(result, file)
+                }
+            }
     }
 
     private fun getType(buildGradleContent: String): ModuleType {

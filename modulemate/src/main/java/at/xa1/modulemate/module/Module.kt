@@ -2,7 +2,8 @@ package at.xa1.modulemate.module
 
 data class Module(
     val path: String,
-    val modulePath: String,
+    val relativePath: String,
+    val absolutePath: String,
     val type: ModuleType
 )
 
