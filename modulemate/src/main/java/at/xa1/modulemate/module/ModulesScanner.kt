@@ -4,12 +4,13 @@ import at.xa1.modulemate.config.ModuleClassificationConfig
 import java.io.File
 
 class ModulesScanner(
-    config: ModuleClassificationConfig
+    config: ModuleClassificationConfig,
+    private val root: File,
 ) {
     private val javaLibraryRegex = Regex(config.kotlinLib)
     private val androidLibraryRegex = Regex(config.androidLib)
     private val androidAppRegex = Regex(config.androidApp)
-    fun scan(root: File): Modules {
+    fun scan(): List<Module> {
         val buildGradleFiles = mutableListOf<File>()
         scanFolderForBuildGradle(buildGradleFiles, root)
 
@@ -27,7 +28,7 @@ class ModulesScanner(
             )
         }
 
-        return Modules(modules.toList())
+        return modules
     }
 
     private fun scanFolderForBuildGradle(result: MutableList<File>, folder: File) {

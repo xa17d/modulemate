@@ -17,7 +17,7 @@ class GradleCommandStep(
     override fun run(): Boolean {
 
         val flags = mutableSetOf<String>()
-        modules.modules.forEach { module ->
+        modules.filteredModules.forEach { module ->
             when (module.type) {
                 ModuleType.KOTLIN_LIB -> flags.addAll(kotlinLibFlags)
                 ModuleType.ANDROID_LIB -> flags.addAll(androidLibFlags)
@@ -29,7 +29,7 @@ class GradleCommandStep(
 
         val command = listOf("./gradlew") +
             flags +
-            modules.modules.flatMap { module ->
+            modules.filteredModules.flatMap { module ->
                 val tasks = when (module.type) {
                     ModuleType.OTHER -> emptyList()
                     ModuleType.KOTLIN_LIB -> kotlinLibTasks

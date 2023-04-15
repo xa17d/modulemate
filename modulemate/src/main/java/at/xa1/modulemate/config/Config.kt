@@ -24,6 +24,7 @@ data class ModuleClassificationConfig(
 @Serializable
 data class Command(
     val shortcut: String,
+    val name: String,
     val steps: List<CommandStep>,
 )
 

@@ -2,6 +2,7 @@ package at.xa1.modulemate.command
 
 class Command(
     val shortcut: String,
+    val name: String,
     val steps: List<CommandStep>
 ) {
     fun run(): Boolean {
