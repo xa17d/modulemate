@@ -29,10 +29,14 @@ internal fun createCommandList(
                 steps = command.steps.map { step ->
                     when (step) {
                         is CommandStep.Browser -> BrowserCommandStep(
-                            browser, variables, step.url
+                            runWhen = step.runWhen.toRunWhen(),
+                            browser = browser,
+                            variables = variables,
+                            urlPattern = step.url,
                         )
 
                         is CommandStep.Gradle -> GradleCommandStep(
+                            runWhen = step.runWhen.toRunWhen(),
                             shell = shell,
                             modules = modules,
                             kotlinLibFlags = step.flags.getForKotlinLib(),
@@ -44,12 +48,14 @@ internal fun createCommandList(
                         )
 
                         is CommandStep.Shell -> ShellCommandStep(
+                            runWhen = step.runWhen.toRunWhen(),
                             shell = shell,
                             variables = variables,
                             command = step.command,
                         )
 
                         is CommandStep.Report -> ReportCommandStep(
+                            runWhen = step.runWhen.toRunWhen(),
                             shell = shell,
                             variables = variables,
                             modules = modules,

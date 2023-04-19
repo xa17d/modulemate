@@ -5,18 +5,38 @@ class Command(
     val name: String,
     val steps: List<CommandStep>
 ) {
-    fun run(): Boolean {
-        var overallSuccess = true
+    fun run(): CommandResult {
+        var result = CommandResult.SUCCESS
         for (step in steps) {
-            val success = step.run()
-            if (!success) {
-                overallSuccess = false // TODO stop if step is terminal failing.
+
+            val runStep = when (result) {
+                CommandResult.SUCCESS -> step.runWhen == RunWhen.PREVIOUS_SUCCESS || step.runWhen == RunWhen.ALWAYS
+                CommandResult.FAILURE -> step.runWhen == RunWhen.PREVIOUS_FAILURE || step.runWhen == RunWhen.ALWAYS
+            }
+
+            if (runStep) {
+                val stepResult = step.run()
+                if (stepResult == CommandResult.FAILURE) {
+                    result = CommandResult.FAILURE
+                }
             }
         }
-        return overallSuccess
+        return result
     }
 }
 
+enum class CommandResult {
+    SUCCESS,
+    FAILURE
+}
+
+fun Boolean.successToCommandResult(): CommandResult = if (this) {
+    CommandResult.SUCCESS
+} else {
+    CommandResult.FAILURE
+}
+
 sealed interface CommandStep {
-    fun run(): Boolean
+    val runWhen: RunWhen
+    fun run(): CommandResult
 }

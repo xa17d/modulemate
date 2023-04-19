@@ -3,9 +3,11 @@ package at.xa1.modulemate.command
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.system.Shell
+import at.xa1.modulemate.system.isSuccess
 import at.xa1.modulemate.system.run
 
 class ReportCommandStep(
+    override val runWhen: RunWhen,
     private val shell: Shell,
     private val variables: Variables,
     private val modules: Modules,
@@ -13,7 +15,7 @@ class ReportCommandStep(
     private val pathAndroidLib: String,
     private val pathAndroidApp: String,
 ) : CommandStep {
-    override fun run(): Boolean {
+    override fun run(): CommandResult {
         val activeModule = modules.getActiveModule()
 
         val variable = Variable("ACTIVE_MODULE_PATH") { activeModule.absolutePath }
@@ -30,6 +32,6 @@ class ReportCommandStep(
 
         variables.remove(variable.name)
 
-        return (result.exitCode == 0)
+        return result.isSuccess.successToCommandResult()
     }
 }

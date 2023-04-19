@@ -25,16 +25,28 @@ data class ShellResult(
     }
 }
 
-fun ShellResult.getSingleLine(): String {
-    if (exitCode != 0 || error.isNotEmpty()) {
+val ShellResult.isSuccess: Boolean
+    get() = (exitCode == 0 && error.isEmpty())
+
+fun ShellResult.verifySuccessful() {
+    if (!isSuccess) {
         error("Expected success, but command failed: $this")
     }
+}
+
+fun ShellResult.getSingleLine(): String {
+    verifySuccessful()
 
     val lines = out.lines()
     if (lines.size > 1 && lines[1].isNotEmpty()) {
         error("Expected result to have only one line with an optional \"\\n\" at the end, but lines were: $lines")
     }
     return lines[0]
+}
+
+fun ShellResult.getLines(): List<String> {
+    verifySuccessful()
+    return out.lines()
 }
 
 class RuntimeShell(private val folder: File) : Shell {

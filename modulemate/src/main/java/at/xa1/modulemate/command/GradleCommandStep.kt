@@ -3,8 +3,10 @@ package at.xa1.modulemate.command
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.system.Shell
+import at.xa1.modulemate.system.isSuccess
 
 class GradleCommandStep(
+    override val runWhen: RunWhen,
     private val shell: Shell,
     private val modules: Modules,
     private val kotlinLibFlags: List<String>,
@@ -14,7 +16,7 @@ class GradleCommandStep(
     private val androidLibTasks: List<String>,
     private val androidAppTasks: List<String>,
 ) : CommandStep {
-    override fun run(): Boolean {
+    override fun run(): CommandResult {
 
         val flags = mutableSetOf<String>()
         modules.filteredModules.forEach { module ->
@@ -41,6 +43,6 @@ class GradleCommandStep(
             }
 
         val result = shell.run(command.toTypedArray())
-        return result.exitCode == 0
+        return result.isSuccess.successToCommandResult()
     }
 }

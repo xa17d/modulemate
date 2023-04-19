@@ -5,15 +5,18 @@ import java.net.URLEncoder
 import java.nio.charset.Charset
 
 class BrowserCommandStep(
+    override val runWhen: RunWhen,
     private val browser: Browser,
     private val variables: Variables,
     private val urlPattern: String,
 ) : CommandStep {
-    override fun run(): Boolean {
+
+    override fun run(): CommandResult {
         val url = variables.replacePlaceholders(urlPattern) { value ->
             URLEncoder.encode(value, Charset.forName("UTF8"))
         }
-        browser.open(url)
-        return true
+        val success = browser.open(url)
+
+        return success.successToCommandResult()
     }
 }

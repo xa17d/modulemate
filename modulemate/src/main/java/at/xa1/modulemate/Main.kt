@@ -13,9 +13,7 @@ import at.xa1.modulemate.cli.CliColor.CYAN
 import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
 import at.xa1.modulemate.cli.CliColor.UNDERLINE
-import at.xa1.modulemate.command.Command
-import at.xa1.modulemate.command.Variables
-import at.xa1.modulemate.command.addDefault
+import at.xa1.modulemate.command.*
 import at.xa1.modulemate.command.createCommandList
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
@@ -29,7 +27,6 @@ import at.xa1.modulemate.system.ShellOpenBrowser
 import java.io.File
 
 fun main(args: Array<String>) {
-
     val cliArgs = CliArgs(args)
 
     val folder = File(cliArgs.getValueOrDefault("--repository", "."))
@@ -126,10 +123,11 @@ fun main(args: Array<String>) {
 
 fun runCommand(command: Command) {
     print("${BACKGROUND_BRIGHT_BLUE}▶️  ${command.name}$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
-    val success = command.run()
-    if (success) {
-        print("${BACKGROUND_BRIGHT_GREEN}🎉 Success!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
-    } else {
-        print("${BACKGROUND_BRIGHT_RED}⚠️ Failed!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
+    val result = command.run()
+    when (result) {
+        CommandResult.SUCCESS ->
+            print("${BACKGROUND_BRIGHT_GREEN}🎉 Success!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
+        CommandResult.FAILURE ->
+            print("${BACKGROUND_BRIGHT_RED}⚠️ Failed!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
     }
 }

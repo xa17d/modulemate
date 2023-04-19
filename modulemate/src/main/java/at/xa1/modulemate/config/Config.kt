@@ -1,5 +1,6 @@
 package at.xa1.modulemate.config
 
+import at.xa1.modulemate.command.RunWhen
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,15 +32,19 @@ data class Command(
 @Serializable
 sealed interface CommandStep {
 
+    val runWhen: CommandStepRunWhen
+
     @Serializable
     @SerialName("browser")
     data class Browser(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
         val url: String
     ) : CommandStep
 
     @Serializable
     @SerialName("gradle")
     data class Gradle(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
         val flags: TypeSpecificStringList = TypeSpecificStringList(),
         val tasks: TypeSpecificStringList = TypeSpecificStringList(),
     ) : CommandStep
@@ -47,14 +52,29 @@ sealed interface CommandStep {
     @Serializable
     @SerialName("shell")
     data class Shell(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
         val command: List<String> = emptyList(),
     ) : CommandStep
 
     @Serializable
     @SerialName("report")
     data class Report(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
         val path: TypeSpecificStringList = TypeSpecificStringList(),
     ) : CommandStep
+}
+
+@Serializable
+enum class CommandStepRunWhen {
+    PREVIOUS_SUCCESS,
+    PREVIOUS_FAILURE,
+    ALWAYS,
+}
+
+fun CommandStepRunWhen.toRunWhen(): RunWhen = when (this) {
+    CommandStepRunWhen.PREVIOUS_SUCCESS -> RunWhen.PREVIOUS_SUCCESS
+    CommandStepRunWhen.PREVIOUS_FAILURE -> RunWhen.PREVIOUS_FAILURE
+    CommandStepRunWhen.ALWAYS -> RunWhen.ALWAYS
 }
 
 @Serializable
