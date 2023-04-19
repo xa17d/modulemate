@@ -59,4 +59,8 @@ Distributed under [BSD 3-Clause License](LICENSE). See [LICENSE](LICENSE) for mo
 ## Backlog
 
 - [x] Installation script
-- [ ] Command for printing changed modules compared to the main branch
+- [x] Command for printing changed modules compared to the main branch
+- [ ] Make "quit" a regular command
+- [ ] Clean up filter system
+- [ ] Show who's working on modules from remote active changes
+- [ ] Shell scripts depending on module type

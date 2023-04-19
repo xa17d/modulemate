@@ -14,13 +14,11 @@ import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
 import at.xa1.modulemate.cli.CliColor.UNDERLINE
 import at.xa1.modulemate.command.*
-import at.xa1.modulemate.command.createCommandList
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
-import at.xa1.modulemate.module.ModuleType
-import at.xa1.modulemate.module.Modules
-import at.xa1.modulemate.module.ModulesScanner
-import at.xa1.modulemate.module.RepositoryModulesScanner
+import at.xa1.modulemate.module.*
+import at.xa1.modulemate.module.filter.ChangedModulesFilter
+import at.xa1.modulemate.module.filter.PathPrefixFilter
 import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
 import at.xa1.modulemate.system.ShellOpenBrowser
@@ -46,12 +44,22 @@ fun main(args: Array<String>) {
     val modules = Modules(
         scanner = RepositoryModulesScanner(config.module.classification, repositoryRoot)
     )
-    modules.filter = filter
+    if (filter != null) {
+        modules.applyFilter(PathPrefixFilter(filter))
+    }
     val browser = ShellOpenBrowser(shell)
     val variables = Variables().apply {
         addDefault(repository)
     }
-    val commandList = createCommandList(config, browser, variables, printingShell, modules)
+    val commandList = createCommandList(config, browser, variables, printingShell, modules).apply {
+        add(
+            Command(
+                "changedModules",
+                "Filter only for changed modules",
+                listOf(ChangeFilterCommandStep(RunWhen.PREVIOUS_SUCCESS, modules, ChangedModulesFilter(repository)))
+            )
+        )
+    }
 
     val shortcutOrFilter = cliArgs.nextOrNull()
     val shortcutCommand = if (shortcutOrFilter == null) {
@@ -67,21 +75,13 @@ fun main(args: Array<String>) {
         )
         runCommand(shortcutCommand)
     } else {
-        modules.filter = shortcutOrFilter
-
-        println("${UNDERLINE}Modules:$RESET")
-        modules.filteredModules.forEach { module ->
-            val formatting = when (module.type) {
-                ModuleType.KOTLIN_LIB -> BLUE
-                ModuleType.ANDROID_LIB -> GREEN
-                ModuleType.ANDROID_APP -> CYAN
-                ModuleType.OTHER -> ""
-            }
-            println("$formatting ${module.path}$RESET")
+        if (shortcutOrFilter != null) {
+            modules.applyFilter(PathPrefixFilter(shortcutOrFilter))
         }
 
         var lastCommand = ""
         while (true) {
+            printModules(modules)
             print("$BLUE〉$CLEAR_UNTIL_END_OF_LINE")
             val input = readln()
             print(RESET)
@@ -121,12 +121,26 @@ fun main(args: Array<String>) {
     println("👋 bye")
 }
 
+private fun printModules(modules: Modules) {
+    println("${UNDERLINE}Modules:$RESET")
+    modules.filteredModules.forEach { module ->
+        val formatting = when (module.type) {
+            ModuleType.KOTLIN_LIB -> BLUE
+            ModuleType.ANDROID_LIB -> GREEN
+            ModuleType.ANDROID_APP -> CYAN
+            ModuleType.OTHER -> ""
+        }
+        println("$formatting ${module.path}$RESET")
+    }
+}
+
 fun runCommand(command: Command) {
     print("${BACKGROUND_BRIGHT_BLUE}▶️  ${command.name}$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
     val result = command.run()
     when (result) {
         CommandResult.SUCCESS ->
             print("${BACKGROUND_BRIGHT_GREEN}🎉 Success!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
+
         CommandResult.FAILURE ->
             print("${BACKGROUND_BRIGHT_RED}⚠️ Failed!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
     }

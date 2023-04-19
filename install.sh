@@ -5,8 +5,7 @@ set -e
 cd "${BASH_SOURCE%/*}"
 
 echo "▶️  Building…"
-mkdir -p build
-./gradlew jar
+./build.sh
 
 echo ""
 echo "▶️  Creating m script…"
@@ -16,6 +15,7 @@ mScript=$(cat <<EndOfMessage
 java -jar $PWD/modulemate/build/libs/modulemate.jar \$@
 EndOfMessage
 )
+mkdir -p build
 echo "$mScript" > build/m
 
 chmod +x build/m

@@ -1,5 +1,7 @@
 package at.xa1.modulemate.module
 
+import at.xa1.modulemate.module.filter.AllModulesFilter
+
 class TestModuleScanner(
     private val modules: List<Module>
 ) : ModulesScanner {
@@ -8,6 +10,6 @@ class TestModuleScanner(
 
 fun testModules(vararg modules: Module): Modules {
     val result = Modules(TestModuleScanner(modules.toList()))
-    result.filter = ""
+    result.applyFilter(AllModulesFilter())
     return result
 }
