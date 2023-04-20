@@ -35,17 +35,25 @@ TODO
 - MacOS or Linux
 - Java 11 or higher installed
 
-Build:
+**Build:**
 
 ```shell
-./gradlew jar test
+./build.sh
 ```
+See [build.sh](build.sh) for detailed command.
 
-Run:
+**Run:**
 
 ```shell
 java -jar modulemate/build/libs/modulemate.jar
 ```
+
+or
+
+```shell
+m
+```
+...if installed via `./install.sh`
 
 ## License
 

@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-./gradlew jar test
+./gradlew jar test ktlintFormat
