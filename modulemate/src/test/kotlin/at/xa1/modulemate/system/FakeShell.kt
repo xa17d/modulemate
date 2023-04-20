@@ -31,5 +31,4 @@ class FakeShell : Shell {
         val result = expectedCommands.removeAt(index)
         return result.second
     }
-
 }

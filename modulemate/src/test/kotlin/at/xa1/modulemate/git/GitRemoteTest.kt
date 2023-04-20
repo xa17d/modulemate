@@ -1,7 +1,7 @@
 package at.xa1.modulemate.git
 
-import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class GitRemoteTest {
 

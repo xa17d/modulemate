@@ -1,9 +1,9 @@
 package at.xa1.modulemate.config
 
-import java.io.File
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import java.io.File
 
 class ConfigResolver(
     private val repositoryRoot: File,
@@ -23,8 +23,8 @@ class ConfigResolver(
         return null
     }
     fun getConfig(): Config {
-        return getConfig(repositoryRoot) ?:
-            getConfig(userHome) ?:
-            defaultConfig
+        return getConfig(repositoryRoot)
+            ?: getConfig(userHome)
+            ?: defaultConfig
     }
 }

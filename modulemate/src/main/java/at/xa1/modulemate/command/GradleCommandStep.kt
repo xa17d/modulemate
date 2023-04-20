@@ -14,10 +14,9 @@ class GradleCommandStep(
     private val androidAppFlags: List<String>,
     private val kotlinLibTasks: List<String>,
     private val androidLibTasks: List<String>,
-    private val androidAppTasks: List<String>,
+    private val androidAppTasks: List<String>
 ) : CommandStep {
     override fun run(): CommandResult {
-
         val flags = mutableSetOf<String>()
         modules.filteredModules.forEach { module ->
             when (module.type) {
@@ -27,7 +26,6 @@ class GradleCommandStep(
                 ModuleType.OTHER -> {}
             }
         }
-
 
         val command = listOf("./gradlew") +
             flags +

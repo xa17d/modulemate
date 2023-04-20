@@ -7,26 +7,26 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Config(
     val module: ModuleConfig,
-    val commands: List<Command>,
+    val commands: List<Command>
 )
 
 @Serializable
 data class ModuleConfig(
-    val classification: ModuleClassificationConfig,
+    val classification: ModuleClassificationConfig
 )
 
 @Serializable
 data class ModuleClassificationConfig(
     val kotlinLib: String,
     val androidLib: String,
-    val androidApp: String,
+    val androidApp: String
 )
 
 @Serializable
 data class Command(
     val shortcut: String,
     val name: String,
-    val steps: List<CommandStep>,
+    val steps: List<CommandStep>
 )
 
 @Serializable
@@ -46,21 +46,21 @@ sealed interface CommandStep {
     data class Gradle(
         override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
         val flags: TypeSpecificStringList = TypeSpecificStringList(),
-        val tasks: TypeSpecificStringList = TypeSpecificStringList(),
+        val tasks: TypeSpecificStringList = TypeSpecificStringList()
     ) : CommandStep
 
     @Serializable
     @SerialName("shell")
     data class Shell(
         override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
-        val command: List<String> = emptyList(),
+        val command: List<String> = emptyList()
     ) : CommandStep
 
     @Serializable
     @SerialName("report")
     data class Report(
         override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
-        val path: TypeSpecificStringList = TypeSpecificStringList(),
+        val path: TypeSpecificStringList = TypeSpecificStringList()
     ) : CommandStep
 }
 
@@ -68,7 +68,7 @@ sealed interface CommandStep {
 enum class CommandStepRunWhen {
     PREVIOUS_SUCCESS,
     PREVIOUS_FAILURE,
-    ALWAYS,
+    ALWAYS
 }
 
 fun CommandStepRunWhen.toRunWhen(): RunWhen = when (this) {
@@ -83,7 +83,7 @@ data class TypeSpecificStringList(
     val kotlinLib: List<String> = emptyList(),
     val android: List<String> = emptyList(),
     val androidLib: List<String> = emptyList(),
-    val androidApp: List<String> = emptyList(),
+    val androidApp: List<String> = emptyList()
 )
 
 fun TypeSpecificStringList.getForKotlinLib(): List<String> = all + kotlinLib

@@ -11,5 +11,5 @@ enum class ModuleType {
     OTHER,
     KOTLIN_LIB,
     ANDROID_LIB,
-    ANDROID_APP,
+    ANDROID_APP
 }

@@ -4,7 +4,7 @@ import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Module
 
 class ChangedModulesFilter(
-    private val repository: GitRepository,
+    private val repository: GitRepository
 ) : ModulesFilter {
     override fun filter(allModules: List<Module>): List<Module> {
         val changedFiles = repository.getChangedFiles()

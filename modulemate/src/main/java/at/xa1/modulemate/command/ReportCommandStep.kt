@@ -13,7 +13,7 @@ class ReportCommandStep(
     private val modules: Modules,
     private val pathKotlinLib: String,
     private val pathAndroidLib: String,
-    private val pathAndroidApp: String,
+    private val pathAndroidApp: String
 ) : CommandStep {
     override fun run(): CommandResult {
         val activeModule = modules.getActiveModule()

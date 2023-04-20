@@ -2,7 +2,7 @@ package at.xa1.modulemate.command
 
 class FakeCommandStep(
     override val runWhen: RunWhen,
-    private val runResult: CommandResult,
+    private val runResult: CommandResult
 ) : CommandStep {
 
     var didRun: Boolean = false

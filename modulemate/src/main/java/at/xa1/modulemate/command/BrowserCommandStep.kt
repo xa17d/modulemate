@@ -8,7 +8,7 @@ class BrowserCommandStep(
     override val runWhen: RunWhen,
     private val browser: Browser,
     private val variables: Variables,
-    private val urlPattern: String,
+    private val urlPattern: String
 ) : CommandStep {
 
     override fun run(): CommandResult {

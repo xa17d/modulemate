@@ -1,7 +1,6 @@
 package at.xa1.modulemate.system
 
 import java.io.File
-import java.util.concurrent.TimeUnit
 
 class PrintingShell(
     private val folder: File

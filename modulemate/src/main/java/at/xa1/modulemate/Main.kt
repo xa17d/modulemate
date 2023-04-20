@@ -13,10 +13,18 @@ import at.xa1.modulemate.cli.CliColor.CYAN
 import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
 import at.xa1.modulemate.cli.CliColor.UNDERLINE
-import at.xa1.modulemate.command.*
+import at.xa1.modulemate.command.ChangeFilterCommandStep
+import at.xa1.modulemate.command.Command
+import at.xa1.modulemate.command.CommandResult
+import at.xa1.modulemate.command.RunWhen
+import at.xa1.modulemate.command.Variables
+import at.xa1.modulemate.command.addDefault
+import at.xa1.modulemate.command.createCommandList
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
-import at.xa1.modulemate.module.*
+import at.xa1.modulemate.module.ModuleType
+import at.xa1.modulemate.module.Modules
+import at.xa1.modulemate.module.RepositoryModulesScanner
 import at.xa1.modulemate.module.filter.ChangedModulesFilter
 import at.xa1.modulemate.module.filter.PathPrefixFilter
 import at.xa1.modulemate.system.PrintingShell
@@ -101,7 +109,7 @@ fun main(args: Array<String>) {
             val command = commandList.getOrNull(shortcut)
             if (command == null) {
                 print(
-                    "${BACKGROUND_BRIGHT_YELLOW}⚠️ Command unknown: $shortcut$CLEAR_UNTIL_END_OF_LINE\n" +
+                    "$BACKGROUND_BRIGHT_YELLOW⚠️ Command unknown: $shortcut$CLEAR_UNTIL_END_OF_LINE\n" +
                         "$RESET$CLEAR_UNTIL_END_OF_LINE" +
                         "${UNDERLINE}Available Commands:$RESET\n"
                 )
@@ -111,7 +119,6 @@ fun main(args: Array<String>) {
                         "$UNDERLINE$BOLD${availableCommand.shortcut}$RESET: ${availableCommand.name}"
                     )
                 }
-
             } else {
                 runCommand(command)
             }
@@ -135,13 +142,13 @@ private fun printModules(modules: Modules) {
 }
 
 fun runCommand(command: Command) {
-    print("${BACKGROUND_BRIGHT_BLUE}▶️  ${command.name}$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
+    print("$BACKGROUND_BRIGHT_BLUE▶️  ${command.name}$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
     val result = command.run()
     when (result) {
         CommandResult.SUCCESS ->
-            print("${BACKGROUND_BRIGHT_GREEN}🎉 Success!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
+            print("$BACKGROUND_BRIGHT_GREEN🎉 Success!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
 
         CommandResult.FAILURE ->
-            print("${BACKGROUND_BRIGHT_RED}⚠️ Failed!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
+            print("$BACKGROUND_BRIGHT_RED⚠️ Failed!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
     }
 }

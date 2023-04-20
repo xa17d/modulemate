@@ -1,7 +1,11 @@
 package at.xa1.modulemate.command
 
-import at.xa1.modulemate.config.*
 import at.xa1.modulemate.config.CommandStep
+import at.xa1.modulemate.config.Config
+import at.xa1.modulemate.config.getForAndroidApp
+import at.xa1.modulemate.config.getForAndroidLib
+import at.xa1.modulemate.config.getForKotlinLib
+import at.xa1.modulemate.config.toRunWhen
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.system.Shell
 import at.xa1.modulemate.system.ShellOpenBrowser
@@ -42,7 +46,7 @@ internal fun createCommandList(
                         runWhen = step.runWhen.toRunWhen(),
                         browser = browser,
                         variables = variables,
-                        urlPattern = step.url,
+                        urlPattern = step.url
                     )
 
                     is CommandStep.Gradle -> GradleCommandStep(
@@ -61,7 +65,7 @@ internal fun createCommandList(
                         runWhen = step.runWhen.toRunWhen(),
                         shell = shell,
                         variables = variables,
-                        command = step.command,
+                        command = step.command
                     )
 
                     is CommandStep.Report -> ReportCommandStep(
@@ -74,7 +78,7 @@ internal fun createCommandList(
                         pathAndroidLib = step.path.getForAndroidLib().singleOrNull()
                             ?: error("pathAndroidLib is not unique"),
                         pathAndroidApp = step.path.getForAndroidApp().singleOrNull()
-                            ?: error("pathAndroidApp is not unique"),
+                            ?: error("pathAndroidApp is not unique")
                     )
                 }
             }

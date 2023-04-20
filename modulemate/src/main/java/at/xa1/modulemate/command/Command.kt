@@ -8,7 +8,6 @@ class Command(
     fun run(): CommandResult {
         var result = CommandResult.SUCCESS
         for (step in steps) {
-
             val runStep = when (result) {
                 CommandResult.SUCCESS -> step.runWhen == RunWhen.PREVIOUS_SUCCESS || step.runWhen == RunWhen.ALWAYS
                 CommandResult.FAILURE -> step.runWhen == RunWhen.PREVIOUS_FAILURE || step.runWhen == RunWhen.ALWAYS

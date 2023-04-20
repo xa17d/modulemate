@@ -5,7 +5,7 @@ data class GitRemote private constructor(
     val host: String,
     val owner: String,
     val repository: String,
-    val repositoryName: String,
+    val repositoryName: String
 ) {
     companion object {
         fun createOrNull(url: String): GitRemote? =
@@ -61,7 +61,7 @@ data class GitRemote private constructor(
                 host = host,
                 owner = owner,
                 repository = repository,
-                repositoryName = repositoryName,
+                repositoryName = repositoryName
             )
         }
     }

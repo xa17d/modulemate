@@ -7,7 +7,7 @@ class ShellCommandStep(
     override val runWhen: RunWhen,
     private val shell: Shell,
     private val variables: Variables,
-    private val command: List<String>,
+    private val command: List<String>
 ) : CommandStep {
     override fun run(): CommandResult {
         val result = shell.run(

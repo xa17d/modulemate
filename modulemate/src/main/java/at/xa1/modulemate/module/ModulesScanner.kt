@@ -9,7 +9,7 @@ interface ModulesScanner {
 
 class RepositoryModulesScanner(
     config: ModuleClassificationConfig,
-    private val root: File,
+    private val root: File
 ) : ModulesScanner {
     private val javaLibraryRegex = Regex(config.kotlinLib)
     private val androidLibraryRegex = Regex(config.androidLib)

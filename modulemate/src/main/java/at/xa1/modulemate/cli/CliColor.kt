@@ -39,17 +39,14 @@ object CliColor {
     const val BACKGROUND_BRIGHT_CYAN: String = "\u001b[46;1m"
     const val BACKGROUND_BRIGHT_WHITE: String = "\u001b[47;1m"
 
-
     const val BOLD: String = "\u001b[1m"
     const val UNDERLINE: String = "\u001b[4m"
     const val REVERSED: String = "\u001b[7m"
-
 
     fun cursorUp(n: Int): String = "\u001b[${n}A"
     fun cursorDown(n: Int): String = "\u001b[${n}B"
     fun cursorRight(n: Int): String = "\u001b[${n}C"
     fun cursorLeft(n: Int): String = "\u001b[${n}D"
-
 
     const val CLEAR_UNTIL_END_OF_SCREEN: String = "\u001b[0J"
     const val CLEAR_TO_BEGINNING_OF_SCREEN: String = "\u001b[1J"

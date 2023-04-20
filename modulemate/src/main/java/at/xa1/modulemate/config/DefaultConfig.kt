@@ -5,8 +5,8 @@ val defaultConfig: Config = Config(
         classification = ModuleClassificationConfig(
             kotlinLib = Regex.escape("apply plugin: \"java-library\""),
             androidLib = Regex.escape("apply plugin: \"com.android.library\""),
-            androidApp = Regex.escape("apply plugin: \"com.android.application\""),
+            androidApp = Regex.escape("apply plugin: \"com.android.application\"")
         )
     ),
-    commands = listOf(),
+    commands = listOf()
 )

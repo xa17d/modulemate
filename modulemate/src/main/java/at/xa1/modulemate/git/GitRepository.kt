@@ -30,7 +30,6 @@ class GitRepository(
         return shell.run("git", "diff", "--name-only", mergeBase).getLines()
     }
 
-
     private fun getMainBranch(): String {
         return shell.run("git", "symbolic-ref", "refs/remotes/origin/HEAD").getSingleLine()
     }
