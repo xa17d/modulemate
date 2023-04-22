@@ -1,6 +1,7 @@
 package at.xa1.modulemate.system
 
 import java.io.File
+import kotlin.test.assertEquals
 import kotlin.test.fail
 
 class FakeShell : Shell {
@@ -30,5 +31,9 @@ class FakeShell : Shell {
         }
         val result = expectedCommands.removeAt(index)
         return result.second
+    }
+
+    fun assertNothingWasRun() {
+        assertEquals(listOf(), expectedCommands)
     }
 }

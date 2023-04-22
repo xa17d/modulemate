@@ -1,6 +1,7 @@
 package at.xa1.modulemate.config
 
 import at.xa1.modulemate.command.RunWhen
+import at.xa1.modulemate.command.ShellMode
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -53,6 +54,7 @@ sealed interface CommandStep {
     @SerialName("shell")
     data class Shell(
         override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
+        val mode: ConfigShellMode = ConfigShellMode.RUN_ONCE,
         val command: List<String> = emptyList()
     ) : CommandStep
 
@@ -89,3 +91,21 @@ data class TypeSpecificStringList(
 fun TypeSpecificStringList.getForKotlinLib(): List<String> = all + kotlinLib
 fun TypeSpecificStringList.getForAndroidLib(): List<String> = all + android + androidLib
 fun TypeSpecificStringList.getForAndroidApp(): List<String> = all + android + androidApp
+
+enum class ConfigShellMode {
+    RUN_ONCE,
+    RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
+    RUN_IF_AT_LEAST_ONE_ANDROID_LIB_MODULE,
+    RUN_IF_AT_LEAST_ONE_ANDROID_APP_MODULE,
+    RUN_IF_AT_LEAST_ONE_KOTLIN_LIB_MODULE,
+    RUN_IF_AT_LEAST_ONE_OTHER_MODULE
+}
+
+fun ConfigShellMode.toShellMode(): ShellMode = when (this) {
+    ConfigShellMode.RUN_ONCE -> ShellMode.RUN_ONCE
+    ConfigShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE -> ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE
+    ConfigShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_LIB_MODULE -> ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_LIB_MODULE
+    ConfigShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_APP_MODULE -> ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_APP_MODULE
+    ConfigShellMode.RUN_IF_AT_LEAST_ONE_KOTLIN_LIB_MODULE -> ShellMode.RUN_IF_AT_LEAST_ONE_KOTLIN_LIB_MODULE
+    ConfigShellMode.RUN_IF_AT_LEAST_ONE_OTHER_MODULE -> ShellMode.RUN_IF_AT_LEAST_ONE_OTHER_MODULE
+}

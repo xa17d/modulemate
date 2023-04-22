@@ -13,3 +13,9 @@ enum class ModuleType {
     ANDROID_LIB,
     ANDROID_APP
 }
+
+fun Iterable<Module>.containsAnyAndroidModule(): Boolean =
+    containsAnyOfType(ModuleType.ANDROID_LIB) || containsAnyOfType(ModuleType.ANDROID_APP)
+
+fun Iterable<Module>.containsAnyOfType(type: ModuleType): Boolean =
+    any { module -> module.type == type }

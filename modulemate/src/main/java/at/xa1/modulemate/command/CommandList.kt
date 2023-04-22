@@ -6,6 +6,7 @@ import at.xa1.modulemate.config.getForAndroidApp
 import at.xa1.modulemate.config.getForAndroidLib
 import at.xa1.modulemate.config.getForKotlinLib
 import at.xa1.modulemate.config.toRunWhen
+import at.xa1.modulemate.config.toShellMode
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.system.Shell
 import at.xa1.modulemate.system.ShellOpenBrowser
@@ -63,7 +64,9 @@ internal fun createCommandList(
 
                     is CommandStep.Shell -> ShellCommandStep(
                         runWhen = step.runWhen.toRunWhen(),
+                        mode = step.mode.toShellMode(),
                         shell = shell,
+                        modulesInput = modules,
                         variables = variables,
                         command = step.command
                     )

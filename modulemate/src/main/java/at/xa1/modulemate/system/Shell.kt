@@ -26,7 +26,7 @@ data class ShellResult(
 }
 
 val ShellResult.isSuccess: Boolean
-    get() = (exitCode == 0 && error.isEmpty())
+    get() = (exitCode == 0)
 
 fun ShellResult.verifySuccessful() {
     if (!isSuccess) {
