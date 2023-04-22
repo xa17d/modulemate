@@ -13,9 +13,11 @@ import at.xa1.modulemate.cli.CliColor.CYAN
 import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
 import at.xa1.modulemate.cli.CliColor.UNDERLINE
+import at.xa1.modulemate.command.ActiveWorkCommandStep
 import at.xa1.modulemate.command.ChangeFilterCommandStep
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandResult
+import at.xa1.modulemate.command.ConflictAnalysisCommandStep
 import at.xa1.modulemate.command.RunWhen
 import at.xa1.modulemate.command.Variables
 import at.xa1.modulemate.command.addDefault
@@ -65,6 +67,20 @@ fun main(args: Array<String>) {
                 "changedModules",
                 "Filter only for changed modules",
                 listOf(ChangeFilterCommandStep(RunWhen.PREVIOUS_SUCCESS, modules, ChangedModulesFilter(repository)))
+            )
+        )
+        add(
+            Command(
+                "activeWork",
+                "Show what modules are actively worked on in remote branches",
+                listOf(ActiveWorkCommandStep(repository, modules))
+            )
+        )
+        add(
+            Command(
+                "conflictAnalysis",
+                "Show what other remote branches touch modules worked on locally.",
+                listOf(ConflictAnalysisCommandStep(repository, modules))
             )
         )
     }
