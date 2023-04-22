@@ -1,5 +1,6 @@
 package at.xa1.modulemate.command
 
+import at.xa1.modulemate.command.step.FakeCommandStep
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

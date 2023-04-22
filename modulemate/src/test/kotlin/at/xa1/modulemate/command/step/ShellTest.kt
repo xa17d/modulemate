@@ -1,5 +1,7 @@
-package at.xa1.modulemate.command
+package at.xa1.modulemate.command.step
 
+import at.xa1.modulemate.command.CommandResult
+import at.xa1.modulemate.command.Variables
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.testModules
@@ -8,7 +10,7 @@ import at.xa1.modulemate.system.ShellResult
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class ShellCommandStepTest {
+class ShellTest {
 
     private val fakeShell = FakeShell()
 
@@ -16,7 +18,7 @@ class ShellCommandStepTest {
     fun `command is not run if mode=RUN_IF_AT_LEAST_ONE_ANDROID_MODULE but only kotlinLib module present`() {
         val modules = testModules(Module(":kotlin-lib", "", "", ModuleType.KOTLIN_LIB))
 
-        val step = ShellCommandStep(
+        val step = Shell(
             mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
             shell = fakeShell,
             modulesInput = modules,
@@ -37,7 +39,7 @@ class ShellCommandStepTest {
             Module(":android-lib", "", "", ModuleType.ANDROID_LIB)
         )
 
-        val step = ShellCommandStep(
+        val step = Shell(
             mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
             shell = fakeShell,
             modulesInput = modules,

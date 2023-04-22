@@ -1,7 +1,7 @@
 package at.xa1.modulemate.config
 
-import at.xa1.modulemate.command.ShellMode
 import at.xa1.modulemate.command.StepSuccessCondition
+import at.xa1.modulemate.command.step.ShellMode
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

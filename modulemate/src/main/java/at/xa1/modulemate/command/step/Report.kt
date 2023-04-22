@@ -1,12 +1,16 @@
-package at.xa1.modulemate.command
+package at.xa1.modulemate.command.step
 
+import at.xa1.modulemate.command.CommandResult
+import at.xa1.modulemate.command.Variable
+import at.xa1.modulemate.command.Variables
+import at.xa1.modulemate.command.successToCommandResult
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.system.Shell
 import at.xa1.modulemate.system.isSuccess
 import at.xa1.modulemate.system.run
 
-class ReportCommandStep(
+class Report(
     private val shell: Shell,
     private val variables: Variables,
     private val modules: Modules,

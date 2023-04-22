@@ -1,4 +1,4 @@
-package at.xa1.modulemate.command
+package at.xa1.modulemate.command.step
 
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.ModuleType
@@ -7,7 +7,7 @@ import at.xa1.modulemate.system.FakeShell
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class GradleCommandStepTest {
+class GradleTest {
 
     private val fakeShell = FakeShell().apply {
         failOnUnexpectedCommand = false
@@ -15,7 +15,7 @@ class GradleCommandStepTest {
 
     @Test
     fun `gradle shell command is constructed correctly`() {
-        GradleCommandStep(
+        Gradle(
             shell = fakeShell,
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),
@@ -53,7 +53,7 @@ class GradleCommandStepTest {
 
     @Test
     fun `gradle shell command only contains flags of module types present`() {
-        GradleCommandStep(
+        Gradle(
             shell = fakeShell,
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),

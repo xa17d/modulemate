@@ -1,17 +1,18 @@
-package at.xa1.modulemate.command
+package at.xa1.modulemate.command.step
 
 import at.xa1.modulemate.cli.CliColor.BACKGROUND_BLUE
 import at.xa1.modulemate.cli.CliColor.BLACK
 import at.xa1.modulemate.cli.CliColor.BOLD
 import at.xa1.modulemate.cli.CliColor.CLEAR_UNTIL_END_OF_LINE
 import at.xa1.modulemate.cli.CliColor.RESET
+import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.filter.findModulesByFiles
 import java.time.Duration
 import java.time.ZonedDateTime
 
-class ActiveWorkCommandStep(
+class ActiveWork(
     private val repository: GitRepository,
     private val modulesFull: Modules
 ) : CommandStep {

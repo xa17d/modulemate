@@ -1,5 +1,8 @@
 package at.xa1.modulemate.command
 
+import at.xa1.modulemate.command.step.Browser
+import at.xa1.modulemate.command.step.Gradle
+import at.xa1.modulemate.command.step.Report
 import at.xa1.modulemate.config.CommandStep
 import at.xa1.modulemate.config.Config
 import at.xa1.modulemate.config.getForAndroidApp
@@ -8,7 +11,6 @@ import at.xa1.modulemate.config.getForKotlinLib
 import at.xa1.modulemate.config.toShellMode
 import at.xa1.modulemate.config.toSuccessCondition
 import at.xa1.modulemate.module.Modules
-import at.xa1.modulemate.system.Shell
 import at.xa1.modulemate.system.ShellOpenBrowser
 
 class CommandList {
@@ -34,7 +36,7 @@ internal fun createCommandList(
     config: Config,
     browser: ShellOpenBrowser,
     variables: Variables,
-    shell: Shell,
+    shell: at.xa1.modulemate.system.Shell,
     modules: Modules
 ): CommandList {
     val commandList = config.commands.map { command ->
@@ -60,16 +62,16 @@ private fun createCommandStep(
     step: CommandStep,
     browser: ShellOpenBrowser,
     variables: Variables,
-    shell: Shell,
+    shell: at.xa1.modulemate.system.Shell,
     modules: Modules
 ) = when (step) {
-    is CommandStep.Browser -> BrowserCommandStep(
+    is CommandStep.Browser -> Browser(
         browser = browser,
         variables = variables,
         urlPattern = step.url
     )
 
-    is CommandStep.Gradle -> GradleCommandStep(
+    is CommandStep.Gradle -> Gradle(
         shell = shell,
         modules = modules,
         kotlinLibFlags = step.flags.getForKotlinLib(),
@@ -80,7 +82,7 @@ private fun createCommandStep(
         androidAppTasks = step.tasks.getForAndroidApp()
     )
 
-    is CommandStep.Shell -> ShellCommandStep(
+    is CommandStep.Shell -> at.xa1.modulemate.command.step.Shell(
         mode = step.mode.toShellMode(),
         shell = shell,
         modulesInput = modules,
@@ -88,7 +90,7 @@ private fun createCommandStep(
         command = step.command
     )
 
-    is CommandStep.Report -> ReportCommandStep(
+    is CommandStep.Report -> Report(
         shell = shell,
         variables = variables,
         modules = modules,

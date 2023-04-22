@@ -13,16 +13,16 @@ import at.xa1.modulemate.cli.CliColor.CYAN
 import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
 import at.xa1.modulemate.cli.CliColor.UNDERLINE
-import at.xa1.modulemate.command.ActiveWorkCommandStep
-import at.xa1.modulemate.command.ChangeFilterCommandStep
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.CommandStepConfig
-import at.xa1.modulemate.command.ConflictAnalysisCommandStep
 import at.xa1.modulemate.command.StepSuccessCondition
 import at.xa1.modulemate.command.Variables
 import at.xa1.modulemate.command.addDefault
 import at.xa1.modulemate.command.createCommandList
+import at.xa1.modulemate.command.step.ActiveWork
+import at.xa1.modulemate.command.step.ChangeFilter
+import at.xa1.modulemate.command.step.ConflictAnalysis
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.ModuleType
@@ -70,7 +70,7 @@ fun main(args: Array<String>) {
                 listOf(
                     CommandStepConfig(
                         successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-                        step = ChangeFilterCommandStep(
+                        step = ChangeFilter(
                             modules,
                             ChangedModulesFilter(repository)
                         )
@@ -86,7 +86,7 @@ fun main(args: Array<String>) {
                 listOf(
                     CommandStepConfig(
                         successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-                        step = ActiveWorkCommandStep(repository, modules)
+                        step = ActiveWork(repository, modules)
                     )
                 )
             )
@@ -98,7 +98,7 @@ fun main(args: Array<String>) {
                 listOf(
                     CommandStepConfig(
                         successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-                        ConflictAnalysisCommandStep(repository, modules)
+                        ConflictAnalysis(repository, modules)
                     )
                 )
             )
