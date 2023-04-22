@@ -12,7 +12,6 @@ class ConflictAnalysisCommandStep(
     private val modulesFull: Modules
 ) : CommandStep {
 
-    override val runWhen: RunWhen = RunWhen.PREVIOUS_SUCCESS
     override fun run(): CommandResult {
         val limit = ZonedDateTime.now().minus(ACTIVE_TIME_SPAN)
 

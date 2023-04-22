@@ -5,8 +5,8 @@ import at.xa1.modulemate.config.Config
 import at.xa1.modulemate.config.getForAndroidApp
 import at.xa1.modulemate.config.getForAndroidLib
 import at.xa1.modulemate.config.getForKotlinLib
-import at.xa1.modulemate.config.toRunWhen
 import at.xa1.modulemate.config.toShellMode
+import at.xa1.modulemate.config.toSuccessCondition
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.system.Shell
 import at.xa1.modulemate.system.ShellOpenBrowser
@@ -41,49 +41,12 @@ internal fun createCommandList(
         Command(
             shortcut = command.shortcut,
             name = command.name,
-            steps = command.steps.map { step ->
-                when (step) {
-                    is CommandStep.Browser -> BrowserCommandStep(
-                        runWhen = step.runWhen.toRunWhen(),
-                        browser = browser,
-                        variables = variables,
-                        urlPattern = step.url
-                    )
-
-                    is CommandStep.Gradle -> GradleCommandStep(
-                        runWhen = step.runWhen.toRunWhen(),
-                        shell = shell,
-                        modules = modules,
-                        kotlinLibFlags = step.flags.getForKotlinLib(),
-                        androidLibFlags = step.flags.getForAndroidLib(),
-                        androidAppFlags = step.flags.getForAndroidApp(),
-                        kotlinLibTasks = step.tasks.getForKotlinLib(),
-                        androidLibTasks = step.tasks.getForAndroidLib(),
-                        androidAppTasks = step.tasks.getForAndroidApp()
-                    )
-
-                    is CommandStep.Shell -> ShellCommandStep(
-                        runWhen = step.runWhen.toRunWhen(),
-                        mode = step.mode.toShellMode(),
-                        shell = shell,
-                        modulesInput = modules,
-                        variables = variables,
-                        command = step.command
-                    )
-
-                    is CommandStep.Report -> ReportCommandStep(
-                        runWhen = step.runWhen.toRunWhen(),
-                        shell = shell,
-                        variables = variables,
-                        modules = modules,
-                        pathKotlinLib = step.path.getForKotlinLib().singleOrNull()
-                            ?: error("pathKotlinLib is not unique"),
-                        pathAndroidLib = step.path.getForAndroidLib().singleOrNull()
-                            ?: error("pathAndroidLib is not unique"),
-                        pathAndroidApp = step.path.getForAndroidApp().singleOrNull()
-                            ?: error("pathAndroidApp is not unique")
-                    )
-                }
+            stepConfigs =
+            command.steps.map { step ->
+                CommandStepConfig(
+                    successCondition = step.runWhen.toSuccessCondition(),
+                    step = createCommandStep(step, browser, variables, shell, modules)
+                )
             }
         )
     }
@@ -91,4 +54,49 @@ internal fun createCommandList(
     return CommandList().apply {
         addAll(commandList)
     }
+}
+
+private fun createCommandStep(
+    step: CommandStep,
+    browser: ShellOpenBrowser,
+    variables: Variables,
+    shell: Shell,
+    modules: Modules
+) = when (step) {
+    is CommandStep.Browser -> BrowserCommandStep(
+        browser = browser,
+        variables = variables,
+        urlPattern = step.url
+    )
+
+    is CommandStep.Gradle -> GradleCommandStep(
+        shell = shell,
+        modules = modules,
+        kotlinLibFlags = step.flags.getForKotlinLib(),
+        androidLibFlags = step.flags.getForAndroidLib(),
+        androidAppFlags = step.flags.getForAndroidApp(),
+        kotlinLibTasks = step.tasks.getForKotlinLib(),
+        androidLibTasks = step.tasks.getForAndroidLib(),
+        androidAppTasks = step.tasks.getForAndroidApp()
+    )
+
+    is CommandStep.Shell -> ShellCommandStep(
+        mode = step.mode.toShellMode(),
+        shell = shell,
+        modulesInput = modules,
+        variables = variables,
+        command = step.command
+    )
+
+    is CommandStep.Report -> ReportCommandStep(
+        shell = shell,
+        variables = variables,
+        modules = modules,
+        pathKotlinLib = step.path.getForKotlinLib().singleOrNull()
+            ?: error("pathKotlinLib is not unique"),
+        pathAndroidLib = step.path.getForAndroidLib().singleOrNull()
+            ?: error("pathAndroidLib is not unique"),
+        pathAndroidApp = step.path.getForAndroidApp().singleOrNull()
+            ?: error("pathAndroidApp is not unique")
+    )
 }

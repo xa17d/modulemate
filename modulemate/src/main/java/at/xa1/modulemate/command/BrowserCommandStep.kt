@@ -5,7 +5,6 @@ import java.net.URLEncoder
 import java.nio.charset.Charset
 
 class BrowserCommandStep(
-    override val runWhen: RunWhen,
     private val browser: Browser,
     private val variables: Variables,
     private val urlPattern: String

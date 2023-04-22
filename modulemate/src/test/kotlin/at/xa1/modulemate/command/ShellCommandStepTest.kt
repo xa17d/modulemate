@@ -17,7 +17,6 @@ class ShellCommandStepTest {
         val modules = testModules(Module(":kotlin-lib", "", "", ModuleType.KOTLIN_LIB))
 
         val step = ShellCommandStep(
-            runWhen = RunWhen.ALWAYS,
             mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
             shell = fakeShell,
             modulesInput = modules,
@@ -39,7 +38,6 @@ class ShellCommandStepTest {
         )
 
         val step = ShellCommandStep(
-            runWhen = RunWhen.ALWAYS,
             mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
             shell = fakeShell,
             modulesInput = modules,

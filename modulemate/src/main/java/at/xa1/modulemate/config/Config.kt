@@ -1,7 +1,7 @@
 package at.xa1.modulemate.config
 
-import at.xa1.modulemate.command.RunWhen
 import at.xa1.modulemate.command.ShellMode
+import at.xa1.modulemate.command.StepSuccessCondition
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -73,10 +73,10 @@ enum class CommandStepRunWhen {
     ALWAYS
 }
 
-fun CommandStepRunWhen.toRunWhen(): RunWhen = when (this) {
-    CommandStepRunWhen.PREVIOUS_SUCCESS -> RunWhen.PREVIOUS_SUCCESS
-    CommandStepRunWhen.PREVIOUS_FAILURE -> RunWhen.PREVIOUS_FAILURE
-    CommandStepRunWhen.ALWAYS -> RunWhen.ALWAYS
+fun CommandStepRunWhen.toSuccessCondition(): StepSuccessCondition = when (this) {
+    CommandStepRunWhen.PREVIOUS_SUCCESS -> StepSuccessCondition.PREVIOUS_SUCCESS
+    CommandStepRunWhen.PREVIOUS_FAILURE -> StepSuccessCondition.PREVIOUS_FAILURE
+    CommandStepRunWhen.ALWAYS -> StepSuccessCondition.ALWAYS
 }
 
 @Serializable

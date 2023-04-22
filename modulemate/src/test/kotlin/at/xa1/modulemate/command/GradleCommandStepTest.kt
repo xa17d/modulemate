@@ -16,7 +16,6 @@ class GradleCommandStepTest {
     @Test
     fun `gradle shell command is constructed correctly`() {
         GradleCommandStep(
-            runWhen = RunWhen.PREVIOUS_SUCCESS,
             shell = fakeShell,
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),
@@ -55,7 +54,6 @@ class GradleCommandStepTest {
     @Test
     fun `gradle shell command only contains flags of module types present`() {
         GradleCommandStep(
-            runWhen = RunWhen.PREVIOUS_SUCCESS,
             shell = fakeShell,
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),

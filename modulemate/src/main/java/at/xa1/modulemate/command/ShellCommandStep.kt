@@ -8,7 +8,6 @@ import at.xa1.modulemate.system.Shell
 import at.xa1.modulemate.system.isSuccess
 
 class ShellCommandStep(
-    override val runWhen: RunWhen,
     private val mode: ShellMode,
     private val shell: Shell,
     private val modulesInput: Modules,

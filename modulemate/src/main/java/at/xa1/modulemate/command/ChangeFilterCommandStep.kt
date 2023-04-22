@@ -4,7 +4,6 @@ import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.filter.ModulesFilter
 
 class ChangeFilterCommandStep(
-    override val runWhen: RunWhen,
     private val modules: Modules,
     private val filter: ModulesFilter
 ) : CommandStep {

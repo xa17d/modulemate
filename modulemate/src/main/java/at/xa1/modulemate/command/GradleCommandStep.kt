@@ -6,7 +6,6 @@ import at.xa1.modulemate.system.Shell
 import at.xa1.modulemate.system.isSuccess
 
 class GradleCommandStep(
-    override val runWhen: RunWhen,
     private val shell: Shell,
     private val modules: Modules,
     private val kotlinLibFlags: List<String>,

@@ -17,8 +17,9 @@ import at.xa1.modulemate.command.ActiveWorkCommandStep
 import at.xa1.modulemate.command.ChangeFilterCommandStep
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandResult
+import at.xa1.modulemate.command.CommandStepConfig
 import at.xa1.modulemate.command.ConflictAnalysisCommandStep
-import at.xa1.modulemate.command.RunWhen
+import at.xa1.modulemate.command.StepSuccessCondition
 import at.xa1.modulemate.command.Variables
 import at.xa1.modulemate.command.addDefault
 import at.xa1.modulemate.command.createCommandList
@@ -66,21 +67,40 @@ fun main(args: Array<String>) {
             Command(
                 "changedModules",
                 "Filter only for changed modules",
-                listOf(ChangeFilterCommandStep(RunWhen.PREVIOUS_SUCCESS, modules, ChangedModulesFilter(repository)))
+                listOf(
+                    CommandStepConfig(
+                        successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
+                        step = ChangeFilterCommandStep(
+                            modules,
+                            ChangedModulesFilter(repository)
+                        )
+                    )
+                )
+
             )
         )
         add(
             Command(
                 "activeWork",
                 "Show what modules are actively worked on in remote branches",
-                listOf(ActiveWorkCommandStep(repository, modules))
+                listOf(
+                    CommandStepConfig(
+                        successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
+                        step = ActiveWorkCommandStep(repository, modules)
+                    )
+                )
             )
         )
         add(
             Command(
                 "conflictAnalysis",
                 "Show what other remote branches touch modules worked on locally.",
-                listOf(ConflictAnalysisCommandStep(repository, modules))
+                listOf(
+                    CommandStepConfig(
+                        successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
+                        ConflictAnalysisCommandStep(repository, modules)
+                    )
+                )
             )
         )
     }
