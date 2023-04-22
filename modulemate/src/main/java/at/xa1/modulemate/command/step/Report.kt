@@ -1,9 +1,10 @@
 package at.xa1.modulemate.command.step
 
 import at.xa1.modulemate.command.CommandResult
-import at.xa1.modulemate.command.Variable
-import at.xa1.modulemate.command.Variables
 import at.xa1.modulemate.command.successToCommandResult
+import at.xa1.modulemate.command.variable.DefaultVariables
+import at.xa1.modulemate.command.variable.Variables
+import at.xa1.modulemate.command.variable.replacePlaceholders
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.system.Shell
@@ -19,10 +20,7 @@ class Report(
     private val pathAndroidApp: String
 ) : CommandStep {
     override fun run(): CommandResult {
-        val activeModule = modules.getActiveModule()
-
-        val variable = Variable("ACTIVE_MODULE_PATH") { activeModule.absolutePath }
-        variables.add(variable)
+        val activeModule = modules.getByPath(variables.get(DefaultVariables.ACTIVE_MODULE))
 
         val path = when (activeModule.type) {
             ModuleType.OTHER -> error("Unknown ModuleType for ${activeModule.path}")
@@ -32,8 +30,6 @@ class Report(
         }
 
         val result = shell.run("open", variables.replacePlaceholders(path))
-
-        variables.remove(variable.name)
 
         return result.isSuccess.successToCommandResult()
     }

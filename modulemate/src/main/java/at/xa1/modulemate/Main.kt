@@ -17,12 +17,12 @@ import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.CommandStepConfig
 import at.xa1.modulemate.command.StepSuccessCondition
-import at.xa1.modulemate.command.Variables
-import at.xa1.modulemate.command.addDefault
 import at.xa1.modulemate.command.createCommandList
 import at.xa1.modulemate.command.step.ActiveWork
 import at.xa1.modulemate.command.step.ChangeFilter
 import at.xa1.modulemate.command.step.ConflictAnalysis
+import at.xa1.modulemate.command.variable.CachedVariables
+import at.xa1.modulemate.command.variable.DefaultVariables
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.ModuleType
@@ -59,9 +59,8 @@ fun main(args: Array<String>) {
         modules.applyFilter(PathPrefixFilter(filter))
     }
     val browser = ShellOpenBrowser(shell)
-    val variables = Variables().apply {
-        addDefault(repository)
-    }
+    val defaultVariables = DefaultVariables.create(repository, modules)
+    val variables = CachedVariables(defaultVariables)
     val commandList = createCommandList(config, browser, variables, printingShell, modules).apply {
         add(
             Command(
@@ -158,6 +157,8 @@ fun main(args: Array<String>) {
             } else {
                 runCommand(command)
             }
+
+            variables.clearCache()
         }
     }
 

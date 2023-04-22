@@ -1,7 +1,7 @@
 package at.xa1.modulemate.command.step
 
 import at.xa1.modulemate.command.CommandResult
-import at.xa1.modulemate.command.Variables
+import at.xa1.modulemate.command.variable.VariableSet
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.testModules
@@ -22,7 +22,7 @@ class ShellTest {
             mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
             shell = fakeShell,
             modulesInput = modules,
-            variables = Variables(),
+            variables = VariableSet(),
             command = listOf("myCommand")
         )
 
@@ -43,7 +43,7 @@ class ShellTest {
             mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
             shell = fakeShell,
             modulesInput = modules,
-            variables = Variables(),
+            variables = VariableSet(),
             command = listOf("myCommand")
         )
 

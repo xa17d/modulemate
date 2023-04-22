@@ -3,6 +3,7 @@ package at.xa1.modulemate.command
 import at.xa1.modulemate.command.step.Browser
 import at.xa1.modulemate.command.step.Gradle
 import at.xa1.modulemate.command.step.Report
+import at.xa1.modulemate.command.variable.Variables
 import at.xa1.modulemate.config.CommandStep
 import at.xa1.modulemate.config.Config
 import at.xa1.modulemate.config.getForAndroidApp
