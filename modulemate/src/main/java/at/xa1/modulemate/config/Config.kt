@@ -7,13 +7,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Config(
-    val module: ModuleConfig,
-    val commands: List<Command>
+    val version: String,
+    val module: ModuleConfig = ModuleConfig(),
+    val commands: List<Command> = emptyList()
 )
 
 @Serializable
 data class ModuleConfig(
-    val classification: ModuleClassificationConfig
+    val classification: ModuleClassificationConfig? = null
 )
 
 @Serializable

@@ -23,6 +23,7 @@ import at.xa1.modulemate.command.step.ChangeFilter
 import at.xa1.modulemate.command.step.ConflictAnalysis
 import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.command.variable.DefaultVariables
+import at.xa1.modulemate.config.ConfigMerger
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.ModuleType
@@ -46,14 +47,15 @@ fun main(args: Array<String>) {
     val repositoryRoot = repository.getRepositoryRoot()
 
     print(
-        "$BOLD$BACKGROUND_RED \uD83E\uDDF0 modulemate " +
+        "$BOLD$BACKGROUND_RED \uD83E\uDDF0 modulemate v${Modulemate.VERSION} " +
             "〉${repository.getRemoteOrigin().repositoryName} 〉${repository.getBranch()}" +
             "$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE"
     )
 
-    val config = ConfigResolver(repositoryRoot).getConfig()
+    val configList = ConfigResolver(repositoryRoot).getConfigs()
+    val configMerger = ConfigMerger(configList)
     val modules = Modules(
-        scanner = RepositoryModulesScanner(config.module.classification, repositoryRoot)
+        scanner = RepositoryModulesScanner(configMerger.getModuleClassification(), repositoryRoot)
     )
     if (filter != null) {
         modules.applyFilter(PathPrefixFilter(filter))
@@ -61,7 +63,13 @@ fun main(args: Array<String>) {
     val browser = ShellOpenBrowser(shell)
     val defaultVariables = DefaultVariables.create(repository, modules)
     val variables = CachedVariables(defaultVariables)
-    val commandList = createCommandList(config, browser, variables, printingShell, modules).apply {
+    val commandList = createCommandList(
+        configMerger.getCommandConfigs(),
+        browser,
+        variables,
+        printingShell,
+        modules
+    ).apply {
         add(
             Command(
                 "changedModules",

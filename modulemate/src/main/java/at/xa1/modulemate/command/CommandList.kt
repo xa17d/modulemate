@@ -5,7 +5,6 @@ import at.xa1.modulemate.command.step.Gradle
 import at.xa1.modulemate.command.step.Report
 import at.xa1.modulemate.command.variable.Variables
 import at.xa1.modulemate.config.CommandStep
-import at.xa1.modulemate.config.Config
 import at.xa1.modulemate.config.getForAndroidApp
 import at.xa1.modulemate.config.getForAndroidLib
 import at.xa1.modulemate.config.getForKotlinLib
@@ -34,13 +33,13 @@ class CommandList {
 }
 
 internal fun createCommandList(
-    config: Config,
+    commandConfigs: List<at.xa1.modulemate.config.Command>,
     browser: ShellOpenBrowser,
     variables: Variables,
     shell: at.xa1.modulemate.system.Shell,
     modules: Modules
 ): CommandList {
-    val commandList = config.commands.map { command ->
+    val commandList = commandConfigs.map { command ->
         Command(
             shortcut = command.shortcut,
             name = command.name,

@@ -1,0 +1,22 @@
+{
+    "version": "1",
+    "module": {
+        "classification": {
+            "kotlinLib": "\\Qapply plugin: \"java-library\"\\E",
+            "androidLib": "\\Qapply plugin: \"com.android.library\"\\E",
+            "androidApp": "\\Qapply plugin: \"com.android.application\"\\E"
+        }
+    },
+    "commands": [
+        {
+            "shortcut": "pr",
+            "name": "Pull Request",
+            "steps": [
+                {
+                    "type": "browser",
+                    "url": "https://{GIT_HOST}/{GIT_OWNER}/{GIT_REPOSITORY_NAME}/pull/{GIT_BRANCH_NAME}"
+                }
+            ]
+        }
+    ]
+}
