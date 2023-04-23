@@ -15,12 +15,7 @@ import at.xa1.modulemate.cli.CliColor.RESET
 import at.xa1.modulemate.cli.CliColor.UNDERLINE
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandResult
-import at.xa1.modulemate.command.CommandStepConfig
-import at.xa1.modulemate.command.StepSuccessCondition
 import at.xa1.modulemate.command.createCommandList
-import at.xa1.modulemate.command.step.ActiveWork
-import at.xa1.modulemate.command.step.ChangeFilter
-import at.xa1.modulemate.command.step.ConflictAnalysis
 import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.command.variable.DefaultVariables
 import at.xa1.modulemate.config.ConfigMerger
@@ -29,7 +24,6 @@ import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
-import at.xa1.modulemate.module.filter.ChangedModulesFilter
 import at.xa1.modulemate.module.filter.PathPrefixFilter
 import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
@@ -68,49 +62,9 @@ fun main(args: Array<String>) {
         browser,
         variables,
         printingShell,
+        repository,
         modules
-    ).apply {
-        add(
-            Command(
-                "changedModules",
-                "Filter only for changed modules",
-                listOf(
-                    CommandStepConfig(
-                        successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-                        step = ChangeFilter(
-                            modules,
-                            ChangedModulesFilter(repository)
-                        )
-                    )
-                )
-
-            )
-        )
-        add(
-            Command(
-                "activeWork",
-                "Show what modules are actively worked on in remote branches",
-                listOf(
-                    CommandStepConfig(
-                        successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-                        step = ActiveWork(repository, modules)
-                    )
-                )
-            )
-        )
-        add(
-            Command(
-                "conflictAnalysis",
-                "Show what other remote branches touch modules worked on locally.",
-                listOf(
-                    CommandStepConfig(
-                        successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-                        ConflictAnalysis(repository, modules)
-                    )
-                )
-            )
-        )
-    }
+    )
 
     val shortcutOrFilter = cliArgs.nextOrNull()
     val shortcutCommand = if (shortcutOrFilter == null) {

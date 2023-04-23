@@ -65,6 +65,13 @@ sealed interface CommandStep {
         override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
         val path: TypeSpecificStringList = TypeSpecificStringList()
     ) : CommandStep
+
+    @Serializable
+    @SerialName("builtIn")
+    data class BuiltIn(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
+        val id: String
+    ) : CommandStep
 }
 
 @Serializable

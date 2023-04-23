@@ -1,6 +1,9 @@
 package at.xa1.modulemate.command
 
+import at.xa1.modulemate.command.step.ActiveWork
 import at.xa1.modulemate.command.step.Browser
+import at.xa1.modulemate.command.step.ChangeFilter
+import at.xa1.modulemate.command.step.ConflictAnalysis
 import at.xa1.modulemate.command.step.Gradle
 import at.xa1.modulemate.command.step.Report
 import at.xa1.modulemate.command.variable.Variables
@@ -10,7 +13,9 @@ import at.xa1.modulemate.config.getForAndroidLib
 import at.xa1.modulemate.config.getForKotlinLib
 import at.xa1.modulemate.config.toShellMode
 import at.xa1.modulemate.config.toSuccessCondition
+import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
+import at.xa1.modulemate.module.filter.ChangedModulesFilter
 import at.xa1.modulemate.system.ShellOpenBrowser
 
 class CommandList {
@@ -37,6 +42,7 @@ internal fun createCommandList(
     browser: ShellOpenBrowser,
     variables: Variables,
     shell: at.xa1.modulemate.system.Shell,
+    repository: GitRepository,
     modules: Modules
 ): CommandList {
     val commandList = commandConfigs.map { command ->
@@ -47,7 +53,7 @@ internal fun createCommandList(
             command.steps.map { step ->
                 CommandStepConfig(
                     successCondition = step.runWhen.toSuccessCondition(),
-                    step = createCommandStep(step, browser, variables, shell, modules)
+                    step = createCommandStep(step, browser, variables, shell, repository, modules)
                 )
             }
         )
@@ -63,6 +69,7 @@ private fun createCommandStep(
     browser: ShellOpenBrowser,
     variables: Variables,
     shell: at.xa1.modulemate.system.Shell,
+    repository: GitRepository,
     modules: Modules
 ) = when (step) {
     is CommandStep.Browser -> Browser(
@@ -101,4 +108,13 @@ private fun createCommandStep(
         pathAndroidApp = step.path.getForAndroidApp().singleOrNull()
             ?: error("pathAndroidApp is not unique")
     )
+
+    is CommandStep.BuiltIn -> {
+        when (step.id) {
+            "activeWork" -> ActiveWork(repository, modules)
+            "conflictAnalysis" -> ConflictAnalysis(repository, modules)
+            "changedModules" -> ChangeFilter(modules, ChangedModulesFilter(repository))
+            else -> error("Unknown built-in step: ${step.id}")
+        }
+    }
 }

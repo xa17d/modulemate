@@ -17,6 +17,36 @@
                     "url": "https://{GIT_HOST}/{GIT_OWNER}/{GIT_REPOSITORY_NAME}/pull/{GIT_BRANCH_NAME}"
                 }
             ]
+        },
+        {
+            "shortcut": "activeWork",
+            "name": "Show what modules are actively worked on in remote branches.",
+            "steps": [
+                {
+                    "type": "builtIn",
+                    "id": "activeWork"
+                }
+            ]
+        },
+        {
+            "shortcut": "conflictAnalysis",
+            "name": "Show what other remote branches touch modules that are also worked on locally.",
+            "steps": [
+                {
+                    "type": "builtIn",
+                    "id": "conflictAnalysis"
+                }
+            ]
+        },
+        {
+            "shortcut": "changedModules",
+            "name": "Filter only for changed modules",
+            "steps": [
+                {
+                    "type": "builtIn",
+                    "id": "changedModules"
+                }
+            ]
         }
     ]
 }
