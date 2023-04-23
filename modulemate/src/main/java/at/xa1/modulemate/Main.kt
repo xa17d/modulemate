@@ -9,6 +9,7 @@ import at.xa1.modulemate.command.CommandStepConfig
 import at.xa1.modulemate.command.StepSuccessCondition
 import at.xa1.modulemate.command.createCommandList
 import at.xa1.modulemate.command.step.Help
+import at.xa1.modulemate.command.step.QuitException
 import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.command.variable.DefaultVariables
 import at.xa1.modulemate.config.ConfigMerger
@@ -72,18 +73,21 @@ fun main(args: Array<String>) {
         commandList = commandList
     )
 
-    val filterBeforeCommand = modules.filter
+    try {
+        val filterBeforeCommand = modules.filter
 
-    val promptMode = when (commandRunner.run(cliArgs)) {
-        UserCommandRunner.Result.COMMAND_RUN ->
-            modules.filter != filterBeforeCommand
+        val promptMode = when (commandRunner.run(cliArgs)) {
+            UserCommandRunner.Result.COMMAND_RUN ->
+                modules.filter != filterBeforeCommand
 
-        UserCommandRunner.Result.INPUT_INVALID -> true // TODO show error
-        UserCommandRunner.Result.FILTER_APPLIED -> true
-    }
+            UserCommandRunner.Result.INPUT_INVALID -> true // TODO show error
+            UserCommandRunner.Result.FILTER_APPLIED -> true
+        }
 
-    if (promptMode) {
-        PromptMode(modules, variables, commandRunner).run()
+        if (promptMode) {
+            PromptMode(modules, variables, commandRunner).run()
+        }
+    } catch (_: QuitException) {
     }
 
     Cli.line("👋 bye")

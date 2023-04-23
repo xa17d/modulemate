@@ -66,6 +66,15 @@
                     ]
                 }
             ]
+        },
+        {
+            "shortcut": "q",
+            "name": "Quit modulemate",
+            "steps": [
+                {
+                    "type": "quit"
+                }
+            ]
         }
     ]
 }

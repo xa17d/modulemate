@@ -5,6 +5,7 @@ import at.xa1.modulemate.command.step.Browser
 import at.xa1.modulemate.command.step.ChangeFilter
 import at.xa1.modulemate.command.step.ConflictAnalysis
 import at.xa1.modulemate.command.step.Gradle
+import at.xa1.modulemate.command.step.Quit
 import at.xa1.modulemate.command.step.Report
 import at.xa1.modulemate.command.variable.replacePlaceholders
 import at.xa1.modulemate.config.CommandStep
@@ -110,4 +111,7 @@ private fun createCommandStep(
 
     is CommandStep.ConflictAnalysis ->
         ConflictAnalysis()
+
+    is CommandStep.Quit ->
+        Quit()
 }

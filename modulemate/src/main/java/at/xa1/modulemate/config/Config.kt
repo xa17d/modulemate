@@ -90,6 +90,12 @@ sealed interface CommandStep {
     data class ConflictAnalysis(
         override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS
     ) : CommandStep
+
+    @Serializable
+    @SerialName("quit")
+    data class Quit(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS
+    ) : CommandStep
 }
 
 @Serializable
