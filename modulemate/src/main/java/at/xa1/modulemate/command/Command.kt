@@ -5,7 +5,7 @@ class Command(
     val name: String,
     val stepConfigs: List<CommandStepConfig>
 ) {
-    fun run(): CommandResult {
+    fun run(context: CommandContext): CommandResult {
         var result = CommandResult.SUCCESS
         for (stepConfig in stepConfigs) {
             val runStep = when (result) {
@@ -19,7 +19,7 @@ class Command(
             }
 
             if (runStep) {
-                val stepResult = stepConfig.step.run()
+                val stepResult = stepConfig.step.run(context)
                 if (stepResult == CommandResult.FAILURE) {
                     result = CommandResult.FAILURE
                 }

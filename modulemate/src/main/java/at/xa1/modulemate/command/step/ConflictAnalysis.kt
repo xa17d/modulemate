@@ -1,19 +1,17 @@
 package at.xa1.modulemate.command.step
 
+import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.step.ActiveWork.Companion.ACTIVE_TIME_SPAN
-import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Module
-import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.filter.findModulesByFiles
 import java.time.ZonedDateTime
 
-class ConflictAnalysis(
-    private val repository: GitRepository,
-    private val modulesFull: Modules
-) : CommandStep {
+class ConflictAnalysis : CommandStep {
 
-    override fun run(): CommandResult {
+    override fun run(context: CommandContext): CommandResult {
+        val repository = context.repository
+
         val limit = ZonedDateTime.now().minus(ACTIVE_TIME_SPAN)
 
         try {
@@ -25,7 +23,7 @@ class ConflictAnalysis(
         val remoteTrackingBranch = repository.getRemoteTrackingBranch()
 
         val modules = mutableMapOf<Module, ModuleConflicts>()
-        val consideredModules = modulesFull.filteredModules
+        val consideredModules = context.modules.filteredModules
         consideredModules.forEach { module ->
             modules[module] = ModuleConflicts(module, mutableListOf())
         }

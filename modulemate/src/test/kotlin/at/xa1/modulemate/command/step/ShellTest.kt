@@ -1,7 +1,7 @@
 package at.xa1.modulemate.command.step
 
 import at.xa1.modulemate.command.CommandResult
-import at.xa1.modulemate.command.variable.VariableSet
+import at.xa1.modulemate.command.testCommandContext
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.testModules
@@ -21,12 +21,10 @@ class ShellTest {
         val step = Shell(
             mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
             shell = fakeShell,
-            modulesInput = modules,
-            variables = VariableSet(),
             command = listOf("myCommand")
         )
 
-        val result = step.run()
+        val result = step.run(testCommandContext(modules = modules))
 
         assertEquals(CommandResult.SUCCESS, result)
         fakeShell.assertNothingWasRun()
@@ -42,14 +40,12 @@ class ShellTest {
         val step = Shell(
             mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
             shell = fakeShell,
-            modulesInput = modules,
-            variables = VariableSet(),
             command = listOf("myCommand")
         )
 
         fakeShell.whenRun("myCommand", result = ShellResult.SUCCESS_EMPTY)
 
-        val result = step.run()
+        val result = step.run(testCommandContext(modules = modules))
 
         assertEquals(CommandResult.SUCCESS, result)
         assertEquals(

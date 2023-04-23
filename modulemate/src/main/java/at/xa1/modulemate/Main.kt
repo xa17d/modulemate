@@ -14,6 +14,7 @@ import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
 import at.xa1.modulemate.cli.CliColor.UNDERLINE
 import at.xa1.modulemate.command.Command
+import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.createCommandList
 import at.xa1.modulemate.command.variable.CachedVariables
@@ -60,10 +61,7 @@ fun main(args: Array<String>) {
     val commandList = createCommandList(
         configMerger.getCommandConfigs(),
         browser,
-        variables,
-        printingShell,
-        repository,
-        modules
+        printingShell
     )
 
     val shortcutOrFilter = cliArgs.nextOrNull()
@@ -78,7 +76,7 @@ fun main(args: Array<String>) {
             "$UNDERLINE$BOLD${shortcutCommand.shortcut}:$RESET " +
                 "${shortcutCommand.name}$CLEAR_UNTIL_END_OF_LINE\n$RESET"
         )
-        runCommand(shortcutCommand)
+        runCommand(shortcutCommand, CommandContext(repository, modules, variables))
     } else {
         if (shortcutOrFilter != null) {
             modules.applyFilter(PathPrefixFilter(shortcutOrFilter))
@@ -117,7 +115,7 @@ fun main(args: Array<String>) {
                     )
                 }
             } else {
-                runCommand(command)
+                runCommand(command, CommandContext(repository, modules, variables))
             }
 
             variables.clearCache()
@@ -140,9 +138,9 @@ private fun printModules(modules: Modules) {
     }
 }
 
-fun runCommand(command: Command) {
+fun runCommand(command: Command, context: CommandContext) {
     print("$BACKGROUND_BRIGHT_BLUE▶️  ${command.name}$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
-    val result = command.run()
+    val result = command.run(context)
     when (result) {
         CommandResult.SUCCESS ->
             print("$BACKGROUND_BRIGHT_GREEN🎉 Success!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")

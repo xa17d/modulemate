@@ -1,15 +1,14 @@
 package at.xa1.modulemate.command.step
 
+import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.successToCommandResult
 import at.xa1.modulemate.module.ModuleType
-import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.system.Shell
 import at.xa1.modulemate.system.isSuccess
 
 class Gradle(
     private val shell: Shell,
-    private val modules: Modules,
     private val kotlinLibFlags: List<String>,
     private val androidLibFlags: List<String>,
     private val androidAppFlags: List<String>,
@@ -17,9 +16,10 @@ class Gradle(
     private val androidLibTasks: List<String>,
     private val androidAppTasks: List<String>
 ) : CommandStep {
-    override fun run(): CommandResult {
+    override fun run(context: CommandContext): CommandResult {
+        val modules = context.modules.filteredModules
         val flags = mutableSetOf<String>()
-        modules.filteredModules.forEach { module ->
+        modules.forEach { module ->
             when (module.type) {
                 ModuleType.KOTLIN_LIB -> flags.addAll(kotlinLibFlags)
                 ModuleType.ANDROID_LIB -> flags.addAll(androidLibFlags)
@@ -30,7 +30,7 @@ class Gradle(
 
         val command = listOf("./gradlew") +
             flags +
-            modules.filteredModules.flatMap { module ->
+            modules.flatMap { module ->
                 val tasks = when (module.type) {
                     ModuleType.OTHER -> emptyList()
                     ModuleType.KOTLIN_LIB -> kotlinLibTasks

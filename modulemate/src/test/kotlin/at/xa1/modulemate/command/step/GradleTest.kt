@@ -1,5 +1,6 @@
 package at.xa1.modulemate.command.step
 
+import at.xa1.modulemate.command.testCommandContext
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.testModules
@@ -15,21 +16,22 @@ class GradleTest {
 
     @Test
     fun `gradle shell command is constructed correctly`() {
+        val modules = testModules(
+            Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
+            Module(":test-android", "", "", ModuleType.ANDROID_LIB),
+            Module(":test-app", "", "", ModuleType.ANDROID_APP),
+            Module(":test-other", "", "", ModuleType.OTHER)
+        )
+
         Gradle(
             shell = fakeShell,
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),
             androidAppFlags = listOf("-PandroidAppFlag1", "-PandroidAppFlag2"),
-            modules = testModules(
-                Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
-                Module(":test-android", "", "", ModuleType.ANDROID_LIB),
-                Module(":test-app", "", "", ModuleType.ANDROID_APP),
-                Module(":test-other", "", "", ModuleType.OTHER)
-            ),
             kotlinLibTasks = listOf("javaTask1", "javaTask2"),
             androidLibTasks = listOf("androidLibTask1", "androidLibTask2"),
             androidAppTasks = listOf("androidAppTask1", "androidAppTask2")
-        ).run()
+        ).run(testCommandContext(modules = modules))
 
         assertEquals(
             listOf(
@@ -53,18 +55,19 @@ class GradleTest {
 
     @Test
     fun `gradle shell command only contains flags of module types present`() {
+        val modules = testModules(
+            Module(":test-core", "", "", ModuleType.KOTLIN_LIB)
+        )
+
         Gradle(
             shell = fakeShell,
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),
             androidAppFlags = listOf("-PandroidAppFlag1", "-PandroidAppFlag2"),
-            modules = testModules(
-                Module(":test-core", "", "", ModuleType.KOTLIN_LIB)
-            ),
             kotlinLibTasks = listOf("javaTask1", "javaTask2"),
             androidLibTasks = listOf("androidLibTask1", "androidLibTask2"),
             androidAppTasks = listOf("androidAppTask1", "androidAppTask2")
-        ).run()
+        ).run(testCommandContext(modules = modules))
 
         assertEquals(
             listOf(

@@ -5,19 +5,16 @@ import at.xa1.modulemate.cli.CliColor.BLACK
 import at.xa1.modulemate.cli.CliColor.BOLD
 import at.xa1.modulemate.cli.CliColor.CLEAR_UNTIL_END_OF_LINE
 import at.xa1.modulemate.cli.CliColor.RESET
+import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
-import at.xa1.modulemate.git.GitRepository
-import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.filter.findModulesByFiles
 import java.time.Duration
 import java.time.ZonedDateTime
 
-class ActiveWork(
-    private val repository: GitRepository,
-    private val modulesFull: Modules
-) : CommandStep {
+class ActiveWork : CommandStep {
 
-    override fun run(): CommandResult {
+    override fun run(context: CommandContext): CommandResult {
+        val repository = context.repository
         val limit = ZonedDateTime.now().minus(ACTIVE_TIME_SPAN)
 
         try {
@@ -26,7 +23,7 @@ class ActiveWork(
             println("fetch all failed: $e")
         }
 
-        val modules = modulesFull.allModules
+        val modules = context.modules.allModules
 
         repository.getLatestChangeOnRemote()
             .filter { it.latestCommitDate.isAfter(limit) }

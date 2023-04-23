@@ -6,15 +6,12 @@ import at.xa1.modulemate.command.step.ChangeFilter
 import at.xa1.modulemate.command.step.ConflictAnalysis
 import at.xa1.modulemate.command.step.Gradle
 import at.xa1.modulemate.command.step.Report
-import at.xa1.modulemate.command.variable.Variables
 import at.xa1.modulemate.config.CommandStep
 import at.xa1.modulemate.config.getForAndroidApp
 import at.xa1.modulemate.config.getForAndroidLib
 import at.xa1.modulemate.config.getForKotlinLib
 import at.xa1.modulemate.config.toShellMode
 import at.xa1.modulemate.config.toSuccessCondition
-import at.xa1.modulemate.git.GitRepository
-import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.filter.ChangedModulesFilter
 import at.xa1.modulemate.system.ShellOpenBrowser
 
@@ -40,10 +37,7 @@ class CommandList {
 internal fun createCommandList(
     commandConfigs: List<at.xa1.modulemate.config.Command>,
     browser: ShellOpenBrowser,
-    variables: Variables,
-    shell: at.xa1.modulemate.system.Shell,
-    repository: GitRepository,
-    modules: Modules
+    shell: at.xa1.modulemate.system.Shell
 ): CommandList {
     val commandList = commandConfigs.map { command ->
         Command(
@@ -53,7 +47,7 @@ internal fun createCommandList(
             command.steps.map { step ->
                 CommandStepConfig(
                     successCondition = step.runWhen.toSuccessCondition(),
-                    step = createCommandStep(step, browser, variables, shell, repository, modules)
+                    step = createCommandStep(step, browser, shell)
                 )
             }
         )
@@ -67,20 +61,15 @@ internal fun createCommandList(
 private fun createCommandStep(
     step: CommandStep,
     browser: ShellOpenBrowser,
-    variables: Variables,
-    shell: at.xa1.modulemate.system.Shell,
-    repository: GitRepository,
-    modules: Modules
+    shell: at.xa1.modulemate.system.Shell
 ) = when (step) {
     is CommandStep.Browser -> Browser(
         browser = browser,
-        variables = variables,
         urlPattern = step.url
     )
 
     is CommandStep.Gradle -> Gradle(
         shell = shell,
-        modules = modules,
         kotlinLibFlags = step.flags.getForKotlinLib(),
         androidLibFlags = step.flags.getForAndroidLib(),
         androidAppFlags = step.flags.getForAndroidApp(),
@@ -92,15 +81,11 @@ private fun createCommandStep(
     is CommandStep.Shell -> at.xa1.modulemate.command.step.Shell(
         mode = step.mode.toShellMode(),
         shell = shell,
-        modulesInput = modules,
-        variables = variables,
         command = step.command
     )
 
     is CommandStep.Report -> Report(
         shell = shell,
-        variables = variables,
-        modules = modules,
         pathKotlinLib = step.path.getForKotlinLib().singleOrNull()
             ?: error("pathKotlinLib is not unique"),
         pathAndroidLib = step.path.getForAndroidLib().singleOrNull()
@@ -111,9 +96,9 @@ private fun createCommandStep(
 
     is CommandStep.BuiltIn -> {
         when (step.id) {
-            "activeWork" -> ActiveWork(repository, modules)
-            "conflictAnalysis" -> ConflictAnalysis(repository, modules)
-            "changedModules" -> ChangeFilter(modules, ChangedModulesFilter(repository))
+            "activeWork" -> ActiveWork()
+            "conflictAnalysis" -> ConflictAnalysis()
+            "changedModules" -> ChangeFilter { context -> ChangedModulesFilter(context.repository) }
             else -> error("Unknown built-in step: ${step.id}")
         }
     }

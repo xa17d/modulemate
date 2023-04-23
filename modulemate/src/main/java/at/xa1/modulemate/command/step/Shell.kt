@@ -1,11 +1,10 @@
 package at.xa1.modulemate.command.step
 
+import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.successToCommandResult
-import at.xa1.modulemate.command.variable.Variables
 import at.xa1.modulemate.command.variable.replacePlaceholders
 import at.xa1.modulemate.module.ModuleType
-import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.containsAnyAndroidModule
 import at.xa1.modulemate.module.containsAnyOfType
 import at.xa1.modulemate.system.Shell
@@ -14,12 +13,10 @@ import at.xa1.modulemate.system.isSuccess
 class Shell(
     private val mode: ShellMode,
     private val shell: Shell,
-    private val modulesInput: Modules,
-    private val variables: Variables,
     private val command: List<String>
 ) : CommandStep {
-    override fun run(): CommandResult {
-        val modules = modulesInput.filteredModules
+    override fun run(context: CommandContext): CommandResult {
+        val modules = context.modules.filteredModules
 
         val shouldRun = when (mode) {
             ShellMode.RUN_ONCE -> true
@@ -32,7 +29,7 @@ class Shell(
 
         return if (shouldRun) {
             val result = shell.run(
-                command.map { variables.replacePlaceholders(it) }.toTypedArray()
+                command.map { context.variables.replacePlaceholders(it) }.toTypedArray()
             )
 
             result.isSuccess.successToCommandResult()

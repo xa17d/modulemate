@@ -29,7 +29,7 @@ class CommandTest {
             stepConfigs = listOf(stepConfig1, stepConfig2)
         )
 
-        val result = command.run()
+        val result = command.run(testCommandContext())
 
         assertTrue(step1.didRun)
         assertFalse(step2.didRun)
@@ -58,7 +58,7 @@ class CommandTest {
             stepConfigs = listOf(stepConfig1, stepConfig2)
         )
 
-        val result = command.run()
+        val result = command.run(testCommandContext())
 
         assertTrue(step1.didRun)
         assertFalse(step2.didRun)
@@ -87,7 +87,7 @@ class CommandTest {
             stepConfigs = listOf(stepConfig1, stepConfig2)
         )
 
-        val result = command.run()
+        val result = command.run(testCommandContext())
 
         assertTrue(step1.didRun)
         assertTrue(step2.didRun)
@@ -122,7 +122,7 @@ class CommandTest {
             stepConfigs = listOf(stepConfig1, stepConfig2, stepConfig3)
         )
 
-        val result = command.run()
+        val result = command.run(testCommandContext())
 
         assertTrue(step1.didRun)
         assertTrue(step2.didRun)
