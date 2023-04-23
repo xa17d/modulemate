@@ -6,6 +6,9 @@ import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.command.CommandResult
+import at.xa1.modulemate.command.variable.DefaultVariables
+import at.xa1.modulemate.command.variable.Variable
+import at.xa1.modulemate.command.variable.VariableSet
 import at.xa1.modulemate.command.variable.Variables
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
@@ -22,7 +25,13 @@ internal class UserCommandRunner(
         val command = commandList.getOrNull(firstToken)
 
         return if (command != null) {
-            runCommand(command, CommandContext(repository, modules, variables))
+            val extendedVariables = VariableSet(variables).apply {
+                args.getRemainingArgs().forEachIndexed { index, argsValue ->
+                    add(Variable(DefaultVariables.COMMAND_ARG(index)) { argsValue })
+                }
+            }
+
+            runCommand(command, CommandContext(repository, modules, extendedVariables))
             Result.COMMAND_RUN
         } else {
             println("Couldn't find command: $firstToken, therefore applied as filter.")

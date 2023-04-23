@@ -31,6 +31,8 @@ object DefaultVariables {
         )
     }
 
+    fun COMMAND_ARG(index: Int): String = "COMMAND_ARG_$index"
+
     const val ACTIVE_MODULE_FOLDER: String = "ACTIVE_MODULE_FOLDER"
     const val ACTIVE_MODULE: String = "ACTIVE_MODULE"
 }

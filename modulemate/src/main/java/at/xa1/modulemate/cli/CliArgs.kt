@@ -6,6 +6,7 @@ package at.xa1.modulemate.cli
  */
 internal class CliArgs(args: Array<String>) {
     private val remainingArgs = args.toMutableList()
+    fun getRemainingArgs(): List<String> = remainingArgs.toList()
 
     fun nextOrNull(): String? {
         if (remainingArgs.isEmpty()) {
