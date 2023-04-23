@@ -27,14 +27,14 @@ internal class UserCommandRunner(
         } else {
             println("Couldn't find command: $firstToken, therefore applied as filter.")
 
-            modules.applyFilter(PathPrefixFilter(firstToken))
+            if (firstToken.isNotEmpty()) {
+                modules.applyFilter(PathPrefixFilter(firstToken))
 
-            return if (modules.filteredModules.isNotEmpty()) {
-                Result.FILTER_APPLIED
-            } else {
-                Result.INPUT_INVALID
+                if (modules.filteredModules.isNotEmpty()) {
+                    return Result.FILTER_APPLIED
+                }
             }
-
+            return Result.INPUT_INVALID
         }
     }
 
