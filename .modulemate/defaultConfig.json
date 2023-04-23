@@ -23,8 +23,7 @@
             "name": "Show what modules are actively worked on in remote branches.",
             "steps": [
                 {
-                    "type": "builtIn",
-                    "id": "activeWork"
+                    "type": "activeWork"
                 }
             ]
         },
@@ -33,8 +32,7 @@
             "name": "Show what other remote branches touch modules that are also worked on locally.",
             "steps": [
                 {
-                    "type": "builtIn",
-                    "id": "conflictAnalysis"
+                    "type": "conflictAnalysis"
                 }
             ]
         },
@@ -43,8 +41,29 @@
             "name": "Filter only for changed modules",
             "steps": [
                 {
-                    "type": "builtIn",
-                    "id": "changedModules"
+                    "type": "filterChangedModules"
+                }
+            ]
+        },
+        {
+            "shortcut": "prefix",
+            "name": "Filter only for changed modules",
+            "steps": [
+                {
+                    "type": "filterPrefix",
+                    "prefix": "{COMMAND_ARG_0}"
+                }
+            ]
+        },
+        {
+            "shortcut": "update",
+            "name": "Update modulemate",
+            "steps": [
+                {
+                    "type": "shell",
+                    "command": [
+                        "{MODULEMATE_HOME}/update.sh"
+                    ]
                 }
             ]
         }

@@ -1,6 +1,7 @@
 package at.xa1.modulemate.config
 
 import at.xa1.modulemate.Modulemate
+import at.xa1.modulemate.Modulemate.MODULEMATE_FOLDER
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -58,9 +59,7 @@ class ConfigResolver(
     }
 
     private fun getDefaultConfigOrNull(): ConfigSource? {
-        val jarLocation = File(Modulemate::class.java.protectionDomain.codeSource.location.toURI())
-        val modulemateFolder = findModulemateFolderInParents(jarLocation) ?: return null
-        val defaultConfigFile = File(modulemateFolder, DEFAULT_CONFIG_FILE)
+        val defaultConfigFile = File(File(Modulemate.getHome(), MODULEMATE_FOLDER), DEFAULT_CONFIG_FILE)
         return if (defaultConfigFile.exists()) {
             readConfigFile(defaultConfigFile)
         } else {
@@ -68,18 +67,7 @@ class ConfigResolver(
         }
     }
 
-    private fun findModulemateFolderInParents(folder: File): File? {
-        val modulemateFolderCandidate = File(folder, MODULEMATE_FOLDER)
-        if (modulemateFolderCandidate.exists() && modulemateFolderCandidate.isDirectory) {
-            return modulemateFolderCandidate
-        }
-
-        val parent = folder.parentFile ?: return null
-        return findModulemateFolderInParents(parent)
-    }
-
     companion object {
-        private const val MODULEMATE_FOLDER: String = ".modulemate"
         private const val CONFIG_FILE: String = "config.json"
         private const val DEFAULT_CONFIG_FILE: String = "defaultConfig.json"
     }

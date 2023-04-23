@@ -1,5 +1,6 @@
 package at.xa1.modulemate.command.variable
 
+import at.xa1.modulemate.Modulemate
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
 
@@ -29,6 +30,7 @@ object DefaultVariables {
                 activeModule.absolutePath
             }
         )
+        add(Variable("MODULEMATE_HOME") { Modulemate.getHome().absolutePath })
     }
 
     fun COMMAND_ARG(index: Int): String = "COMMAND_ARG_$index"
