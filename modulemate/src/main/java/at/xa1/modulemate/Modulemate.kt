@@ -6,9 +6,10 @@ object Modulemate {
     const val VERSION = "1.0.0-beta01"
 
     const val MODULEMATE_FOLDER: String = ".modulemate"
-    fun getHome(): File {
+
+    val home: File by lazy {
         val jarLocation = File(Modulemate::class.java.protectionDomain.codeSource.location.toURI())
-        return findModulemateHomeInParents(jarLocation) ?: error("Cannot find folder where modulemate is located.")
+        findModulemateHomeInParents(jarLocation) ?: error("Cannot find folder where modulemate is located.")
     }
 
     private fun findModulemateHomeInParents(folder: File): File? {

@@ -1,10 +1,9 @@
 package at.xa1.modulemate
 
+import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
 import at.xa1.modulemate.cli.CliColor.BACKGROUND_RED
 import at.xa1.modulemate.cli.CliColor.BOLD
-import at.xa1.modulemate.cli.CliColor.CLEAR_UNTIL_END_OF_LINE
-import at.xa1.modulemate.cli.CliColor.RESET
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandStepConfig
 import at.xa1.modulemate.command.StepSuccessCondition
@@ -17,6 +16,7 @@ import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
+import at.xa1.modulemate.module.filter.ChangedModulesFilter
 import at.xa1.modulemate.module.filter.PathPrefixFilter
 import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
@@ -33,10 +33,10 @@ fun main(args: Array<String>) {
     val repository = GitRepository(shell, folder)
     val repositoryRoot = repository.getRepositoryRoot()
 
-    print(
-        "$BOLD$BACKGROUND_RED \uD83E\uDDF0 modulemate v${Modulemate.VERSION} " +
-            "〉${repository.getRemoteOrigin().repositoryName} 〉${repository.getBranch()}" +
-            "$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE"
+    Cli.heading(
+        "\uD83E\uDDF0 modulemate v${Modulemate.VERSION} " +
+            "〉${repository.getRemoteOrigin().repositoryName} 〉${repository.getBranch()}",
+        formatting = "$BOLD$BACKGROUND_RED"
     )
 
     val configList = ConfigResolver(repositoryRoot).getConfigs()
@@ -44,7 +44,9 @@ fun main(args: Array<String>) {
     val modules = Modules(
         scanner = RepositoryModulesScanner(configMerger.getModuleClassification(), repositoryRoot)
     )
-    if (prefixFilter != null) {
+    if (prefixFilter == null) {
+        modules.applyFilter(ChangedModulesFilter(repository))
+    } else {
         modules.applyFilter(PathPrefixFilter(prefixFilter))
     }
     val browser = ShellOpenBrowser(shell)
@@ -84,5 +86,5 @@ fun main(args: Array<String>) {
         PromptMode(modules, variables, commandRunner).run()
     }
 
-    println("👋 bye")
+    Cli.line("👋 bye")
 }

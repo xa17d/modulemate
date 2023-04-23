@@ -1,5 +1,6 @@
 package at.xa1.modulemate
 
+import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
 import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.command.step.Help
@@ -28,43 +29,41 @@ internal class PromptMode(
             printModules(modules)
         }
 
-        print("${CliColor.BLUE}[${CliColor.GREEN}$lastCommand${CliColor.BLUE}] 〉${CliColor.CLEAR_UNTIL_END_OF_LINE}")
         val input = readInputOrLast()
-        print(CliColor.RESET)
 
         val inputTokens = input.split(' ').toTypedArray() // TODO properly tokenize
         val result = commandRunner.run(CliArgs(inputTokens))
         if (result == UserCommandRunner.Result.INPUT_INVALID) {
-            print(
-                "${CliColor.BACKGROUND_BRIGHT_YELLOW}⚠️ Command unknown: $input${CliColor.CLEAR_UNTIL_END_OF_LINE}\n" +
-                    "${CliColor.RESET}${CliColor.CLEAR_UNTIL_END_OF_LINE}"
-            )
+            Cli.heading("⚠️ Command unknown: $input", formatting = CliColor.BACKGROUND_BRIGHT_YELLOW)
             commandRunner.run(CliArgs(arrayOf(Help.SHORTCUT)))
             lastCommand = Help.SHORTCUT
         }
     }
 
     private fun readInputOrLast(): String {
-        val input = readln()
+        val input = Cli.prompt(lastCommand)
         return if (input == "") {
             lastCommand
         } else {
             lastCommand = input
-            println("Repeat: ${CliColor.UNDERLINE}$lastCommand${CliColor.RESET}\n")
+            Cli.line("Repeat: ${CliColor.UNDERLINE}$lastCommand${CliColor.RESET}")
             input
         }
     }
 }
 
+fun Cli.module(module: Module, indent: String = "  ") {
+    val formatting = when (module.type) {
+        ModuleType.KOTLIN_LIB -> CliColor.BLUE
+        ModuleType.ANDROID_LIB -> CliColor.GREEN
+        ModuleType.ANDROID_APP -> CliColor.CYAN
+        ModuleType.OTHER -> ""
+    }
+    line("$indent$formatting${module.path}${CliColor.RESET}")
+}
 private fun printModules(modules: Modules) {
-    println("${CliColor.UNDERLINE}Modules:${CliColor.RESET}")
+    Cli.subHeading("Modules:")
     modules.filteredModules.forEach { module ->
-        val formatting = when (module.type) {
-            ModuleType.KOTLIN_LIB -> CliColor.BLUE
-            ModuleType.ANDROID_LIB -> CliColor.GREEN
-            ModuleType.ANDROID_APP -> CliColor.CYAN
-            ModuleType.OTHER -> ""
-        }
-        println("$formatting ${module.path}${CliColor.RESET}")
+        Cli.module(module)
     }
 }

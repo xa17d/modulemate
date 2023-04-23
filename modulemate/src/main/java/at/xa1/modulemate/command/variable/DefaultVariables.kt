@@ -30,7 +30,7 @@ object DefaultVariables {
                 activeModule.absolutePath
             }
         )
-        add(Variable("MODULEMATE_HOME") { Modulemate.getHome().absolutePath })
+        add(Variable("MODULEMATE_HOME") { Modulemate.home.absolutePath })
     }
 
     fun COMMAND_ARG(index: Int): String = "COMMAND_ARG_$index"

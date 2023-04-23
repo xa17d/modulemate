@@ -59,7 +59,7 @@ class ConfigResolver(
     }
 
     private fun getDefaultConfigOrNull(): ConfigSource? {
-        val defaultConfigFile = File(File(Modulemate.getHome(), MODULEMATE_FOLDER), DEFAULT_CONFIG_FILE)
+        val defaultConfigFile = File(File(Modulemate.home, MODULEMATE_FOLDER), DEFAULT_CONFIG_FILE)
         return if (defaultConfigFile.exists()) {
             readConfigFile(defaultConfigFile)
         } else {

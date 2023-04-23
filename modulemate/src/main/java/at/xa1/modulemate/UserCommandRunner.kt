@@ -1,5 +1,6 @@
 package at.xa1.modulemate
 
+import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
 import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.command.Command
@@ -34,7 +35,10 @@ internal class UserCommandRunner(
             runCommand(command, CommandContext(repository, modules, extendedVariables))
             Result.COMMAND_RUN
         } else {
-            println("Couldn't find command: $firstToken, therefore applied as filter.")
+            Cli.line(
+                "Couldn't find command: ${CliColor.UNDERLINE}$firstToken${CliColor.RESET}, " +
+                    "therefore applied as filter."
+            )
 
             if (firstToken.isNotEmpty()) {
                 modules.applyFilter(PathPrefixFilter(firstToken))
@@ -48,23 +52,14 @@ internal class UserCommandRunner(
     }
 
     private fun runCommand(command: Command, context: CommandContext) {
-        print(
-            "${CliColor.BACKGROUND_BRIGHT_BLUE}▶️  ${command.name}${CliColor.CLEAR_UNTIL_END_OF_LINE}\n" +
-                "${CliColor.RESET}${CliColor.CLEAR_UNTIL_END_OF_LINE}"
-        )
+        Cli.heading("▶️  ${command.name}", formatting = CliColor.BACKGROUND_BRIGHT_BLUE)
         val result = command.run(context)
         when (result) {
             CommandResult.SUCCESS ->
-                print(
-                    "${CliColor.BACKGROUND_BRIGHT_GREEN}🎉 Success!${CliColor.CLEAR_UNTIL_END_OF_LINE}\n" +
-                        "${CliColor.RESET}${CliColor.CLEAR_UNTIL_END_OF_LINE}"
-                )
+                Cli.heading("🎉 Success!", formatting = CliColor.BACKGROUND_BRIGHT_GREEN)
 
             CommandResult.FAILURE ->
-                print(
-                    "${CliColor.BACKGROUND_BRIGHT_RED}⚠️ Failed!${CliColor.CLEAR_UNTIL_END_OF_LINE}\n" +
-                        "${CliColor.RESET}${CliColor.CLEAR_UNTIL_END_OF_LINE}"
-                )
+                Cli.heading("⚠️ Failed!", formatting = CliColor.BACKGROUND_BRIGHT_RED)
         }
     }
 

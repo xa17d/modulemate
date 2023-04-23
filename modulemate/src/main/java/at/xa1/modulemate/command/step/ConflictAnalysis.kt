@@ -1,8 +1,13 @@
 package at.xa1.modulemate.command.step
 
+import at.xa1.modulemate.cli.Cli
+import at.xa1.modulemate.cli.CliColor.BLUE
+import at.xa1.modulemate.cli.CliColor.RESET
+import at.xa1.modulemate.cli.CliColor.WHITE
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.step.ActiveWork.Companion.ACTIVE_TIME_SPAN
+import at.xa1.modulemate.module
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.filter.findModulesByFiles
 import java.time.ZonedDateTime
@@ -17,7 +22,7 @@ class ConflictAnalysis : CommandStep {
         try {
             repository.fetchAll()
         } catch (e: IllegalStateException) {
-            println("fetch all failed: $e")
+            Cli.line("fetch all failed: $e")
         }
 
         val remoteTrackingBranch = repository.getRemoteTrackingBranch()
@@ -41,11 +46,14 @@ class ConflictAnalysis : CommandStep {
             }
 
         modules.values.forEach { module ->
-            println(module.module.path)
+            Cli.module(module.module, indent = "")
             module.branches
                 .filter { branch -> branch.ref != remoteTrackingBranch }
                 .forEach { branch ->
-                    println("  - ${branch.ref} by ${branch.authors.joinToString(separator = ", ")}")
+                    Cli.line(
+                        "  on $BLUE${branch.ref}$RESET " +
+                            "by $WHITE${branch.authors.joinToString(separator = ", ")}$RESET"
+                    )
                 }
         }
 
