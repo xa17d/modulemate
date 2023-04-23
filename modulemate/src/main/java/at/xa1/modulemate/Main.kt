@@ -1,28 +1,16 @@
 package at.xa1.modulemate
 
 import at.xa1.modulemate.cli.CliArgs
-import at.xa1.modulemate.cli.CliColor.BACKGROUND_BRIGHT_BLUE
-import at.xa1.modulemate.cli.CliColor.BACKGROUND_BRIGHT_GREEN
-import at.xa1.modulemate.cli.CliColor.BACKGROUND_BRIGHT_RED
-import at.xa1.modulemate.cli.CliColor.BACKGROUND_BRIGHT_YELLOW
 import at.xa1.modulemate.cli.CliColor.BACKGROUND_RED
-import at.xa1.modulemate.cli.CliColor.BLUE
 import at.xa1.modulemate.cli.CliColor.BOLD
 import at.xa1.modulemate.cli.CliColor.CLEAR_UNTIL_END_OF_LINE
-import at.xa1.modulemate.cli.CliColor.CYAN
-import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
-import at.xa1.modulemate.cli.CliColor.UNDERLINE
-import at.xa1.modulemate.command.Command
-import at.xa1.modulemate.command.CommandContext
-import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.createCommandList
 import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.command.variable.DefaultVariables
 import at.xa1.modulemate.config.ConfigMerger
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
-import at.xa1.modulemate.module.ModuleType
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
 import at.xa1.modulemate.module.filter.PathPrefixFilter
@@ -64,88 +52,26 @@ fun main(args: Array<String>) {
         printingShell
     )
 
-    val shortcutOrFilter = cliArgs.nextOrNull()
-    val shortcutCommand = if (shortcutOrFilter == null) {
-        null
-    } else {
-        commandList.getOrNull(shortcutOrFilter)
-    }
+    val commandRunner = UserCommandRunner(
+        repository = repository,
+        modules = modules,
+        variables = variables,
+        commandList = commandList
+    )
 
-    if (shortcutCommand != null) {
-        print(
-            "$UNDERLINE$BOLD${shortcutCommand.shortcut}:$RESET " +
-                "${shortcutCommand.name}$CLEAR_UNTIL_END_OF_LINE\n$RESET"
-        )
-        runCommand(shortcutCommand, CommandContext(repository, modules, variables))
-    } else {
-        if (shortcutOrFilter != null) {
-            modules.applyFilter(PathPrefixFilter(shortcutOrFilter))
+    when (val initialCommandResult = commandRunner.run(cliArgs)) {
+        UserCommandRunner.Result.COMMAND_RUN -> {
+            // do nothing and exit
         }
-
-        var lastCommand = ""
-        while (true) {
-            printModules(modules)
-            print("$BLUE〉$CLEAR_UNTIL_END_OF_LINE")
-            val input = readln()
-            print(RESET)
-            val shortcut = when (input) {
-                "" -> {
-                    if (lastCommand == "") {
-                        break
-                    }
-                    println("Repeat: ${UNDERLINE}$lastCommand$RESET\n")
-                    lastCommand
-                }
-
-                "q" -> break
-                else -> input
-            }
-            lastCommand = shortcut
-            val command = commandList.getOrNull(shortcut)
-            if (command == null) {
-                print(
-                    "$BACKGROUND_BRIGHT_YELLOW⚠️ Command unknown: $shortcut$CLEAR_UNTIL_END_OF_LINE\n" +
-                        "$RESET$CLEAR_UNTIL_END_OF_LINE" +
-                        "${UNDERLINE}Available Commands:$RESET\n"
-                )
-
-                commandList.commands.forEach { availableCommand ->
-                    println(
-                        "$UNDERLINE$BOLD${availableCommand.shortcut}$RESET: ${availableCommand.name}"
-                    )
-                }
-            } else {
-                runCommand(command, CommandContext(repository, modules, variables))
+        UserCommandRunner.Result.INPUT_INVALID,
+        UserCommandRunner.Result.FILTER_APPLIED -> {
+            if (initialCommandResult == UserCommandRunner.Result.INPUT_INVALID) {
+                // TODO show error
             }
 
-            variables.clearCache()
+            PromptMode(modules, variables, commandRunner).run()
         }
     }
 
     println("👋 bye")
-}
-
-private fun printModules(modules: Modules) {
-    println("${UNDERLINE}Modules:$RESET")
-    modules.filteredModules.forEach { module ->
-        val formatting = when (module.type) {
-            ModuleType.KOTLIN_LIB -> BLUE
-            ModuleType.ANDROID_LIB -> GREEN
-            ModuleType.ANDROID_APP -> CYAN
-            ModuleType.OTHER -> ""
-        }
-        println("$formatting ${module.path}$RESET")
-    }
-}
-
-fun runCommand(command: Command, context: CommandContext) {
-    print("$BACKGROUND_BRIGHT_BLUE▶️  ${command.name}$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
-    val result = command.run(context)
-    when (result) {
-        CommandResult.SUCCESS ->
-            print("$BACKGROUND_BRIGHT_GREEN🎉 Success!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
-
-        CommandResult.FAILURE ->
-            print("$BACKGROUND_BRIGHT_RED⚠️ Failed!$CLEAR_UNTIL_END_OF_LINE\n$RESET$CLEAR_UNTIL_END_OF_LINE")
-    }
 }
