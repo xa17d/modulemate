@@ -2,6 +2,7 @@ package at.xa1.modulemate
 
 import at.xa1.modulemate.cli.CliArgs
 import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.command.step.Help
 import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.ModuleType
@@ -38,7 +39,8 @@ internal class PromptMode(
                 "${CliColor.BACKGROUND_BRIGHT_YELLOW}⚠️ Command unknown: $input${CliColor.CLEAR_UNTIL_END_OF_LINE}\n" +
                     "${CliColor.RESET}${CliColor.CLEAR_UNTIL_END_OF_LINE}"
             )
-            // TODO show help
+            commandRunner.run(CliArgs(arrayOf(Help.SHORTCUT)))
+            lastCommand = Help.SHORTCUT
         }
     }
 

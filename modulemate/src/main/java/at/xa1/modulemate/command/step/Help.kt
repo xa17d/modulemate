@@ -28,4 +28,8 @@ class Help(
         }
         return CommandResult.SUCCESS
     }
+
+    companion object {
+        const val SHORTCUT = "help"
+    }
 }

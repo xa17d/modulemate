@@ -57,7 +57,7 @@ fun main(args: Array<String>) {
     )
     commandList.add(
         Command(
-            "help",
+            Help.SHORTCUT,
             "Help",
             listOf(CommandStepConfig(StepSuccessCondition.PREVIOUS_SUCCESS, Help(commandList)))
         )
