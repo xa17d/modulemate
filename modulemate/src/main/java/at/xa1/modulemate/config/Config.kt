@@ -60,6 +60,19 @@ sealed interface CommandStep {
     ) : CommandStep
 
     @Serializable
+    @SerialName("filterChangedModules")
+    data class FilterChangedModules(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS
+    ) : CommandStep
+
+    @Serializable
+    @SerialName("filterPrefix")
+    data class FilterPrefix(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
+        val prefix: String
+    ) : CommandStep
+
+    @Serializable
     @SerialName("report")
     data class Report(
         override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
@@ -67,10 +80,15 @@ sealed interface CommandStep {
     ) : CommandStep
 
     @Serializable
-    @SerialName("builtIn")
-    data class BuiltIn(
-        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
-        val id: String
+    @SerialName("activeWork")
+    data class ActiveWork(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS
+    ) : CommandStep
+
+    @Serializable
+    @SerialName("conflictAnalysis")
+    data class ConflictAnalysis(
+        override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS
     ) : CommandStep
 }
 

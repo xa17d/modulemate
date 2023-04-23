@@ -12,7 +12,9 @@ class Modules(
     var filteredModules: List<Module> = emptyList()
         private set
 
-    private var filter: ModulesFilter = EmptyFilter()
+    var filter: ModulesFilter = EmptyFilter()
+        private set
+
     fun applyFilter(filter: ModulesFilter) {
         this.filter = filter
         reapplyFilter()
@@ -24,7 +26,6 @@ class Modules(
 
     fun getActiveModule(): Module {
         var lastModifiedModule: Module? = null
-        var lastModifiedFile: File? = null
         var lastModifiedTime: Long = Long.MIN_VALUE
 
         filteredModules.forEach { module ->
@@ -33,7 +34,6 @@ class Modules(
 
                 if (fileModified > lastModifiedTime) {
                     lastModifiedTime = fileModified
-                    lastModifiedFile = file
                     lastModifiedModule = module
                 }
             }

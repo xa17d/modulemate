@@ -2,6 +2,8 @@ package at.xa1.modulemate.command.variable
 
 interface Variables {
     fun get(name: String): String
+
+    fun getAll(): List<Variable>
 }
 
 fun Variables.replacePlaceholders(patternString: String, encoder: VariableEncoder = NopVariableEncoder): String {

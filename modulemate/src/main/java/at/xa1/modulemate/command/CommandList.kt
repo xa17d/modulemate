@@ -6,6 +6,7 @@ import at.xa1.modulemate.command.step.ChangeFilter
 import at.xa1.modulemate.command.step.ConflictAnalysis
 import at.xa1.modulemate.command.step.Gradle
 import at.xa1.modulemate.command.step.Report
+import at.xa1.modulemate.command.variable.replacePlaceholders
 import at.xa1.modulemate.config.CommandStep
 import at.xa1.modulemate.config.getForAndroidApp
 import at.xa1.modulemate.config.getForAndroidLib
@@ -13,12 +14,13 @@ import at.xa1.modulemate.config.getForKotlinLib
 import at.xa1.modulemate.config.toShellMode
 import at.xa1.modulemate.config.toSuccessCondition
 import at.xa1.modulemate.module.filter.ChangedModulesFilter
+import at.xa1.modulemate.module.filter.PathPrefixFilter
 import at.xa1.modulemate.system.ShellOpenBrowser
 
 class CommandList {
     private val _commands = mutableListOf<Command>()
 
-    val commands: List<Command>
+    val allCommands: List<Command>
         get() = _commands
 
     fun add(command: Command) {
@@ -94,12 +96,18 @@ private fun createCommandStep(
             ?: error("pathAndroidApp is not unique")
     )
 
-    is CommandStep.BuiltIn -> {
-        when (step.id) {
-            "activeWork" -> ActiveWork()
-            "conflictAnalysis" -> ConflictAnalysis()
-            "changedModules" -> ChangeFilter { context -> ChangedModulesFilter(context.repository) }
-            else -> error("Unknown built-in step: ${step.id}")
+    is CommandStep.FilterChangedModules ->
+        ChangeFilter { context -> ChangedModulesFilter(context.repository) }
+
+    is CommandStep.FilterPrefix ->
+        ChangeFilter { context ->
+            val prefix = context.variables.replacePlaceholders(step.prefix)
+            PathPrefixFilter(prefix)
         }
-    }
+
+    is CommandStep.ActiveWork ->
+        ActiveWork()
+
+    is CommandStep.ConflictAnalysis ->
+        ConflictAnalysis()
 }

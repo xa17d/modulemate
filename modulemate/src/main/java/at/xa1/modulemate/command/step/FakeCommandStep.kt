@@ -8,7 +8,7 @@ class FakeCommandStep(
 ) : CommandStep {
 
     var didRun: Boolean = false
-    override fun run(commandContext: CommandContext): CommandResult {
+    override fun run(context: CommandContext): CommandResult {
         didRun = true
         return runResult
     }

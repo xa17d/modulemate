@@ -18,6 +18,18 @@ class VariableSet(
         return parent.get(name)
     }
 
+    override fun getAll(): List<Variable> {
+        val result = mutableListOf<Variable>()
+
+        if (parent != null) {
+            result.addAll(parent.getAll())
+        }
+
+        result.addAll(variables.values)
+
+        return result
+    }
+
     private fun getOrNull(name: String): Variable? = variables[name]
 
     fun add(variable: Variable) {

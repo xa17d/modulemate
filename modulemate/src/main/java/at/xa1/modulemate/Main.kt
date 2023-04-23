@@ -5,7 +5,11 @@ import at.xa1.modulemate.cli.CliColor.BACKGROUND_RED
 import at.xa1.modulemate.cli.CliColor.BOLD
 import at.xa1.modulemate.cli.CliColor.CLEAR_UNTIL_END_OF_LINE
 import at.xa1.modulemate.cli.CliColor.RESET
+import at.xa1.modulemate.command.Command
+import at.xa1.modulemate.command.CommandStepConfig
+import at.xa1.modulemate.command.StepSuccessCondition
 import at.xa1.modulemate.command.createCommandList
+import at.xa1.modulemate.command.step.Help
 import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.command.variable.DefaultVariables
 import at.xa1.modulemate.config.ConfigMerger
@@ -23,7 +27,7 @@ fun main(args: Array<String>) {
     val cliArgs = CliArgs(args)
 
     val folder = File(cliArgs.getValueOrDefault("--repository", "."))
-    val filter = cliArgs.getValueOrNull("--filter")
+    val prefixFilter = cliArgs.getValueOrNull("--prefixFilter")
     val shell = RuntimeShell(folder)
     val printingShell = PrintingShell(folder)
     val repository = GitRepository(shell, folder)
@@ -40,8 +44,8 @@ fun main(args: Array<String>) {
     val modules = Modules(
         scanner = RepositoryModulesScanner(configMerger.getModuleClassification(), repositoryRoot)
     )
-    if (filter != null) {
-        modules.applyFilter(PathPrefixFilter(filter))
+    if (prefixFilter != null) {
+        modules.applyFilter(PathPrefixFilter(prefixFilter))
     }
     val browser = ShellOpenBrowser(shell)
     val defaultVariables = DefaultVariables.create(repository, modules)
@@ -51,6 +55,13 @@ fun main(args: Array<String>) {
         browser,
         printingShell
     )
+    commandList.add(
+        Command(
+            "help",
+            "Help",
+            listOf(CommandStepConfig(StepSuccessCondition.PREVIOUS_SUCCESS, Help(commandList)))
+        )
+    )
 
     val commandRunner = UserCommandRunner(
         repository = repository,
@@ -59,19 +70,18 @@ fun main(args: Array<String>) {
         commandList = commandList
     )
 
-    when (val initialCommandResult = commandRunner.run(cliArgs)) {
-        UserCommandRunner.Result.COMMAND_RUN -> {
-            // do nothing and exit
-            // TODO exit code depending on result?
-        }
-        UserCommandRunner.Result.INPUT_INVALID,
-        UserCommandRunner.Result.FILTER_APPLIED -> {
-            if (initialCommandResult == UserCommandRunner.Result.INPUT_INVALID) {
-                // TODO show error
-            }
+    val filterBeforeCommand = modules.filter
 
-            PromptMode(modules, variables, commandRunner).run()
-        }
+    val promptMode = when (commandRunner.run(cliArgs)) {
+        UserCommandRunner.Result.COMMAND_RUN ->
+            modules.filter != filterBeforeCommand
+
+        UserCommandRunner.Result.INPUT_INVALID -> true // TODO show error
+        UserCommandRunner.Result.FILTER_APPLIED -> true
+    }
+
+    if (promptMode) {
+        PromptMode(modules, variables, commandRunner).run()
     }
 
     println("👋 bye")
