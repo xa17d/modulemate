@@ -17,9 +17,9 @@ class GradleTest {
     @Test
     fun `gradle shell command is constructed correctly`() {
         val modules = testModules(
-            Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
             Module(":test-android", "", "", ModuleType.ANDROID_LIB),
             Module(":test-app", "", "", ModuleType.ANDROID_APP),
+            Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
             Module(":test-other", "", "", ModuleType.OTHER)
         )
 
@@ -36,18 +36,18 @@ class GradleTest {
         assertEquals(
             listOf(
                 "./gradlew",
-                "-PkotlinLibFlag1",
-                "-PkotlinLibFlag2",
                 "-PandroidLibFlag1",
                 "-PandroidLibFlag2",
                 "-PandroidAppFlag1",
                 "-PandroidAppFlag2",
-                ":test-core:javaTask1",
-                ":test-core:javaTask2",
+                "-PkotlinLibFlag1",
+                "-PkotlinLibFlag2",
                 ":test-android:androidLibTask1",
                 ":test-android:androidLibTask2",
                 ":test-app:androidAppTask1",
-                ":test-app:androidAppTask2"
+                ":test-app:androidAppTask2",
+                ":test-core:javaTask1",
+                ":test-core:javaTask2"
             ),
             fakeShell.actualCommands.single()
         )

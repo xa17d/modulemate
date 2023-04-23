@@ -7,7 +7,7 @@ import java.io.File
 class Modules(
     private val scanner: ModulesScanner
 ) {
-    val allModules: List<Module> by lazy { scanner.scan() }
+    val allModules: List<Module> by lazy { scanner.scan().sortedBy { it.path } }
 
     var filteredModules: List<Module> = emptyList()
         private set

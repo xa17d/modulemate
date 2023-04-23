@@ -62,6 +62,7 @@ fun main(args: Array<String>) {
     when (val initialCommandResult = commandRunner.run(cliArgs)) {
         UserCommandRunner.Result.COMMAND_RUN -> {
             // do nothing and exit
+            // TODO exit code depending on result?
         }
         UserCommandRunner.Result.INPUT_INVALID,
         UserCommandRunner.Result.FILTER_APPLIED -> {
