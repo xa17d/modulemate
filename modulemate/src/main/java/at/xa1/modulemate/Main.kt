@@ -17,7 +17,6 @@ import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
-import at.xa1.modulemate.module.filter.ChangedModulesFilter
 import at.xa1.modulemate.module.filter.PathPrefixFilter
 import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
@@ -45,9 +44,7 @@ fun main(args: Array<String>) {
     val modules = Modules(
         scanner = RepositoryModulesScanner(configMerger.getModuleClassification(), repositoryRoot)
     )
-    if (prefixFilter == null) {
-        modules.applyFilter(ChangedModulesFilter(repository))
-    } else {
+    if (prefixFilter != null) {
         modules.applyFilter(PathPrefixFilter(prefixFilter))
     }
     val browser = ShellOpenBrowser(shell)
@@ -85,7 +82,7 @@ fun main(args: Array<String>) {
         }
 
         if (promptMode) {
-            PromptMode(modules, variables, commandRunner).run()
+            PromptMode(repository, modules, variables, commandRunner).run()
         }
     } catch (_: QuitException) {
     }

@@ -38,7 +38,7 @@ class ActiveWork : CommandStep {
                     Cli.heading(
                         refName,
                         formatting = "$BOLD$BACKGROUND_BLUE",
-                        addendum = "by $authorsString",
+                        addendum = " by $authorsString",
                         addendumFormatting = "$WHITE$BACKGROUND_BLUE"
                     )
                     changedModules.forEach { module ->

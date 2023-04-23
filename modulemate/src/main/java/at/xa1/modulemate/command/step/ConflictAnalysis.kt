@@ -51,8 +51,8 @@ class ConflictAnalysis : CommandStep {
                 .filter { branch -> branch.ref != remoteTrackingBranch }
                 .forEach { branch ->
                     Cli.line(
-                        "  on $BLUE${branch.ref}$RESET " +
-                            "by $WHITE${branch.authors.joinToString(separator = ", ")}$RESET"
+                        "  on $BLUE${branch.ref}$RESET" +
+                            " by $WHITE${branch.authors.joinToString(separator = ", ")}$RESET"
                     )
                 }
         }

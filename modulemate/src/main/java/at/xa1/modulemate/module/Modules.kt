@@ -42,14 +42,6 @@ class Modules(
         return lastModifiedModule ?: error("no module selected")
     }
 
-    override fun toString(): String {
-        val androidApps = filteredModules.count { it.type == ModuleType.ANDROID_APP }
-        val androidLibs = filteredModules.count { it.type == ModuleType.ANDROID_LIB }
-        val javaLibs = filteredModules.count { it.type == ModuleType.KOTLIN_LIB }
-        val others = filteredModules.size - androidApps - androidLibs - javaLibs
-        return "$androidApps apps, $androidLibs androidLibs, $javaLibs javaLibs, $others others"
-    }
-
     fun getByPath(path: String): Module =
         allModules.find { module -> module.path == path } ?: error("Module with path doesn't exist: $path")
 }

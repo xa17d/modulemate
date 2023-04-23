@@ -1,6 +1,7 @@
 package at.xa1.modulemate.cli
 
 import at.xa1.modulemate.cli.CliColor.BLUE
+import at.xa1.modulemate.cli.CliColor.BOLD
 import at.xa1.modulemate.cli.CliColor.CLEAR_UNTIL_END_OF_LINE
 import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
@@ -20,7 +21,7 @@ object Cli {
     }
 
     fun subHeading(content: String) {
-        println("$UNDERLINE$content$RESET")
+        println("$UNDERLINE$BOLD$content$RESET")
     }
 
     fun line(content: String = "") {

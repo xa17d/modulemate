@@ -3,8 +3,8 @@
     "module": {
         "classification": {
             "kotlinLib": "\\Qapply plugin: \"java-library\"\\E",
-            "androidLib": "\\Qapply plugin: \"com.android.library\"\\E",
-            "androidApp": "\\Qapply plugin: \"com.android.application\"\\E"
+            "androidLib": "\\Qapply plugin: \"com.android.library\"\\E|\\Qid(\"com.android.library\")\\E",
+            "androidApp": "\\Qapply plugin: \"com.android.application\"\\E|\\Qid(\"com.android.application\")\\E"
         }
     },
     "commands": [
@@ -15,6 +15,26 @@
                 {
                     "type": "browser",
                     "url": "https://{GIT_HOST}/{GIT_OWNER}/{GIT_REPOSITORY_NAME}/pull/{GIT_BRANCH_NAME}"
+                }
+            ]
+        },
+        {
+            "shortcut": "a",
+            "name": "Assemble Main and Test code",
+            "steps": [
+                {
+                    "type": "gradle",
+                    "tasks": {
+                        "android": [
+                            "assembleDebug",
+                            "assembleDebugAndroidTest",
+                            "compileDebugUnitTestSources"
+                        ],
+                        "kotlinLib": [
+                            "assemble",
+                            "testClasses"
+                        ]
+                    }
                 }
             ]
         },
