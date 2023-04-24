@@ -1,5 +1,6 @@
 package at.xa1.modulemate.command.step
 
+import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.successToCommandResult
@@ -17,6 +18,9 @@ class Browser(
         val url = context.variables.replacePlaceholders(urlPattern) { value ->
             URLEncoder.encode(value, Charset.forName("UTF8"))
         }
+
+        Cli.stepCommand(url)
+
         val success = browser.open(url)
 
         return success.successToCommandResult()

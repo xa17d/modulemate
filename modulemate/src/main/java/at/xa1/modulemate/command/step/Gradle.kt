@@ -1,5 +1,6 @@
 package at.xa1.modulemate.command.step
 
+import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.successToCommandResult
@@ -40,6 +41,8 @@ class Gradle(
 
                 tasks.map { task -> module.path + ":" + task }
             }
+
+        Cli.stepCommand(command.joinToString(separator = " "))
 
         val result = shell.run(command.toTypedArray())
         return result.isSuccess.successToCommandResult()

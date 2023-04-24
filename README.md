@@ -178,13 +178,13 @@ Runs a gradle command.
 
 - `flags` _(optional)_: Defines flags to add to the gradle command.
   Each distinct flag is only added once.
-    - `all` _(optional)_: Flags defined here are always added.
+    - `all` _(optional)_: Flags defined here are added if there's a kotlinLib, androidLib or androidApp in the filtered modules. "other" modules are ignored.
     - `kotlinLib` _(optional)_: Flags to add if there is at least one kotlinLib in the filtered modules.
     - `android` _(optional)_: Flags to add if there is at least one androidLib or androidApp in the filtered modules.
     - `androidLib` _(optional)_: Flags to add if there is at least one androidLib in the filtered modules.
     - `androidApp` _(optional)_: Flags to add if there is at least one androidApp in the filtered modules.
 - `tasks` _(optional)_: Defines tasks that should be run for each module in the filtered modules
-    - `all` _(optional)_: Tasks that are run for all filtered modules.
+    - `all` _(optional)_: Tasks that are run for all filtered modules, except "other" modules.
     - `kotlinLib` _(optional)_: Tasks that are run for all kotlinLibs in the filtered modules.
     - `android` _(optional)_: Tasks that are run for all androidLibs and androidApps in the filtered modules.
     - `androidLib` _(optional)_: Tasks that are run for all androidLibs in the filtered modules.
@@ -245,7 +245,7 @@ modules)._
 ```
 
 - `path`: Path to the report.
-    - `all` _(optional)_: Path to the report that applies to all modules types.
+    - `all` _(optional)_: Path to the report that applies to all modules types, except "other" modules.
     - `kotlinLib` _(optional)_: Path to the report that applies to kotlinLibs.
     - `android` _(optional)_: Path to the report that applies to androidLibs and androidApps.
     - `androidLib` _(optional)_: Path to the report that applies to androidLibs.

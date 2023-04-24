@@ -6,6 +6,7 @@ import at.xa1.modulemate.cli.CliColor.CLEAR_UNTIL_END_OF_LINE
 import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
 import at.xa1.modulemate.cli.CliColor.UNDERLINE
+import at.xa1.modulemate.cli.CliColor.YELLOW
 
 object Cli {
     fun heading(content: String, formatting: String, addendum: String? = null, addendumFormatting: String? = null) {
@@ -44,5 +45,9 @@ object Cli {
         val t = CliTable()
         t.block()
         print(t.toString())
+    }
+
+    fun stepCommand(command: String) {
+        println("$YELLOW# $GREEN$command$RESET")
     }
 }
