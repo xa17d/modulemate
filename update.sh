@@ -10,5 +10,14 @@ git pull
 echo "▶️  Building…"
 ./build.sh
 
+echo "▶️  Update user configuration"
+if [ -d ~/.modulemate/.git ]; then
+    echo "Updating ~/.modulemate/..."
+    cd ~/.modulemate/
+    git pull
+else
+    echo "Cannot update ~/.modulemate, because it's not a git repository"
+fi
+
 echo ""
 echo "✅ Updated to latest version."
