@@ -58,7 +58,7 @@ internal class PromptMode(
 
         val inputTokens = input.split(' ').toTypedArray() // TODO properly tokenize
         val result = commandRunner.run(CliArgs(inputTokens))
-        if (result == UserCommandRunner.Result.INPUT_INVALID) {
+        if (result is UserCommandRunner.Result.InputInvalid) {
             val mostSimilarCommand = findMostSimilarCommand(
                 commandList.allCommands.map { it.shortcut },
                 input

@@ -2,6 +2,7 @@ package at.xa1.modulemate
 
 import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
+import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.cli.CliColor.BACKGROUND_RED
 import at.xa1.modulemate.cli.CliColor.BOLD
 import at.xa1.modulemate.cli.CliColor.RESET
@@ -95,12 +96,22 @@ private fun modulemate(
     try {
         val filterBeforeCommand = modules.filter
 
-        val promptMode = when (commandRunner.run(cliArgs)) {
-            UserCommandRunner.Result.COMMAND_RUN ->
-                modules.filter != filterBeforeCommand
+        val promptMode = when (val result = commandRunner.run(cliArgs)) {
+            UserCommandRunner.Result.CommandRun ->
+                modules.filter != filterBeforeCommand // enter prompt mode when filter changed.
 
-            UserCommandRunner.Result.INPUT_INVALID -> true // TODO show error
-            UserCommandRunner.Result.FILTER_APPLIED -> true
+            is UserCommandRunner.Result.InputInvalid -> {
+                val empty = result.invalidCommand.isEmpty()
+                if (!empty) {
+                    Cli.heading(
+                        "⚠️ Command unknown: ${result.invalidCommand}",
+                        formatting = CliColor.BACKGROUND_BRIGHT_YELLOW
+                    )
+                }
+                empty
+            }
+
+            UserCommandRunner.Result.FilterApplied -> true
         }
 
         if (promptMode) {

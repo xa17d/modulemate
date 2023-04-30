@@ -22,7 +22,7 @@ internal class UserCommandRunner(
     private val commandList: CommandList
 ) {
     fun run(args: CliArgs): Result {
-        val firstToken = args.nextOrNull() ?: return Result.INPUT_INVALID
+        val firstToken = args.nextOrNull() ?: return Result.InputInvalid("")
         val command = commandList.getOrNull(firstToken)
 
         return if (command != null) {
@@ -33,7 +33,7 @@ internal class UserCommandRunner(
             }
 
             runCommand(command, CommandContext(repository, modules, extendedVariables))
-            Result.COMMAND_RUN
+            Result.CommandRun
         } else {
             if (firstToken.isNotEmpty()) {
                 val filterApplied =
@@ -45,10 +45,10 @@ internal class UserCommandRunner(
                             "therefore applied as filter."
                     )
 
-                    return Result.FILTER_APPLIED
+                    return Result.FilterApplied
                 }
             }
-            return Result.INPUT_INVALID
+            return Result.InputInvalid(firstToken)
         }
     }
 
@@ -64,9 +64,9 @@ internal class UserCommandRunner(
         }
     }
 
-    enum class Result {
-        INPUT_INVALID,
-        COMMAND_RUN,
-        FILTER_APPLIED
+    sealed class Result {
+        data class InputInvalid(val invalidCommand: String) : Result()
+        object CommandRun : Result()
+        object FilterApplied : Result()
     }
 }
