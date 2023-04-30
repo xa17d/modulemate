@@ -4,6 +4,8 @@ import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
 import at.xa1.modulemate.cli.CliColor.BACKGROUND_RED
 import at.xa1.modulemate.cli.CliColor.BOLD
+import at.xa1.modulemate.cli.CliColor.RESET
+import at.xa1.modulemate.cli.CliColor.YELLOW
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandStepConfig
 import at.xa1.modulemate.command.StepSuccessCondition
@@ -27,17 +29,37 @@ fun main(args: Array<String>) {
     val cliArgs = CliArgs(args)
 
     val folder = File(cliArgs.getValueOrDefault("--repository", "."))
-    val prefixFilter = cliArgs.getValueOrNull("--prefixFilter")
     val shell = RuntimeShell(folder)
-    val printingShell = PrintingShell(folder)
     val repository = GitRepository(shell, folder)
-    val repositoryRoot = repository.getRepositoryRoot()
 
+    val repositoryRoot = try {
+        repository.getRepositoryRoot()
+    } catch (e: IllegalStateException) {
+        errorNoGitRepository(folder)
+        return
+    }
+
+    modulemate(repository, repositoryRoot, shell, cliArgs)
+}
+
+private fun header(repoName: String, branch: String) {
     Cli.heading(
         "\uD83E\uDDF0 modulemate v${Modulemate.VERSION} " +
-            "〉${repository.getRemoteOrigin().repositoryName} 〉${repository.getBranch()}",
+            "〉$repoName 〉$branch",
         formatting = "$BOLD$BACKGROUND_RED"
     )
+}
+
+private fun modulemate(
+    repository: GitRepository,
+    repositoryRoot: File,
+    shell: RuntimeShell,
+    cliArgs: CliArgs
+) {
+    val prefixFilter = cliArgs.getValueOrNull("--prefixFilter")
+    val printingShell = PrintingShell(repositoryRoot)
+
+    header(repository.getRemoteOrigin().repositoryName, repository.getBranch())
 
     val configList = ConfigResolver(repositoryRoot).getConfigs()
     val configMerger = ConfigMerger(configList)
@@ -88,4 +110,14 @@ fun main(args: Array<String>) {
     }
 
     Cli.line("👋 bye")
+}
+
+private fun errorNoGitRepository(folder: File) {
+    header(folder.canonicalFile.name, "no git")
+    Cli.line(
+        "Folder is not within a git repository. " +
+            "modulemate requires a git repository. " +
+            "Please navigate to a git repository and try again."
+    )
+    Cli.line("current folder: $YELLOW${folder.canonicalFile.absolutePath}$RESET")
 }

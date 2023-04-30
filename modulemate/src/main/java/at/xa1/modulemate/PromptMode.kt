@@ -76,10 +76,10 @@ internal class PromptMode(
     private fun readInputOrLast(): String {
         val input = Cli.prompt(lastCommand)
         return if (input == "") {
+            Cli.line("Repeat: ${CliColor.UNDERLINE}$lastCommand$RESET")
             lastCommand
         } else {
             lastCommand = input
-            Cli.line("Repeat: ${CliColor.UNDERLINE}$lastCommand$RESET")
             input
         }
     }
