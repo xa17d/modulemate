@@ -24,7 +24,7 @@ class CommandTest {
         )
 
         val command = Command(
-            shortcut = "test",
+            shortcuts = listOf("test"),
             name = "test",
             stepConfigs = listOf(stepConfig1, stepConfig2)
         )
@@ -53,7 +53,7 @@ class CommandTest {
         )
 
         val command = Command(
-            shortcut = "test",
+            shortcuts = listOf("test"),
             name = "test",
             stepConfigs = listOf(stepConfig1, stepConfig2)
         )
@@ -82,7 +82,7 @@ class CommandTest {
         )
 
         val command = Command(
-            shortcut = "test",
+            shortcuts = listOf("test"),
             name = "test",
             stepConfigs = listOf(stepConfig1, stepConfig2)
         )
@@ -117,7 +117,7 @@ class CommandTest {
         )
 
         val command = Command(
-            shortcut = "test",
+            shortcuts = listOf("test"),
             name = "test",
             stepConfigs = listOf(stepConfig1, stepConfig2, stepConfig3)
         )

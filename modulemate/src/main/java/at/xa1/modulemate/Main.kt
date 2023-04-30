@@ -80,7 +80,7 @@ private fun modulemate(
     )
     commandList.add(
         Command(
-            Help.SHORTCUT,
+            Help.SHORTCUTS,
             "Help",
             listOf(CommandStepConfig(StepSuccessCondition.PREVIOUS_SUCCESS, Help(commandList)))
         )

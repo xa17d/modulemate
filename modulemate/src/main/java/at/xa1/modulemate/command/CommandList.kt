@@ -33,7 +33,7 @@ class CommandList {
     }
 
     fun getOrNull(shortcut: String): Command? {
-        return _commands.find { it.shortcut == shortcut }
+        return _commands.find { it.shortcuts.contains(shortcut) }
     }
 }
 
@@ -44,7 +44,7 @@ internal fun createCommandList(
 ): CommandList {
     val commandList = commandConfigs.map { command ->
         Command(
-            shortcut = command.shortcut,
+            shortcuts = command.shortcuts,
             name = command.name,
             stepConfigs =
             command.steps.map { step ->

@@ -1,7 +1,7 @@
 package at.xa1.modulemate.command
 
 class Command(
-    val shortcut: String,
+    val shortcuts: List<String>,
     val name: String,
     val stepConfigs: List<CommandStepConfig>
 ) {

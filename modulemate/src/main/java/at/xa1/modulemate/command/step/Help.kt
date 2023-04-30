@@ -31,7 +31,7 @@ class Help(
         Cli.subHeading("Commands:")
         Cli.table {
             commandList.allCommands.forEach { command ->
-                row(command.shortcut, command.name)
+                row(command.shortcuts.joinToString(", "), command.name)
             }
         }
 
@@ -39,6 +39,6 @@ class Help(
     }
 
     companion object {
-        const val SHORTCUT = "help"
+        val SHORTCUTS: List<String> = listOf("help", "?")
     }
 }

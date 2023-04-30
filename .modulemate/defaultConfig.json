@@ -9,7 +9,9 @@
     },
     "commands": [
         {
-            "shortcut": "pr",
+            "shortcuts": [
+                "pr"
+            ],
             "name": "Pull Request",
             "steps": [
                 {
@@ -19,7 +21,10 @@
             ]
         },
         {
-            "shortcut": "a",
+            "shortcuts": [
+                "a",
+                "assemble"
+            ],
             "name": "Assemble Main and Test code",
             "steps": [
                 {
@@ -39,7 +44,9 @@
             ]
         },
         {
-            "shortcut": "activeWork",
+            "shortcuts": [
+                "activeWork"
+            ],
             "name": "Show what modules are actively worked on in remote branches.",
             "steps": [
                 {
@@ -48,7 +55,9 @@
             ]
         },
         {
-            "shortcut": "conflictAnalysis",
+            "shortcuts": [
+                "conflictAnalysis"
+            ],
             "name": "Show what other remote branches touch modules that are also worked on locally.",
             "steps": [
                 {
@@ -57,7 +66,9 @@
             ]
         },
         {
-            "shortcut": "changedModules",
+            "shortcuts": [
+                "changedModules"
+            ],
             "name": "Filter only for changed modules",
             "steps": [
                 {
@@ -66,7 +77,9 @@
             ]
         },
         {
-            "shortcut": "prefix",
+            "shortcuts": [
+                "prefix"
+            ],
             "name": "Filter only for changed modules",
             "steps": [
                 {
@@ -76,7 +89,9 @@
             ]
         },
         {
-            "shortcut": "update",
+            "shortcuts": [
+                "update"
+            ],
             "name": "Update modulemate",
             "steps": [
                 {
@@ -88,7 +103,11 @@
             ]
         },
         {
-            "shortcut": "q",
+            "shortcuts": [
+                "q",
+                "quit",
+                "exit"
+            ],
             "name": "Quit modulemate",
             "steps": [
                 {
