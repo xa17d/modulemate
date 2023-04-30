@@ -35,15 +35,16 @@ internal class UserCommandRunner(
             runCommand(command, CommandContext(repository, modules, extendedVariables))
             Result.COMMAND_RUN
         } else {
-            Cli.line(
-                "Couldn't find command: ${CliColor.UNDERLINE}$firstToken${CliColor.RESET}, " +
-                    "therefore applied as filter."
-            )
-
             if (firstToken.isNotEmpty()) {
-                modules.applyFilter(PathPrefixFilter(firstToken))
+                val filterApplied =
+                    modules.applyFilterIfFindsModules(PathPrefixFilter(firstToken))
 
-                if (modules.filteredModules.isNotEmpty()) {
+                if (filterApplied) {
+                    Cli.line(
+                        "Couldn't find command: ${CliColor.UNDERLINE}$firstToken${CliColor.RESET}, " +
+                            "therefore applied as filter."
+                    )
+
                     return Result.FILTER_APPLIED
                 }
             }

@@ -20,6 +20,17 @@ class Modules(
         reapplyFilter()
     }
 
+    fun applyFilterIfFindsModules(filter: ModulesFilter): Boolean {
+        val filteredModules = filter.filter(allModules)
+
+        val findsModules = filteredModules.isNotEmpty()
+        if (findsModules) {
+            this.filteredModules = filteredModules
+        }
+
+        return findsModules
+    }
+
     fun reapplyFilter() {
         filteredModules = filter.filter(allModules)
     }

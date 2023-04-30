@@ -3,11 +3,14 @@ package at.xa1.modulemate
 import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
 import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.cli.CliColor.BACKGROUND_WHITE
+import at.xa1.modulemate.cli.CliColor.BLACK
 import at.xa1.modulemate.cli.CliColor.BLUE
 import at.xa1.modulemate.cli.CliColor.CYAN
 import at.xa1.modulemate.cli.CliColor.GREEN
 import at.xa1.modulemate.cli.CliColor.RESET
-import at.xa1.modulemate.command.step.Help
+import at.xa1.modulemate.command.CommandList
+import at.xa1.modulemate.command.findMostSimilarCommand
 import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Module
@@ -21,7 +24,8 @@ internal class PromptMode(
     private val repository: GitRepository,
     private val modules: Modules,
     private val variables: CachedVariables,
-    private val commandRunner: UserCommandRunner
+    private val commandRunner: UserCommandRunner,
+    private val commandList: CommandList
 ) {
     private var lastFilteredModules: List<Module>? = null
     private var lastCommand = ""
@@ -55,9 +59,17 @@ internal class PromptMode(
         val inputTokens = input.split(' ').toTypedArray() // TODO properly tokenize
         val result = commandRunner.run(CliArgs(inputTokens))
         if (result == UserCommandRunner.Result.INPUT_INVALID) {
+            val mostSimilarCommand = findMostSimilarCommand(
+                commandList.allCommands.map { it.shortcut },
+                input
+            )
+
             Cli.heading("⚠️ Command unknown: $input", formatting = CliColor.BACKGROUND_BRIGHT_YELLOW)
-            commandRunner.run(CliArgs(arrayOf(Help.SHORTCUT)))
-            lastCommand = Help.SHORTCUT
+            Cli.line(
+                "Did you mean $GREEN$mostSimilarCommand$RESET? " +
+                    "(if yes, press $BACKGROUND_WHITE$BLACK Enter $RESET$RESET)"
+            )
+            lastCommand = mostSimilarCommand
         }
     }
 

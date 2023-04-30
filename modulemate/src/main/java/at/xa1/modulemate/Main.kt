@@ -82,7 +82,7 @@ fun main(args: Array<String>) {
         }
 
         if (promptMode) {
-            PromptMode(repository, modules, variables, commandRunner).run()
+            PromptMode(repository, modules, variables, commandRunner, commandList).run()
         }
     } catch (_: QuitException) {
     }

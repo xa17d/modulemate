@@ -3,7 +3,7 @@ package at.xa1.modulemate
 import java.io.File
 
 object Modulemate {
-    const val VERSION = "1.0.0-beta01"
+    const val VERSION = "1.0.0-beta02"
 
     const val MODULEMATE_FOLDER: String = ".modulemate"
 

@@ -308,4 +308,6 @@ Distributed under [BSD 3-Clause License](LICENSE). See [LICENSE](LICENSE) for mo
 - [x] Command for printing changed modules compared to the main branch
 - [x] Show who's working on modules from remote active changes
 - [x] Shell command depending on module type
+- [x] Suggest similar command if command not found
+- [ ] Don't crash if folder is not a git repository
 - [ ] Shell command that runs for every module
