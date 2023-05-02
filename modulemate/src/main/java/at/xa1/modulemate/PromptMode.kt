@@ -64,7 +64,7 @@ internal class PromptMode(
                 input
             )
 
-            Cli.heading("⚠️ Command unknown: $input", formatting = CliColor.BACKGROUND_BRIGHT_YELLOW)
+            Cli.heading("⚠️  Command unknown: $input", formatting = CliColor.BACKGROUND_BRIGHT_YELLOW)
             Cli.line(
                 "Did you mean $GREEN$mostSimilarCommand$RESET? " +
                     "(if yes, press $BACKGROUND_WHITE$BLACK Enter $RESET$RESET)"

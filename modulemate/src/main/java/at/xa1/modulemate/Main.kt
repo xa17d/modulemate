@@ -104,7 +104,7 @@ private fun modulemate(
                 val empty = result.invalidCommand.isEmpty()
                 if (!empty) {
                     Cli.heading(
-                        "⚠️ Command unknown: ${result.invalidCommand}",
+                        "⚠️  Command unknown: ${result.invalidCommand}",
                         formatting = CliColor.BACKGROUND_BRIGHT_YELLOW
                     )
                 }

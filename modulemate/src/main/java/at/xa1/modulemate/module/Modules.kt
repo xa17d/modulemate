@@ -17,7 +17,7 @@ class Modules(
 
     fun applyFilter(filter: ModulesFilter) {
         this.filter = filter
-        reapplyFilter()
+        filteredModules = filter.filter(allModules)
     }
 
     fun applyFilterIfFindsModules(filter: ModulesFilter): Boolean {
@@ -26,13 +26,10 @@ class Modules(
         val findsModules = filteredModules.isNotEmpty()
         if (findsModules) {
             this.filteredModules = filteredModules
+            this.filter = filter
         }
 
         return findsModules
-    }
-
-    fun reapplyFilter() {
-        filteredModules = filter.filter(allModules)
     }
 
     fun getActiveModule(): Module {
