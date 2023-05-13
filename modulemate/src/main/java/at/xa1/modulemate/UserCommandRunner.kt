@@ -11,6 +11,7 @@ import at.xa1.modulemate.command.variable.DefaultVariables
 import at.xa1.modulemate.command.variable.Variable
 import at.xa1.modulemate.command.variable.VariableSet
 import at.xa1.modulemate.command.variable.Variables
+import at.xa1.modulemate.config.Source
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.filter.PathPrefixFilter
@@ -30,6 +31,14 @@ internal class UserCommandRunner(
                 args.getRemainingArgs().forEachIndexed { index, argsValue ->
                     add(Variable(DefaultVariables.COMMAND_ARG(index)) { argsValue })
                 }
+                add(
+                    Variable(DefaultVariables.CONFIG_FOLDER) {
+                        when (val source = command.source) {
+                            Source.BuiltIn -> error("Only available for commands defined in config files.")
+                            is Source.ConfigFile -> source.file.parentFile.absolutePath
+                        }
+                    }
+                )
             }
 
             runCommand(command, CommandContext(repository, modules, extendedVariables))

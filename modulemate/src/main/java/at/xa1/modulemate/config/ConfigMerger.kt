@@ -11,8 +11,17 @@ class ConfigMerger(
             )
     }
 
-    fun getCommandConfigs(): List<Command> = configs.flatMap { configSource -> configSource.config.commands }
+    fun getCommandsWithSource(): List<CommandSource> = configs.flatMap { configSource ->
+        configSource.config.commands.map { command ->
+            CommandSource(source = configSource.source, command = command)
+        }
+    }
 
     private val configFiles: String
-        get() = configs.joinToString(separator = "\n") { configSource -> configSource.source.absolutePath }
+        get() = configs.mapNotNull { configSource ->
+            when (val source = configSource.source) {
+                is Source.ConfigFile -> source.file.absolutePath
+                Source.BuiltIn -> null
+            }
+        }.joinToString(separator = "\n")
 }

@@ -17,6 +17,7 @@ import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.command.variable.DefaultVariables
 import at.xa1.modulemate.config.ConfigMerger
 import at.xa1.modulemate.config.ConfigResolver
+import at.xa1.modulemate.config.Source
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
@@ -74,7 +75,7 @@ private fun modulemate(
     val defaultVariables = DefaultVariables.create(repository, modules)
     val variables = CachedVariables(defaultVariables)
     val commandList = createCommandList(
-        configMerger.getCommandConfigs(),
+        configMerger.getCommandsWithSource(),
         browser,
         printingShell
     )
@@ -82,7 +83,8 @@ private fun modulemate(
         Command(
             Help.SHORTCUTS,
             "Help",
-            listOf(CommandStepConfig(StepSuccessCondition.PREVIOUS_SUCCESS, Help(commandList)))
+            listOf(CommandStepConfig(StepSuccessCondition.PREVIOUS_SUCCESS, Help(commandList))),
+            Source.BuiltIn
         )
     )
 

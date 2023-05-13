@@ -6,7 +6,7 @@ import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.Modules
 
-class CommandContext(
+data class CommandContext(
     val repository: GitRepository,
     val modules: Modules,
     val variables: Variables

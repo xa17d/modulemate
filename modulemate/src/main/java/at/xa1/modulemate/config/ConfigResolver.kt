@@ -48,7 +48,7 @@ class ConfigResolver(
         try {
             val config = Json.decodeFromString<Config>(configFile.readText())
             return ConfigSource(
-                source = configFile,
+                source = Source.ConfigFile(configFile),
                 config = config
             )
         } catch (e: SerializationException) {

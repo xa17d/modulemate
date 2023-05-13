@@ -8,6 +8,7 @@ import at.xa1.modulemate.command.step.Gradle
 import at.xa1.modulemate.command.step.Quit
 import at.xa1.modulemate.command.step.Report
 import at.xa1.modulemate.command.variable.replacePlaceholders
+import at.xa1.modulemate.config.CommandSource
 import at.xa1.modulemate.config.CommandStep
 import at.xa1.modulemate.config.getForAndroidApp
 import at.xa1.modulemate.config.getForAndroidLib
@@ -38,21 +39,23 @@ class CommandList {
 }
 
 internal fun createCommandList(
-    commandConfigs: List<at.xa1.modulemate.config.Command>,
+    commandConfigs: List<CommandSource>,
     browser: ShellOpenBrowser,
     shell: at.xa1.modulemate.system.Shell
 ): CommandList {
-    val commandList = commandConfigs.map { command ->
+    val commandList = commandConfigs.map { commandSource ->
+        val command = commandSource.command
+
         Command(
             shortcuts = command.shortcuts,
             name = command.name,
-            stepConfigs =
-            command.steps.map { step ->
+            stepConfigs = command.steps.map { step ->
                 CommandStepConfig(
                     successCondition = step.runWhen.toSuccessCondition(),
                     step = createCommandStep(step, browser, shell)
                 )
-            }
+            },
+            source = commandSource.source
         )
     }
 

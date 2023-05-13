@@ -1,9 +1,12 @@
 package at.xa1.modulemate.command
 
+import at.xa1.modulemate.config.Source
+
 class Command(
     val shortcuts: List<String>,
     val name: String,
-    val stepConfigs: List<CommandStepConfig>
+    val stepConfigs: List<CommandStepConfig>,
+    val source: Source
 ) {
     fun run(context: CommandContext): CommandResult {
         var result = CommandResult.SUCCESS

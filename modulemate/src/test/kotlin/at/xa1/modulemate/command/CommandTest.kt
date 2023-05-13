@@ -1,6 +1,7 @@
 package at.xa1.modulemate.command
 
 import at.xa1.modulemate.command.step.FakeCommandStep
+import at.xa1.modulemate.config.Source
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -26,7 +27,8 @@ class CommandTest {
         val command = Command(
             shortcuts = listOf("test"),
             name = "test",
-            stepConfigs = listOf(stepConfig1, stepConfig2)
+            stepConfigs = listOf(stepConfig1, stepConfig2),
+            source = Source.BuiltIn
         )
 
         val result = command.run(testCommandContext())
@@ -55,7 +57,8 @@ class CommandTest {
         val command = Command(
             shortcuts = listOf("test"),
             name = "test",
-            stepConfigs = listOf(stepConfig1, stepConfig2)
+            stepConfigs = listOf(stepConfig1, stepConfig2),
+            source = Source.BuiltIn
         )
 
         val result = command.run(testCommandContext())
@@ -84,7 +87,8 @@ class CommandTest {
         val command = Command(
             shortcuts = listOf("test"),
             name = "test",
-            stepConfigs = listOf(stepConfig1, stepConfig2)
+            stepConfigs = listOf(stepConfig1, stepConfig2),
+            source = Source.BuiltIn
         )
 
         val result = command.run(testCommandContext())
@@ -119,7 +123,8 @@ class CommandTest {
         val command = Command(
             shortcuts = listOf("test"),
             name = "test",
-            stepConfigs = listOf(stepConfig1, stepConfig2, stepConfig3)
+            stepConfigs = listOf(stepConfig1, stepConfig2, stepConfig3),
+            source = Source.BuiltIn
         )
 
         val result = command.run(testCommandContext())

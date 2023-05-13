@@ -37,4 +37,5 @@ object DefaultVariables {
 
     const val ACTIVE_MODULE_FOLDER: String = "ACTIVE_MODULE_FOLDER"
     const val ACTIVE_MODULE: String = "ACTIVE_MODULE"
+    const val CONFIG_FOLDER: String = "CONFIG_FOLDER"
 }

@@ -1,6 +1,6 @@
 package at.xa1.modulemate.config
 
-data class ConfigSource(
+data class CommandSource(
     val source: Source,
-    val config: Config
+    val command: Command
 )
