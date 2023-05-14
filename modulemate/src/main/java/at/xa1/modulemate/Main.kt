@@ -22,9 +22,11 @@ import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
 import at.xa1.modulemate.module.filter.PathPrefixFilter
+import at.xa1.modulemate.searchmode.SearchMode
 import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
 import at.xa1.modulemate.system.ShellOpenBrowser
+import at.xa1.modulemate.ui.Ui
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -117,7 +119,10 @@ private fun modulemate(
         }
 
         if (promptMode) {
-            PromptMode(repository, modules, variables, commandRunner, commandList).run()
+            val ui = Ui.init()
+            SearchMode(
+                ui = ui
+            ).run()
         }
     } catch (_: QuitException) {
     }

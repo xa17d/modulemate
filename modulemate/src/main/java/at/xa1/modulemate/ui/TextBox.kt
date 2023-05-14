@@ -2,23 +2,30 @@ package at.xa1.modulemate.ui
 
 import at.xa1.modulemate.cli.CliColor
 
-fun ScreenContext.textBox(text: String, hint: String, emoji: String, width: Int) {
+data class TextBox(
+    val text: String = "",
+    val hint: String = "",
+    val emoji: String = "💬",
+    val cursor: Int = 0
+)
+
+fun ScreenContext.print(textBox: TextBox, width: Int) {
     print("╭")
     repeat(width - 2) { print("─") }
     print("╮\n")
 
     print("│ ")
-    print(emoji)
+    print(textBox.emoji)
     print(" ")
 
-    val contentLength = if (text.isEmpty()) {
+    val contentLength = if (textBox.text.isEmpty()) {
         print(CliColor.YELLOW)
-        print(hint)
+        print(textBox.hint)
         print(CliColor.RESET)
-        hint.length
+        textBox.hint.length
     } else {
-        print(text)
-        text.length
+        print(textBox.text)
+        textBox.text.length
     }
 
     repeat(width - contentLength - 6) { print(" ") }
@@ -28,14 +35,6 @@ fun ScreenContext.textBox(text: String, hint: String, emoji: String, width: Int)
     repeat(width - 2) { print("─") }
     print("╯\n")
 }
-
-data class TextBox(
-    val text: String = "",
-    val hint: String = "",
-    val emoji: String = "💬",
-    val width: Int = 20,
-    val cursor: Int = 0
-)
 
 fun TextBox.reduce(userInput: UiUserInput): TextBox {
     return when (userInput) {
