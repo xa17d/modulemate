@@ -42,6 +42,13 @@ fun SearchScreenState.reduce(input: UiUserInput, modules: Modules, height: Int):
                 } else {
                     modules.activate(module)
                 }
+            } else {
+                val allActive = listBox.items.all { module -> modules.isActive(module) }
+                if (allActive) {
+                    listBox.items.forEach { module -> modules.deactivate(module) }
+                } else {
+                    listBox.items.forEach { module -> modules.activate(module) }
+                }
             }
             this
         }
