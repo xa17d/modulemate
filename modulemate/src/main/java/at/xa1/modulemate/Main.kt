@@ -121,7 +121,8 @@ private fun modulemate(
         if (promptMode) {
             val ui = Ui.init()
             SearchMode(
-                ui = ui
+                ui = ui,
+                modules = modules
             ).run()
         }
     } catch (_: QuitException) {
