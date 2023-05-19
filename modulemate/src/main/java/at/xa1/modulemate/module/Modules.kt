@@ -5,9 +5,38 @@ import at.xa1.modulemate.module.filter.ModulesFilter
 import java.io.File
 
 class Modules(
-    private val scanner: ModulesScanner
+    private val scanner: ModulesScanner,
 ) {
-    val allModules: List<Module> by lazy { scanner.scan().sortedBy { it.path } }
+    private val mActiveModules = HashSet<Module>()
+    private val mRecentModules = mutableListOf<Module>()
+
+    val allModules: List<Module> by lazy { scanner.scan().sortedWith(sortComparator) }
+
+    val recentModules: List<Module> = emptyList()
+    val activeModules: Set<Module>
+        get() = mActiveModules
+
+    fun isActive(module: Module) = activeModules.contains(module)
+    fun activate(module: Module) {
+        if (!isActive(module)) {
+            mActiveModules.add(module)
+
+            if (!recentModules.contains(module)) {
+                mRecentModules.add(module)
+                mRecentModules.sortWith(sortComparator)
+            }
+        }
+    }
+
+    fun deactivate(module: Module) {
+        mActiveModules.remove(module)
+    }
+
+    fun removeRecent(module: Module) {
+        deactivate(module)
+        mRecentModules.remove(module)
+    }
+
 
     var filteredModules: List<Module> = emptyList()
         private set
@@ -52,4 +81,8 @@ class Modules(
 
     fun getByPath(path: String): Module =
         allModules.find { module -> module.path == path } ?: error("Module with path doesn't exist: $path")
+
+    companion object {
+        private val sortComparator = compareBy<Module> { module -> module.path }
+    }
 }
