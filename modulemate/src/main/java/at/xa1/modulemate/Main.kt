@@ -60,7 +60,7 @@ private fun modulemate(
     repository: GitRepository,
     repositoryRoot: File,
     shell: RuntimeShell,
-    cliArgs: CliArgs,
+    cliArgs: CliArgs
 ) {
     val prefixFilter = cliArgs.getValueOrNull("--prefixFilter")
     val printingShell = PrintingShell(repositoryRoot)

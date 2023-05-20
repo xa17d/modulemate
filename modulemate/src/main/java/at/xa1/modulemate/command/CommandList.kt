@@ -41,7 +41,7 @@ class CommandList {
 internal fun createCommandList(
     commandConfigs: List<CommandSource>,
     browser: ShellOpenBrowser,
-    shell: at.xa1.modulemate.system.Shell,
+    shell: at.xa1.modulemate.system.Shell
 ): CommandList {
     val commandList = commandConfigs.map { commandSource ->
         val command = commandSource.command
@@ -67,7 +67,7 @@ internal fun createCommandList(
 private fun createCommandStep(
     step: CommandStep,
     browser: ShellOpenBrowser,
-    shell: at.xa1.modulemate.system.Shell,
+    shell: at.xa1.modulemate.system.Shell
 ) = when (step) {
     is CommandStep.Browser -> Browser(
         browser = browser,
