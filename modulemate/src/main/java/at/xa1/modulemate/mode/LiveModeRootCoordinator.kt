@@ -62,7 +62,7 @@ internal class LiveModeRootCoordinator(
                     return
                 }
                 else -> {
-                    error("Unexpected input: $input")
+                    // Ignore.
                 }
             }
         }
