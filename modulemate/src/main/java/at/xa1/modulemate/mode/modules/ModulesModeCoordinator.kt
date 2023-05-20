@@ -1,35 +1,31 @@
-package at.xa1.modulemate.mode.search
+package at.xa1.modulemate.mode.modules
 
-import at.xa1.modulemate.mode.LiveUiMode
+import at.xa1.modulemate.mode.ModeCoordinator
 import at.xa1.modulemate.mode.ModulesListItemRenderer
 import at.xa1.modulemate.mode.SearchListScreen
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
 
-internal class SearchMode(
+internal class ModulesModeCoordinator(
     private val ui: Ui,
     private val modules: Modules
-) : LiveUiMode {
+) : ModeCoordinator {
     private val screen = SearchListScreen(
-        emoji = "🔍",
-        hint = "Search Mode: Type to search modules",
-        listProvider = { filter ->
-            val filterTokens = filter.split(' ')
-            modules.allModules.filter { module ->
-                filterTokens.all { token -> module.path.contains(token) }
-            }
-        },
+        emoji = "📦",
+        hint = "Module Mode",
+        listProvider = { modules.recentModules },
         listItemRenderer = ModulesListItemRenderer(modules)
     )
 
-    override fun print(input: UiUserInput?) {
+    override fun run(): UiUserInput {
         while (true) {
             screen.print(ui)
 
             when (val input = ui.readUserInput()) {
-                UiUserInput.Tab, UiUserInput.Shift.Tab -> return
-                UiUserInput.Return -> selectModule()
+                UiUserInput.Tab, UiUserInput.Shift.Tab, is UiUserInput.Char -> return input
+                UiUserInput.Return -> toggleModule()
+                UiUserInput.Backspace, UiUserInput.Delete -> removeRecentModule()
                 else -> {
                     screen.input(input)
                 }
@@ -37,20 +33,27 @@ internal class SearchMode(
         }
     }
 
-    private fun selectModule() {
+    private fun removeRecentModule() {
+        val module = screen.selectedItem
+        if (module != null) {
+            modules.removeRecent(module)
+        }
+    }
+
+    private fun toggleModule() {
         val selectedModule = screen.selectedItem
         val allItemsInList = screen.state.listBox.items
 
         if (selectedModule != null) {
             if (modules.isActive(selectedModule)) {
-                modules.removeRecent(selectedModule)
+                modules.deactivate(selectedModule)
             } else {
                 modules.activate(selectedModule)
             }
         } else {
             val allActive = allItemsInList.all { module -> modules.isActive(module) }
             if (allActive) {
-                allItemsInList.forEach { module -> modules.removeRecent(module) }
+                allItemsInList.forEach { module -> modules.deactivate(module) }
             } else {
                 allItemsInList.forEach { module -> modules.activate(module) }
             }

@@ -4,16 +4,16 @@ import at.xa1.modulemate.UserCommandRunner
 import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandList
-import at.xa1.modulemate.mode.LiveUiMode
+import at.xa1.modulemate.mode.ModeCoordinator
 import at.xa1.modulemate.mode.SearchListScreen
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
 
-internal class FlashMode(
+internal class FlashModeCoordinator(
     private val ui: Ui,
     private val commandList: CommandList,
     private val commandRunner: UserCommandRunner
-) : LiveUiMode {
+) : ModeCoordinator {
     private val screen = SearchListScreen(
         emoji = "⚡️",
         hint = "Flash Mode",
@@ -32,12 +32,12 @@ internal class FlashMode(
     )
 
     private var lastCommand: Command? = null
-    override fun print(input: UiUserInput?) {
+    override fun run(): UiUserInput {
         screen.print(ui)
 
         while (true) {
             when (val input = ui.readUserInput()) {
-                UiUserInput.Tab, UiUserInput.Shift.Tab -> return
+                UiUserInput.Tab, UiUserInput.Shift.Tab -> return input
                 UiUserInput.Return -> {
                     val command = screen.selectedItem ?: lastCommand
                     if (command != null) {

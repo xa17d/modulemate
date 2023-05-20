@@ -19,7 +19,7 @@ import at.xa1.modulemate.config.ConfigMerger
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.config.Source
 import at.xa1.modulemate.git.GitRepository
-import at.xa1.modulemate.mode.LiveUi
+import at.xa1.modulemate.mode.LiveModeRootCoordinator
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
 import at.xa1.modulemate.module.filter.PathPrefixFilter
@@ -120,7 +120,7 @@ private fun modulemate(
 
         if (promptMode) {
             val ui = Ui.init()
-            LiveUi(ui, modules, commandList, commandRunner).run()
+            LiveModeRootCoordinator(ui, modules, commandList, commandRunner).run()
         }
     } catch (_: QuitException) {
     }
