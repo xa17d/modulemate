@@ -1,6 +1,7 @@
 package at.xa1.modulemate.mode.command
 
 import at.xa1.modulemate.UserCommandRunner
+import at.xa1.modulemate.cli.CliEmoji
 import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.mode.ModeCoordinator
 import at.xa1.modulemate.mode.SearchListScreen
@@ -14,7 +15,7 @@ internal class CommandModeCoordinator(
     private val commandRunner: UserCommandRunner
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
-        emoji = "\uD83D\uDD79", // = 🕹️but without the  U+FE0F (VARIATION SELECTOR-16)
+        emoji = CliEmoji.JOYSTICK.toString(),
         hint = "Command Mode: Search and execute commands",
         listProvider = { filter ->
             commandList.allCommands.filter { command ->
@@ -25,9 +26,9 @@ internal class CommandModeCoordinator(
         },
         listItemRenderer = { item, isSelected ->
             if (isSelected) {
-                item.shortcuts.joinToString { " $it " } + " " + item.name
+                " " + item.shortcuts.joinToString { " $it " } + " " + item.name
             } else {
-                item.shortcuts.joinToString { formatKey(it) } + " " + item.name
+                " " + item.shortcuts.joinToString { formatKey(it) } + " " + item.name
             }
         }
     )

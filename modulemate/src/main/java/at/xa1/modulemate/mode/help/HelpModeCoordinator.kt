@@ -1,6 +1,7 @@
 package at.xa1.modulemate.mode.help
 
 import at.xa1.modulemate.Modulemate
+import at.xa1.modulemate.cli.CliEmoji
 import at.xa1.modulemate.cli.CliFormat
 import at.xa1.modulemate.mode.ModeCoordinator
 import at.xa1.modulemate.mode.SearchListScreen
@@ -11,7 +12,7 @@ internal class HelpModeCoordinator(
     private val ui: Ui
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
-        emoji = "ℹ\uFE0F",
+        emoji = CliEmoji.I_ENCLOSED.toString(),
         hint = "Help Mode",
         listProvider = {
             listOf(
@@ -20,25 +21,25 @@ internal class HelpModeCoordinator(
                 "Use ${formatKey("TAB")} and ${formatKey("⇧")} + ${formatKey("TAB")} " +
                     "to switch forward and backwards between modes.",
                 "",
-                header("🔍 Search Mode"),
+                header("${CliEmoji.MAGNIFYING_GLASS} Search Mode"),
                 "Shows all available modules. Type to filter.",
                 "Use ${formatKey("▲")} and ${formatKey("▼")} to navigate in the list.",
                 "Press ${formatKey("RETURN ⏎")} to activate or deactivate a module.",
                 "${formatKey("RETURN ⏎")} when selection is in search box will activate or deactivate " +
                     "all filtered modules.",
                 "",
-                header("📦 Module Mode"),
+                header("${CliEmoji.PACKAGE} Module Mode"),
                 "Shows active and recent modules.",
                 "Use ${formatKey("▲")} and ${formatKey("▼")} to navigate in the list.",
                 "Press ${formatKey("RETURN ⏎")} to activate or deactivate a module.",
                 "Use ${formatKey("  ⌫")} to deactivate a module and remove it from recent.",
                 "",
-                header("🕹 Command Mode"),
+                header("${CliEmoji.JOYSTICK} Command Mode"),
                 "Shows all available commands. Type to filter.",
                 "Use ${formatKey("▲")} and ${formatKey("▼")} to navigate in the list.",
                 "Press ${formatKey("RETURN ⏎")} to execute a command.",
                 "",
-                header("⚡️ Flash Mode"),
+                header("${CliEmoji.HIGH_VOLTAGE} Flash Mode"),
                 "Shows all commands with a one-character-shortcut.",
                 "Type one character, and the corresponding command is immediately executed"
             )
@@ -64,7 +65,7 @@ internal class HelpModeCoordinator(
     }
 
     private fun moduleMate() =
-        "🧰 ${CliFormat.BOLD}${CliFormat.RED}modulemate${CliFormat.RESET} " +
+        "${CliEmoji.TOOLBOX} ${CliFormat.BOLD}${CliFormat.RED}modulemate${CliFormat.RESET} " +
             "${CliFormat.BRIGHT_WHITE}v${Modulemate.VERSION}${CliFormat.RESET}"
     private fun header(text: String) = CliFormat.BOLD + CliFormat.UNDERLINE + text + CliFormat.RESET
 }

@@ -1,6 +1,7 @@
 package at.xa1.modulemate.mode.flash
 
 import at.xa1.modulemate.UserCommandRunner
+import at.xa1.modulemate.cli.CliEmoji
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.mode.ModeCoordinator
@@ -15,16 +16,16 @@ internal class FlashModeCoordinator(
     private val commandRunner: UserCommandRunner
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
-        emoji = "⚡️",
+        emoji = CliEmoji.HIGH_VOLTAGE.toString(),
         hint = "Flash Mode: Execute commands with one key stroke",
         listProvider = {
             commandList.allCommands.filter { command -> command.oneCharShortCuts.isNotEmpty() }
         },
         listItemRenderer = { item, isSelected ->
             if (isSelected) {
-                item.oneCharShortCuts.joinToString { " $it " } + " " + item.name
+                " " + item.oneCharShortCuts.joinToString { " $it " } + " " + item.name
             } else {
-                item.oneCharShortCuts.joinToString { formatKey(it) } + " " + item.name
+                " " + item.oneCharShortCuts.joinToString { formatKey(it) } + " " + item.name
             }
         }
     )

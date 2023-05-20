@@ -1,5 +1,6 @@
 package at.xa1.modulemate.mode.modules
 
+import at.xa1.modulemate.cli.CliEmoji
 import at.xa1.modulemate.mode.ModeCoordinator
 import at.xa1.modulemate.mode.ModulesListItemRenderer
 import at.xa1.modulemate.mode.SearchListScreen
@@ -12,7 +13,7 @@ internal class ModulesModeCoordinator(
     private val modules: Modules
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
-        emoji = "📦",
+        emoji = CliEmoji.PACKAGE.toString(),
         hint = "Module Mode: Select active modules",
         listProvider = { modules.recentModules },
         listItemRenderer = ModulesListItemRenderer(modules)

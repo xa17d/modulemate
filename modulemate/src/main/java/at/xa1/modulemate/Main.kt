@@ -2,6 +2,7 @@ package at.xa1.modulemate
 
 import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
+import at.xa1.modulemate.cli.CliEmoji
 import at.xa1.modulemate.cli.CliFormat
 import at.xa1.modulemate.cli.CliFormat.BACKGROUND_RED
 import at.xa1.modulemate.cli.CliFormat.BOLD
@@ -48,7 +49,7 @@ fun main(args: Array<String>) {
 
 private fun header(repoName: String, branch: String) {
     Cli.heading(
-        "\uD83E\uDDF0 modulemate v${Modulemate.VERSION} " +
+        "${CliEmoji.TOOLBOX} modulemate v${Modulemate.VERSION} " +
             "〉$repoName 〉$branch",
         formatting = "$BOLD$BACKGROUND_RED"
     )
@@ -58,7 +59,7 @@ private fun modulemate(
     repository: GitRepository,
     repositoryRoot: File,
     shell: RuntimeShell,
-    cliArgs: CliArgs
+    cliArgs: CliArgs,
 ) {
     val prefixFilter = cliArgs.getValueOrNull("--prefixFilter")
     val printingShell = PrintingShell(repositoryRoot)
@@ -108,7 +109,7 @@ private fun modulemate(
                 val empty = result.invalidCommand.isEmpty()
                 if (!empty) {
                     Cli.heading(
-                        "⚠️  Command unknown: ${result.invalidCommand}",
+                        "${CliEmoji.WARNING_SIGN} Command unknown: ${result.invalidCommand}",
                         formatting = CliFormat.BACKGROUND_YELLOW
                     )
                 }
@@ -125,7 +126,7 @@ private fun modulemate(
     } catch (_: QuitException) {
     }
 
-    Cli.line("👋 bye")
+    Cli.line("${CliEmoji.WAVING_HAND} bye")
 }
 
 private fun errorNoGitRepository(folder: File) {

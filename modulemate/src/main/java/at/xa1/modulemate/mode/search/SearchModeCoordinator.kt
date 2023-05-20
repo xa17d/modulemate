@@ -1,5 +1,6 @@
 package at.xa1.modulemate.mode.search
 
+import at.xa1.modulemate.cli.CliEmoji
 import at.xa1.modulemate.mode.ModeCoordinator
 import at.xa1.modulemate.mode.ModulesListItemRenderer
 import at.xa1.modulemate.mode.SearchListScreen
@@ -12,7 +13,7 @@ internal class SearchModeCoordinator(
     private val modules: Modules
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
-        emoji = "🔍",
+        emoji = CliEmoji.MAGNIFYING_GLASS.toString(),
         hint = "Search Mode: Type to search modules",
         listProvider = { filter ->
             val filterTokens = filter.split(' ')
