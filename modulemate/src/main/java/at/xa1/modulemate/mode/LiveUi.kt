@@ -21,7 +21,7 @@ internal class LiveUi(
     private val searchMode = SearchMode(ui, modules)
     private val modulesMode = ModulesMode(ui, modules)
     private val commandMode = CommandMode(ui, commandList, commandRunner)
-    private val flashMode = FlashMode(ui, commandList)
+    private val flashMode = FlashMode(ui, commandList, commandRunner)
     private val modes = listOf(
         helpMode,
         searchMode,

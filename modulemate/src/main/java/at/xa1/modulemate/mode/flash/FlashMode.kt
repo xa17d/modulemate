@@ -1,46 +1,88 @@
 package at.xa1.modulemate.mode.flash
 
+import at.xa1.modulemate.UserCommandRunner
+import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.mode.LiveUiMode
-import at.xa1.modulemate.ui.ListBox
-import at.xa1.modulemate.ui.ListItemRenderer
-import at.xa1.modulemate.ui.TextBox
+import at.xa1.modulemate.mode.SearchListScreen
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
 
-class FlashMode(
+internal class FlashMode(
     private val ui: Ui,
-    private val commandList: CommandList
+    private val commandList: CommandList,
+    private val commandRunner: UserCommandRunner
 ) : LiveUiMode {
-    private var state = FlashScreenState(
-        searchBox = TextBox(
-            hint = "Flash Mode",
-            emoji = "⚡️"
-        ),
-        listBox = ListBox(
-            items = commandList.allCommands.filter { command ->
-                command.shortcuts.any { shortcut -> shortcut.length == 1 }
-            },
-            height = 0,
-            itemRenderer = object : ListItemRenderer<Command> {
-                override fun render(item: Command, isSelected: Boolean): String {
-                    return item.shortcuts.filter { it.length == 1 }.toString() + ": " + item.name
-                }
+    private val screen = SearchListScreen(
+        emoji = "⚡️",
+        hint = "Flash Mode",
+        listProvider = {
+            commandList.allCommands.filter { command -> command.oneCharShortCuts.isNotEmpty() }
+        },
+        listItemRenderer = { item, isSelected ->
+            if (isSelected) {
+                item.oneCharShortCuts.joinToString { " $it " } + ": " + item.name
+            } else {
+                item.oneCharShortCuts.joinToString {
+                    CliColor.BACKGROUND_WHITE + CliColor.BLACK + " " + it + " " + CliColor.RESET
+                } + ": " + item.name
             }
-        )
+        }
     )
 
+    private var lastCommand: Command? = null
     override fun print(input: UiUserInput?) {
-        val context = ui.createScreenContext()
+        screen.print(ui)
 
-        if (input != null) {
-            state = state.reduce(input, context.size.rows)
-        }
-        state = state.updateHeight(context.size.rows)
+        while (true) {
+            when (val input = ui.readUserInput()) {
+                UiUserInput.Tab, UiUserInput.Shift.Tab -> return
+                UiUserInput.Return -> {
+                    val command = screen.selectedItem ?: lastCommand
+                    if (command != null) {
+                        executeCommand(command)
+                    }
+                }
 
-        context.printScreen {
-            flashScreen(this, state)
+                UiUserInput.Arrow.Up -> {
+                    if (screen.selectedItem == null && lastCommand != null) {
+                        executeCommand(lastCommand!!)
+                    } else {
+                        screenInput(input)
+                    }
+                }
+
+                is UiUserInput.Char -> {
+                    val command = commandList.getOrNull(input.char.toString())
+
+                    if (command != null) {
+                        executeCommand(command)
+                    } else {
+                        screen.print(ui)
+                    }
+                }
+
+                else -> screenInput(input)
+            }
         }
     }
+
+    private fun screenInput(input: UiUserInput) {
+        screen.input(input)
+        screen.print(ui)
+    }
+
+    private fun executeCommand(command: Command) {
+        screen.moveCursorAfterTextBox(ui)
+
+        commandRunner.run(command)
+
+        screen.printOnlyTextBox(ui, command.name)
+
+        lastCommand = command
+    }
+
+    private val Command.oneCharShortCuts: List<String>
+        get() = shortcuts.filter { shortcut -> shortcut.length == 1 }
 }

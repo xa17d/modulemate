@@ -11,7 +11,7 @@ data class ListBox<T>(
     val itemRenderer: ListItemRenderer<T>
 )
 
-interface ListItemRenderer<T> {
+fun interface ListItemRenderer<T> {
     fun render(item: T, isSelected: Boolean): String
 }
 
