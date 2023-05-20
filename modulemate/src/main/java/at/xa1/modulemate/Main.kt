@@ -27,6 +27,7 @@ import at.xa1.modulemate.module.filter.PathPrefixFilter
 import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
 import at.xa1.modulemate.system.ShellOpenBrowser
+import at.xa1.modulemate.ui.CleanExit
 import at.xa1.modulemate.ui.Ui
 import java.io.File
 
@@ -121,6 +122,7 @@ private fun modulemate(
 
         if (promptMode) {
             val ui = Ui.init()
+            CleanExit().setup(ui)
             LiveModeRootCoordinator(ui, modules, commandList, commandRunner).run()
         }
     } catch (_: QuitException) {
