@@ -32,14 +32,7 @@ fun CommandScreenState.reduce(input: UiUserInput, commandList: CommandList, heig
     return when (input) {
         UiUserInput.Arrow.Down -> copy(listBox = listBox.moveDown())
         UiUserInput.Arrow.Up -> copy(listBox = listBox.moveUp())
-
-        UiUserInput.Return -> {
-            println("TODO execute")
-            this
-        }
-        else -> {
-            copy(searchBox = searchBox.reduce(input)).updateList(commandList)
-        }
+        else -> copy(searchBox = searchBox.reduce(input)).updateList(commandList)
     }.updateHeight(height)
 }
 

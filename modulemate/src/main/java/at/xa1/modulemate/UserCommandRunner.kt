@@ -22,27 +22,31 @@ internal class UserCommandRunner(
     private val variables: Variables,
     private val commandList: CommandList
 ) {
+    fun run(command: Command, args: List<String> = emptyList()): Result {
+        val extendedVariables = VariableSet(variables).apply {
+            args.forEachIndexed { index, argsValue ->
+                add(Variable(DefaultVariables.COMMAND_ARG(index)) { argsValue })
+            }
+            add(
+                Variable(DefaultVariables.CONFIG_FOLDER) {
+                    when (val source = command.source) {
+                        Source.BuiltIn -> error("Only available for commands defined in config files.")
+                        is Source.ConfigFile -> source.file.parentFile.absolutePath
+                    }
+                }
+            )
+        }
+
+        runCommand(command, CommandContext(repository, modules, extendedVariables))
+        return Result.CommandRun
+    }
+
     fun run(args: CliArgs): Result {
         val firstToken = args.nextOrNull() ?: return Result.InputInvalid("")
         val command = commandList.getOrNull(firstToken)
 
         return if (command != null) {
-            val extendedVariables = VariableSet(variables).apply {
-                args.getRemainingArgs().forEachIndexed { index, argsValue ->
-                    add(Variable(DefaultVariables.COMMAND_ARG(index)) { argsValue })
-                }
-                add(
-                    Variable(DefaultVariables.CONFIG_FOLDER) {
-                        when (val source = command.source) {
-                            Source.BuiltIn -> error("Only available for commands defined in config files.")
-                            is Source.ConfigFile -> source.file.parentFile.absolutePath
-                        }
-                    }
-                )
-            }
-
-            runCommand(command, CommandContext(repository, modules, extendedVariables))
-            Result.CommandRun
+            run(command, args.getRemainingArgs())
         } else {
             if (firstToken.isNotEmpty()) {
                 val filterApplied =

@@ -1,5 +1,6 @@
 package at.xa1.modulemate.liveui
 
+import at.xa1.modulemate.UserCommandRunner
 import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.commandmode.CommandMode
 import at.xa1.modulemate.flashmode.FlashMode
@@ -10,15 +11,16 @@ import at.xa1.modulemate.searchmode.SearchMode
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
 
-class LiveUi(
+internal class LiveUi(
     private val ui: Ui,
     modules: Modules,
-    commandList: CommandList
+    commandList: CommandList,
+    commandRunner: UserCommandRunner
 ) {
     private val helpMode = HelpMode(ui)
     private val searchMode = SearchMode(ui, modules)
     private val modulesMode = ModulesMode(ui, modules)
-    private val commandMode = CommandMode(ui, commandList)
+    private val commandMode = CommandMode(ui, commandList, commandRunner)
     private val flashMode = FlashMode(ui, commandList)
     private val modes = listOf(
         helpMode,

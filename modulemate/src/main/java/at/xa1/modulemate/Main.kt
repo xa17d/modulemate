@@ -120,7 +120,7 @@ private fun modulemate(
 
         if (promptMode) {
             val ui = Ui.init()
-            LiveUi(ui, modules, commandList).run()
+            LiveUi(ui, modules, commandList, commandRunner).run()
         }
     } catch (_: QuitException) {
     }
