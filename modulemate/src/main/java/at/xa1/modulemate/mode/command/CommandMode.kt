@@ -1,10 +1,10 @@
-package at.xa1.modulemate.commandmode
+package at.xa1.modulemate.mode.command
 
 import at.xa1.modulemate.UserCommandRunner
 import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandList
-import at.xa1.modulemate.liveui.LiveUiMode
+import at.xa1.modulemate.mode.LiveUiMode
 import at.xa1.modulemate.ui.ListBox
 import at.xa1.modulemate.ui.ListBoxItemRenderer
 import at.xa1.modulemate.ui.TextBox

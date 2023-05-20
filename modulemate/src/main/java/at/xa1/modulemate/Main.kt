@@ -19,7 +19,7 @@ import at.xa1.modulemate.config.ConfigMerger
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.config.Source
 import at.xa1.modulemate.git.GitRepository
-import at.xa1.modulemate.liveui.LiveUi
+import at.xa1.modulemate.mode.LiveUi
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
 import at.xa1.modulemate.module.filter.PathPrefixFilter

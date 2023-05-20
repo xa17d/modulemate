@@ -1,13 +1,13 @@
-package at.xa1.modulemate.liveui
+package at.xa1.modulemate.mode
 
 import at.xa1.modulemate.UserCommandRunner
 import at.xa1.modulemate.command.CommandList
-import at.xa1.modulemate.commandmode.CommandMode
-import at.xa1.modulemate.flashmode.FlashMode
-import at.xa1.modulemate.helpmode.HelpMode
+import at.xa1.modulemate.mode.command.CommandMode
+import at.xa1.modulemate.mode.flash.FlashMode
+import at.xa1.modulemate.mode.help.HelpMode
+import at.xa1.modulemate.mode.modules.ModulesMode
+import at.xa1.modulemate.mode.search.SearchMode
 import at.xa1.modulemate.module.Modules
-import at.xa1.modulemate.modulesmode.ModulesMode
-import at.xa1.modulemate.searchmode.SearchMode
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
 

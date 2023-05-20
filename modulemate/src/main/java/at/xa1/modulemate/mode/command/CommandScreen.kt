@@ -1,4 +1,4 @@
-package at.xa1.modulemate.commandmode
+package at.xa1.modulemate.mode.command
 
 import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.command.Command

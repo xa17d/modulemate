@@ -1,4 +1,4 @@
-package at.xa1.modulemate.searchmode
+package at.xa1.modulemate.mode.modules
 
 import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.module.Module
@@ -10,11 +10,11 @@ import at.xa1.modulemate.ui.UiUserInput
 import at.xa1.modulemate.ui.moveDown
 import at.xa1.modulemate.ui.moveUp
 import at.xa1.modulemate.ui.print
-import at.xa1.modulemate.ui.reduce
+import at.xa1.modulemate.ui.selectedItemOrNull
 import at.xa1.modulemate.ui.updateHeight
 import at.xa1.modulemate.ui.updateItems
 
-fun searchScreen(context: ScreenContext, state: SearchScreenState) = context.printScreen {
+fun modulesScreen(context: ScreenContext, state: ModulesScreenState) = context.printScreen {
     print(state.searchBox, context.size.columns)
 
     print(state.listBox)
@@ -23,17 +23,16 @@ fun searchScreen(context: ScreenContext, state: SearchScreenState) = context.pri
     print(CliColor.cursorDown(1) + CliColor.cursorRight(5 + state.searchBox.cursor))
 }
 
-data class SearchScreenState(
+data class ModulesScreenState(
     val searchBox: TextBox,
     val listBox: ListBox<Module>
 )
 
-fun SearchScreenState.reduce(input: UiUserInput, modules: Modules, height: Int): SearchScreenState {
+fun ModulesScreenState.reduce(input: UiUserInput, modules: Modules, height: Int): ModulesScreenState {
     return when (input) {
         UiUserInput.Arrow.Down -> copy(listBox = listBox.moveDown())
         UiUserInput.Arrow.Up -> copy(listBox = listBox.moveUp())
 
-        UiUserInput.Escape -> TODO()
         UiUserInput.Return -> {
             if (listBox.selectedIndex != -1) {
                 val module = listBox.items[listBox.selectedIndex]
@@ -53,14 +52,20 @@ fun SearchScreenState.reduce(input: UiUserInput, modules: Modules, height: Int):
             this
         }
 
-        else -> {
-            copy(searchBox = searchBox.reduce(input)).updateList(modules)
+        UiUserInput.Backspace, UiUserInput.Delete -> {
+            val module = listBox.selectedItemOrNull()
+            if (module != null) {
+                modules.removeRecent(module)
+            }
+            this
         }
-    }.updateHeight(height)
+
+        else -> this
+    }.updateList(modules).updateHeight(height)
 }
 
-private fun SearchScreenState.updateList(modules: Modules): SearchScreenState =
-    copy(listBox = listBox.updateItems(modules.allModules.filter { it.path.contains(searchBox.text) }))
+internal fun ModulesScreenState.updateList(modules: Modules): ModulesScreenState =
+    copy(listBox = listBox.updateItems(modules.recentModules))
 
-internal fun SearchScreenState.updateHeight(height: Int): SearchScreenState =
+internal fun ModulesScreenState.updateHeight(height: Int): ModulesScreenState =
     copy(listBox = listBox.updateHeight(height - 4))

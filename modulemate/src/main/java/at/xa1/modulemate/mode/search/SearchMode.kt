@@ -1,24 +1,24 @@
-package at.xa1.modulemate.modulesmode
+package at.xa1.modulemate.mode.search
 
-import at.xa1.modulemate.liveui.LiveUiMode
-import at.xa1.modulemate.liveui.ModulesListItemRenderer
+import at.xa1.modulemate.mode.LiveUiMode
+import at.xa1.modulemate.mode.ModulesListItemRenderer
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.ui.ListBox
 import at.xa1.modulemate.ui.TextBox
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
 
-class ModulesMode(
+class SearchMode(
     private val ui: Ui,
     private val modules: Modules
 ) : LiveUiMode {
-    private var state = ModulesScreenState(
+    private var state = SearchScreenState(
         searchBox = TextBox(
-            hint = "Module Mode",
-            emoji = "📦"
+            hint = "Search Mode: Type to search modules and commands",
+            emoji = "🔍"
         ),
         listBox = ListBox(
-            items = modules.recentModules,
+            items = modules.allModules,
             height = 0,
             renderer = ModulesListItemRenderer(modules)
         )
@@ -27,13 +27,14 @@ class ModulesMode(
     override fun print(input: UiUserInput?) {
         val context = ui.createScreenContext()
 
-        if (input != null) {
-            state = state.reduce(input, modules, context.size.rows)
+        state = if (input != null) {
+            state.reduce(input, modules, context.size.rows)
+        } else {
+            state.updateHeight(context.size.rows)
         }
-        state = state.updateList(modules).updateHeight(context.size.rows)
 
         context.printScreen {
-            modulesScreen(this, state)
+            searchScreen(this, state)
         }
     }
 }

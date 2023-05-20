@@ -1,8 +1,8 @@
-package at.xa1.modulemate.helpmode
+package at.xa1.modulemate.mode.help
 
 import at.xa1.modulemate.Modulemate
 import at.xa1.modulemate.cli.CliColor
-import at.xa1.modulemate.liveui.LiveUiMode
+import at.xa1.modulemate.mode.LiveUiMode
 import at.xa1.modulemate.ui.ListBox
 import at.xa1.modulemate.ui.ListBoxItemRenderer
 import at.xa1.modulemate.ui.TextBox

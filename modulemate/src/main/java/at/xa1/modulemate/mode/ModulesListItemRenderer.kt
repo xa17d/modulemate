@@ -1,4 +1,4 @@
-package at.xa1.modulemate.liveui
+package at.xa1.modulemate.mode
 
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.Modules
