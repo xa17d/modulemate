@@ -1,32 +1,30 @@
 package at.xa1.modulemate.mode.flash
 
 import at.xa1.modulemate.UserCommandRunner
-import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.mode.ModeCoordinator
 import at.xa1.modulemate.mode.SearchListScreen
+import at.xa1.modulemate.mode.help.formatKey
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
 
 internal class FlashModeCoordinator(
     private val ui: Ui,
     private val commandList: CommandList,
-    private val commandRunner: UserCommandRunner
+    private val commandRunner: UserCommandRunner,
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
         emoji = "⚡️",
-        hint = "Flash Mode",
+        hint = "Flash Mode: Execute commands with one key stroke",
         listProvider = {
             commandList.allCommands.filter { command -> command.oneCharShortCuts.isNotEmpty() }
         },
         listItemRenderer = { item, isSelected ->
             if (isSelected) {
-                item.oneCharShortCuts.joinToString { " $it " } + ": " + item.name
+                item.oneCharShortCuts.joinToString { " $it " } + " " + item.name
             } else {
-                item.oneCharShortCuts.joinToString {
-                    CliColor.BACKGROUND_WHITE + CliColor.BLACK + " " + it + " " + CliColor.RESET
-                } + ": " + item.name
+                item.oneCharShortCuts.joinToString { formatKey(it) } + " " + item.name
             }
         }
     )
@@ -37,7 +35,7 @@ internal class FlashModeCoordinator(
 
         while (true) {
             when (val input = ui.readUserInput()) {
-                UiUserInput.Tab, UiUserInput.Shift.Tab -> return input
+                UiUserInput.Tab, UiUserInput.Shift.Tab, UiUserInput.Escape -> return input
                 UiUserInput.Return -> {
                     val command = screen.selectedItem ?: lastCommand
                     if (command != null) {

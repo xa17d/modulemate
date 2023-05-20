@@ -15,7 +15,7 @@ internal class LiveModeRootCoordinator(
     private val ui: Ui,
     modules: Modules,
     commandList: CommandList,
-    commandRunner: UserCommandRunner,
+    commandRunner: UserCommandRunner
 ) {
     private val helpMode = HelpModeCoordinator(ui)
     private val searchMode = SearchModeCoordinator(ui, modules)
@@ -39,7 +39,6 @@ internal class LiveModeRootCoordinator(
     }
 
     fun run() {
-
         while (true) {
             when (val input = currentMode.run()) {
                 UiUserInput.Tab -> {

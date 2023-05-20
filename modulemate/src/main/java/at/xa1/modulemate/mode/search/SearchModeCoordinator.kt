@@ -9,7 +9,7 @@ import at.xa1.modulemate.ui.UiUserInput
 
 internal class SearchModeCoordinator(
     private val ui: Ui,
-    private val modules: Modules,
+    private val modules: Modules
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
         emoji = "🔍",
@@ -39,7 +39,7 @@ internal class SearchModeCoordinator(
             screen.print(ui)
 
             when (val input = ui.readUserInput()) {
-                UiUserInput.Tab, UiUserInput.Shift.Tab -> return input
+                UiUserInput.Tab, UiUserInput.Shift.Tab, UiUserInput.Escape -> return input
                 UiUserInput.Return -> selectModule()
                 else -> {
                     screen.input(input)

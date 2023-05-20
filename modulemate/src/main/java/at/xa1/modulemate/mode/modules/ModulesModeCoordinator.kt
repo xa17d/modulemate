@@ -9,11 +9,11 @@ import at.xa1.modulemate.ui.UiUserInput
 
 internal class ModulesModeCoordinator(
     private val ui: Ui,
-    private val modules: Modules
+    private val modules: Modules,
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
         emoji = "📦",
-        hint = "Module Mode",
+        hint = "Module Mode: Select active modules",
         listProvider = { modules.recentModules },
         listItemRenderer = ModulesListItemRenderer(modules)
     )
@@ -23,7 +23,7 @@ internal class ModulesModeCoordinator(
             screen.print(ui)
 
             when (val input = ui.readUserInput()) {
-                UiUserInput.Tab, UiUserInput.Shift.Tab, is UiUserInput.Char -> return input
+                UiUserInput.Tab, UiUserInput.Shift.Tab, is UiUserInput.Char, UiUserInput.Escape -> return input
                 UiUserInput.Return -> toggleModule()
                 UiUserInput.Backspace, UiUserInput.Delete -> removeRecentModule()
                 else -> {
