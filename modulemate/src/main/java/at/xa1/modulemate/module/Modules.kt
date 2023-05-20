@@ -1,5 +1,6 @@
 package at.xa1.modulemate.module
 
+import at.xa1.modulemate.module.filter.CustomFilter
 import at.xa1.modulemate.module.filter.EmptyFilter
 import at.xa1.modulemate.module.filter.ModulesFilter
 import java.io.File
@@ -7,7 +8,7 @@ import java.io.File
 class Modules(
     private val scanner: ModulesScanner
 ) {
-    private val mActiveModules = HashSet<Module>()
+    private val mActiveModules = mutableSetOf<Module>()
     private val mRecentModules = mutableListOf<Module>()
 
     val allModules: List<Module> by lazy { scanner.scan().sortedWith(sortComparator) }
@@ -26,27 +27,35 @@ class Modules(
                 mRecentModules.add(module)
                 mRecentModules.sortWith(sortComparator)
             }
+
+            applyFilter(CustomFilter)
         }
     }
 
     fun deactivate(module: Module) {
         mActiveModules.remove(module)
+        applyFilter(CustomFilter)
     }
 
     fun removeRecent(module: Module) {
         deactivate(module)
         mRecentModules.remove(module)
+        applyFilter(CustomFilter)
     }
-
-    var filteredModules: List<Module> = emptyList()
-        private set
 
     var filter: ModulesFilter = EmptyFilter()
         private set
 
     fun applyFilter(filter: ModulesFilter) {
+        if (filter != CustomFilter) {
+            mRecentModules.clear()
+            mActiveModules.clear()
+
+            val filteredModules = filter.filter(allModules)
+            mRecentModules.addAll(filteredModules)
+            mActiveModules.addAll(filteredModules)
+        }
         this.filter = filter
-        filteredModules = filter.filter(allModules)
     }
 
     fun applyFilterIfFindsModules(filter: ModulesFilter): Boolean {
@@ -54,18 +63,17 @@ class Modules(
 
         val findsModules = filteredModules.isNotEmpty()
         if (findsModules) {
-            this.filteredModules = filteredModules
-            this.filter = filter
+            applyFilter(filter)
         }
 
         return findsModules
     }
 
-    fun getActiveModule(): Module {
+    fun getHotModule(): Module {
         var lastModifiedModule: Module? = null
         var lastModifiedTime: Long = Long.MIN_VALUE
 
-        filteredModules.forEach { module ->
+        activeModules.forEach { module ->
             File(module.absolutePath, "src").walk().forEach { file ->
                 val fileModified = file.lastModified()
 

@@ -235,10 +235,10 @@ modules)._
     "type": "report",
     "path": {
         "kotlinLib": [
-            "{ACTIVE_MODULE_PATH}/build/reports/tests/test/index.html"
+            "{HOT_MODULE_PATH}/build/reports/tests/test/index.html"
         ],
         "android": [
-            "{ACTIVE_MODULE_PATH}/build/reports/testDebugReport/index.html"
+            "{HOT_MODULE_PATH}/build/reports/testDebugReport/index.html"
         ]
     }
 }

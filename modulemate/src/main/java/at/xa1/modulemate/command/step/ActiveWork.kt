@@ -6,7 +6,7 @@ import at.xa1.modulemate.cli.CliColor.BOLD
 import at.xa1.modulemate.cli.CliColor.WHITE
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
-import at.xa1.modulemate.module
+import at.xa1.modulemate.mode.formatModule
 import at.xa1.modulemate.module.filter.findModulesByFiles
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -42,7 +42,7 @@ class ActiveWork : CommandStep {
                         addendumFormatting = "$WHITE$BACKGROUND_BLUE"
                     )
                     changedModules.forEach { module ->
-                        Cli.module(module, indent = "  - ")
+                        Cli.line("  - " + formatModule(module))
                     }
                 }
             }

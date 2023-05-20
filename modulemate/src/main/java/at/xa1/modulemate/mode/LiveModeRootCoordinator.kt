@@ -12,8 +12,8 @@ import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
 
 internal class LiveModeRootCoordinator(
-    private val ui: Ui,
-    modules: Modules,
+    ui: Ui,
+    private val modules: Modules,
     commandList: CommandList,
     commandRunner: UserCommandRunner
 ) {
@@ -39,6 +39,10 @@ internal class LiveModeRootCoordinator(
     }
 
     fun run() {
+        if (modules.activeModules.isNotEmpty()) {
+            currentMode = modulesMode
+        }
+
         while (true) {
             when (val input = currentMode.run()) {
                 UiUserInput.Tab -> {

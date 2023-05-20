@@ -18,7 +18,7 @@ class Gradle(
     private val androidAppTasks: List<String>
 ) : CommandStep {
     override fun run(context: CommandContext): CommandResult {
-        val modules = context.modules.filteredModules
+        val modules = context.modules.activeModules
         val flags = mutableSetOf<String>()
         modules.forEach { module ->
             when (module.type) {

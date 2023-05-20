@@ -11,7 +11,7 @@ import at.xa1.modulemate.ui.UiUserInput
 internal class CommandModeCoordinator(
     private val ui: Ui,
     private val commandList: CommandList,
-    private val commandRunner: UserCommandRunner,
+    private val commandRunner: UserCommandRunner
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
         emoji = "\uD83D\uDD79", // = 🕹️but without the  U+FE0F (VARIATION SELECTOR-16)

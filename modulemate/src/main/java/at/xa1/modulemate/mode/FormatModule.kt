@@ -4,7 +4,7 @@ import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.ModuleType
 
-fun formatModule(module: Module, withColors: Boolean): String {
+fun formatModule(module: Module, withColors: Boolean = true): String {
     val text = module.path
 
     return if (withColors) {

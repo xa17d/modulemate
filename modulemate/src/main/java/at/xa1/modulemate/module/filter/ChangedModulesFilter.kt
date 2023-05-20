@@ -15,7 +15,7 @@ class ChangedModulesFilter(
     }
 }
 
-fun List<Module>.findModuleByFile(fileRelativePath: String): Module? = this
+fun Collection<Module>.findModuleByFile(fileRelativePath: String): Module? = this
     .filter { module -> fileRelativePath.startsWith(module.relativePath + "/") }
     .fold<Module, Module?>(null) { moduleWithLongestPath, module ->
         when {
@@ -25,7 +25,7 @@ fun List<Module>.findModuleByFile(fileRelativePath: String): Module? = this
         }
     }
 
-fun List<Module>.findModulesByFiles(filesRelativePath: List<String>): List<Module> = filesRelativePath
+fun Collection<Module>.findModulesByFiles(filesRelativePath: List<String>): List<Module> = filesRelativePath
     .mapNotNull { file -> this.findModuleByFile(file) }
     .toSet() // deduplicate
     .toList()

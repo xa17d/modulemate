@@ -7,7 +7,7 @@ import at.xa1.modulemate.cli.CliColor.WHITE
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.step.ActiveWork.Companion.ACTIVE_TIME_SPAN
-import at.xa1.modulemate.module
+import at.xa1.modulemate.mode.formatModule
 import at.xa1.modulemate.module.Module
 import at.xa1.modulemate.module.filter.findModulesByFiles
 import java.time.ZonedDateTime
@@ -28,7 +28,7 @@ class ConflictAnalysis : CommandStep {
         val remoteTrackingBranch = repository.getRemoteTrackingBranch()
 
         val modules = mutableMapOf<Module, ModuleConflicts>()
-        val consideredModules = context.modules.filteredModules
+        val consideredModules = context.modules.activeModules
         consideredModules.forEach { module ->
             modules[module] = ModuleConflicts(module, mutableListOf())
         }
@@ -46,7 +46,7 @@ class ConflictAnalysis : CommandStep {
             }
 
         modules.values.forEach { module ->
-            Cli.module(module.module, indent = "")
+            Cli.line(formatModule(module.module))
             module.branches
                 .filter { branch -> branch.ref != remoteTrackingBranch }
                 .forEach { branch ->

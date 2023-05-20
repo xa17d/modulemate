@@ -9,7 +9,7 @@ import at.xa1.modulemate.ui.UiUserInput
 
 internal class ModulesModeCoordinator(
     private val ui: Ui,
-    private val modules: Modules,
+    private val modules: Modules
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
         emoji = "📦",

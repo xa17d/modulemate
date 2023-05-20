@@ -12,7 +12,7 @@ import at.xa1.modulemate.ui.UiUserInput
 internal class FlashModeCoordinator(
     private val ui: Ui,
     private val commandList: CommandList,
-    private val commandRunner: UserCommandRunner,
+    private val commandRunner: UserCommandRunner
 ) : ModeCoordinator {
     private val screen = SearchListScreen(
         emoji = "⚡️",
