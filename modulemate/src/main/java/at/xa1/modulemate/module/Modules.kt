@@ -12,7 +12,8 @@ class Modules(
 
     val allModules: List<Module> by lazy { scanner.scan().sortedWith(sortComparator) }
 
-    val recentModules: List<Module> = emptyList()
+    val recentModules: List<Module>
+        get() = mRecentModules
     val activeModules: Set<Module>
         get() = mActiveModules
 

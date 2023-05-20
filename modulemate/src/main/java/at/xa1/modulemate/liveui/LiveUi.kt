@@ -1,6 +1,7 @@
 package at.xa1.modulemate.liveui
 
 import at.xa1.modulemate.module.Modules
+import at.xa1.modulemate.modulesmode.ModulesMode
 import at.xa1.modulemate.searchmode.SearchMode
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
@@ -10,10 +11,14 @@ class LiveUi(
     modules: Modules
 ) {
     private val searchMode = SearchMode(ui, modules)
+    private val modulesMode = ModulesMode(ui, modules)
+    private val modes = listOf(
+        searchMode,
+        modulesMode,
+        TestMode(ui)
+    )
 
-    private val modes = listOf(searchMode, TestMode(ui))
-
-    private var currentMode: LiveUiMode = searchMode
+    private var currentMode: LiveUiMode = modes[0]
 
     private fun moveMode(delta: Int) {
         val currentModeIndex = modes.indexOf(currentMode)
@@ -35,6 +40,13 @@ class LiveUi(
                 UiUserInput.Shift.Tab -> {
                     moveMode(-1)
                     null
+                }
+
+                is UiUserInput.Char -> {
+                    if (currentMode == modulesMode) {
+                        currentMode = searchMode
+                    }
+                    input
                 }
 
                 else -> input

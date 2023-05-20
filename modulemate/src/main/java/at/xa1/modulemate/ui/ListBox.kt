@@ -15,12 +15,7 @@ interface ListBoxItemRenderer<T> {
     fun render(item: T, isSelected: Boolean): String
 }
 
-fun <T> ListBox<T>.selectedItemOrNull(): T? =
-    if (selectedIndex == -1) {
-        null
-    } else {
-        items[selectedIndex]
-    }
+fun <T> ListBox<T>.selectedItemOrNull(): T? = items.getOrNull(selectedIndex)
 
 fun <T> ListBox<T>.moveDown(): ListBox<T> =
     copy(selectedIndex = (selectedIndex + 1).coerceAtMost(items.lastIndex))
@@ -32,7 +27,10 @@ fun <T> ListBox<T>.updateItems(newItems: List<T>): ListBox<T> {
     val selectedItem = selectedItemOrNull()
     val newSelectedIndex = newItems.indexOf(selectedItem)
 
-    return copy(items = newItems, selectedIndex = newSelectedIndex)
+    return copy(
+        items = newItems,
+        selectedIndex = newSelectedIndex
+    ).updateHeight(height)
 }
 
 fun <T> ListBox<T>.updateHeight(newHeight: Int): ListBox<T> {
