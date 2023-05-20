@@ -48,6 +48,7 @@ sealed interface CommandStep {
     @SerialName("gradle")
     data class Gradle(
         override val runWhen: CommandStepRunWhen = CommandStepRunWhen.PREVIOUS_SUCCESS,
+        val richConsole: Boolean = true,
         val flags: TypeSpecificStringList = TypeSpecificStringList(),
         val tasks: TypeSpecificStringList = TypeSpecificStringList()
     ) : CommandStep
