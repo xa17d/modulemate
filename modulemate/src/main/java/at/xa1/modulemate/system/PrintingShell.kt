@@ -17,16 +17,12 @@ class PrintingShell(
         val process = processBuilder.start()
 
         val stdoutThread = Thread {
-            process.inputStream.bufferedReader().useLines { lines ->
-                lines.forEach { println(it) }
-            }
+            process.inputStream.copyTo(System.out)
         }
         stdoutThread.start()
 
         val stderrThread = Thread {
-            process.errorStream.bufferedReader().useLines { lines ->
-                lines.forEach { System.err.println(it) }
-            }
+            process.errorStream.copyTo(System.err)
         }
         stderrThread.start()
 

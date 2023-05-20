@@ -12,5 +12,5 @@ data class CommandContext(
     val variables: Variables
 )
 
-val CommandContext.activeModule: Module
-    get() = modules.getByPath(variables.get(DefaultVariables.ACTIVE_MODULE))
+val CommandContext.hotModule: Module
+    get() = modules.getByPath(variables.get(DefaultVariables.HOT_MODULE))

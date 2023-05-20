@@ -76,6 +76,7 @@ private fun createCommandStep(
 
     is CommandStep.Gradle -> Gradle(
         shell = shell,
+        richConsole = step.richConsole,
         kotlinLibFlags = step.flags.getForKotlinLib(),
         androidLibFlags = step.flags.getForAndroidLib(),
         androidAppFlags = step.flags.getForAndroidApp(),

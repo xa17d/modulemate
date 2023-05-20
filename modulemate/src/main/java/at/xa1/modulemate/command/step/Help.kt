@@ -1,7 +1,7 @@
 package at.xa1.modulemate.command.step
 
 import at.xa1.modulemate.cli.Cli
-import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.cli.CliFormat
 import at.xa1.modulemate.cli.CliTable
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandList
@@ -19,7 +19,7 @@ class Help(
                 } catch (e: IllegalStateException) {
                     CliTable.FormattedCell(
                         content = "Error: " + e.message,
-                        formatting = CliColor.RED + CliColor.BOLD
+                        formatting = CliFormat.RED + CliFormat.BOLD
                     )
                 }
 

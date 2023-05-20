@@ -16,7 +16,7 @@ class Shell(
     private val command: List<String>
 ) : CommandStep {
     override fun run(context: CommandContext): CommandResult {
-        val modules = context.modules.filteredModules
+        val modules = context.modules.activeModules
 
         val shouldRun = when (mode) {
             ShellMode.RUN_ONCE -> true

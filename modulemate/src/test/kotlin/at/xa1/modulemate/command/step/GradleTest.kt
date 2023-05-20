@@ -25,6 +25,7 @@ class GradleTest {
 
         Gradle(
             shell = fakeShell,
+            richConsole = true,
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),
             androidAppFlags = listOf("-PandroidAppFlag1", "-PandroidAppFlag2"),
@@ -36,6 +37,7 @@ class GradleTest {
         assertEquals(
             listOf(
                 "./gradlew",
+                "--console=rich",
                 "-PandroidLibFlag1",
                 "-PandroidLibFlag2",
                 "-PandroidAppFlag1",
@@ -61,6 +63,7 @@ class GradleTest {
 
         Gradle(
             shell = fakeShell,
+            richConsole = false,
             kotlinLibFlags = listOf("-PkotlinLibFlag1", "-PkotlinLibFlag2"),
             androidLibFlags = listOf("-PandroidLibFlag1", "-PandroidLibFlag2"),
             androidAppFlags = listOf("-PandroidAppFlag1", "-PandroidAppFlag2"),

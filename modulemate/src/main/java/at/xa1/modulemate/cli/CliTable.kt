@@ -34,7 +34,7 @@ class CliTable {
         rows.forEachIndexed { _, row ->
             row.forEachIndexed { columnIndex, cellValue ->
                 val columnFormat = if (columnIndex == 0) {
-                    CliColor.BOLD
+                    CliFormat.BOLD
                 } else {
                     ""
                 }
@@ -58,7 +58,7 @@ class CliTable {
                 val cell = " $columnFormat$formatting${content.padEnd(maxLength)} "
 
                 append(cell)
-                append(CliColor.RESET)
+                append(CliFormat.RESET)
             }
             appendLine()
         }

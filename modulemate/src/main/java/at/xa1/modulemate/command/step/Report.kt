@@ -3,7 +3,7 @@ package at.xa1.modulemate.command.step
 import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
-import at.xa1.modulemate.command.activeModule
+import at.xa1.modulemate.command.hotModule
 import at.xa1.modulemate.command.successToCommandResult
 import at.xa1.modulemate.command.variable.Variables
 import at.xa1.modulemate.command.variable.replacePlaceholders
@@ -20,11 +20,11 @@ class Report(
     private val pathAndroidApp: String
 ) : CommandStep {
     override fun run(context: CommandContext): CommandResult {
-        context.modules.filteredModules.forEach { module ->
+        context.modules.activeModules.forEach { module ->
             Cli.stepCommand(getReportPathByModule(module, context.variables))
         }
 
-        val activeModule = context.activeModule
+        val activeModule = context.hotModule
         val path = getReportPathByModule(activeModule, context.variables)
         Cli.subHeading("Active Module:")
         Cli.stepCommand(path)

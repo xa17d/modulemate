@@ -10,6 +10,7 @@ import at.xa1.modulemate.system.isSuccess
 
 class Gradle(
     private val shell: Shell,
+    private val richConsole: Boolean,
     private val kotlinLibFlags: List<String>,
     private val androidLibFlags: List<String>,
     private val androidAppFlags: List<String>,
@@ -18,8 +19,13 @@ class Gradle(
     private val androidAppTasks: List<String>
 ) : CommandStep {
     override fun run(context: CommandContext): CommandResult {
-        val modules = context.modules.filteredModules
+        val modules = context.modules.activeModules
         val flags = mutableSetOf<String>()
+
+        if (richConsole) {
+            flags.add("--console=rich")
+        }
+
         modules.forEach { module ->
             when (module.type) {
                 ModuleType.KOTLIN_LIB -> flags.addAll(kotlinLibFlags)

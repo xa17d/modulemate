@@ -2,11 +2,12 @@ package at.xa1.modulemate
 
 import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
-import at.xa1.modulemate.cli.CliColor
-import at.xa1.modulemate.cli.CliColor.BACKGROUND_RED
-import at.xa1.modulemate.cli.CliColor.BOLD
-import at.xa1.modulemate.cli.CliColor.RESET
-import at.xa1.modulemate.cli.CliColor.YELLOW
+import at.xa1.modulemate.cli.CliEmoji
+import at.xa1.modulemate.cli.CliFormat
+import at.xa1.modulemate.cli.CliFormat.BACKGROUND_RED
+import at.xa1.modulemate.cli.CliFormat.BOLD
+import at.xa1.modulemate.cli.CliFormat.RESET
+import at.xa1.modulemate.cli.CliFormat.YELLOW
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandStepConfig
 import at.xa1.modulemate.command.StepSuccessCondition
@@ -19,12 +20,15 @@ import at.xa1.modulemate.config.ConfigMerger
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.config.Source
 import at.xa1.modulemate.git.GitRepository
+import at.xa1.modulemate.mode.LiveModeRootCoordinator
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
 import at.xa1.modulemate.module.filter.PathPrefixFilter
 import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
 import at.xa1.modulemate.system.ShellOpenBrowser
+import at.xa1.modulemate.ui.CleanExit
+import at.xa1.modulemate.ui.Ui
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -46,7 +50,7 @@ fun main(args: Array<String>) {
 
 private fun header(repoName: String, branch: String) {
     Cli.heading(
-        "\uD83E\uDDF0 modulemate v${Modulemate.VERSION} " +
+        "${CliEmoji.TOOLBOX} modulemate v${Modulemate.VERSION} " +
             "〉$repoName 〉$branch",
         formatting = "$BOLD$BACKGROUND_RED"
     )
@@ -106,8 +110,8 @@ private fun modulemate(
                 val empty = result.invalidCommand.isEmpty()
                 if (!empty) {
                     Cli.heading(
-                        "⚠️  Command unknown: ${result.invalidCommand}",
-                        formatting = CliColor.BACKGROUND_BRIGHT_YELLOW
+                        "${CliEmoji.WARNING_SIGN} Command unknown: ${result.invalidCommand}",
+                        formatting = CliFormat.BACKGROUND_YELLOW
                     )
                 }
                 empty
@@ -117,12 +121,14 @@ private fun modulemate(
         }
 
         if (promptMode) {
-            PromptMode(repository, modules, variables, commandRunner, commandList).run()
+            val ui = Ui.init()
+            CleanExit().setup(ui)
+            LiveModeRootCoordinator(ui, modules, commandList, commandRunner).run()
         }
     } catch (_: QuitException) {
     }
 
-    Cli.line("👋 bye")
+    Cli.line("${CliEmoji.WAVING_HAND} bye")
 }
 
 private fun errorNoGitRepository(folder: File) {

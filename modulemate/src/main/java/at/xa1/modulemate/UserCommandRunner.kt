@@ -2,7 +2,8 @@ package at.xa1.modulemate
 
 import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
-import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.cli.CliEmoji
+import at.xa1.modulemate.cli.CliFormat
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandList
@@ -22,27 +23,31 @@ internal class UserCommandRunner(
     private val variables: Variables,
     private val commandList: CommandList
 ) {
+    fun run(command: Command, args: List<String> = emptyList()): Result {
+        val extendedVariables = VariableSet(variables).apply {
+            args.forEachIndexed { index, argsValue ->
+                add(Variable(DefaultVariables.COMMAND_ARG(index)) { argsValue })
+            }
+            add(
+                Variable(DefaultVariables.CONFIG_FOLDER) {
+                    when (val source = command.source) {
+                        Source.BuiltIn -> error("Only available for commands defined in config files.")
+                        is Source.ConfigFile -> source.file.parentFile.absolutePath
+                    }
+                }
+            )
+        }
+
+        runCommand(command, CommandContext(repository, modules, extendedVariables))
+        return Result.CommandRun
+    }
+
     fun run(args: CliArgs): Result {
         val firstToken = args.nextOrNull() ?: return Result.InputInvalid("")
         val command = commandList.getOrNull(firstToken)
 
         return if (command != null) {
-            val extendedVariables = VariableSet(variables).apply {
-                args.getRemainingArgs().forEachIndexed { index, argsValue ->
-                    add(Variable(DefaultVariables.COMMAND_ARG(index)) { argsValue })
-                }
-                add(
-                    Variable(DefaultVariables.CONFIG_FOLDER) {
-                        when (val source = command.source) {
-                            Source.BuiltIn -> error("Only available for commands defined in config files.")
-                            is Source.ConfigFile -> source.file.parentFile.absolutePath
-                        }
-                    }
-                )
-            }
-
-            runCommand(command, CommandContext(repository, modules, extendedVariables))
-            Result.CommandRun
+            run(command, args.getRemainingArgs())
         } else {
             if (firstToken.isNotEmpty()) {
                 val filterApplied =
@@ -50,7 +55,7 @@ internal class UserCommandRunner(
 
                 if (filterApplied) {
                     Cli.line(
-                        "Couldn't find command: ${CliColor.UNDERLINE}$firstToken${CliColor.RESET}, " +
+                        "Couldn't find command: ${CliFormat.UNDERLINE}$firstToken${CliFormat.RESET}, " +
                             "therefore applied as filter."
                     )
 
@@ -62,14 +67,14 @@ internal class UserCommandRunner(
     }
 
     private fun runCommand(command: Command, context: CommandContext) {
-        Cli.heading("▶️  ${command.name}", formatting = CliColor.BACKGROUND_BRIGHT_BLUE)
+        Cli.heading("${CliEmoji.PLAY_BUTTON} ${command.name}", formatting = CliFormat.BACKGROUND_BRIGHT_BLUE)
         val result = command.run(context)
         when (result) {
             CommandResult.SUCCESS ->
-                Cli.heading("🎉 Success!", formatting = CliColor.BACKGROUND_BRIGHT_GREEN)
+                Cli.heading("${CliEmoji.PARTY_POPPER} Success!", formatting = CliFormat.BACKGROUND_BRIGHT_GREEN)
 
             CommandResult.FAILURE ->
-                Cli.heading("⚠️ Failed!", formatting = CliColor.BACKGROUND_BRIGHT_RED)
+                Cli.heading("${CliEmoji.WARNING_SIGN} Failed!", formatting = CliFormat.BACKGROUND_BRIGHT_RED)
         }
     }
 
