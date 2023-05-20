@@ -3,22 +3,18 @@ package at.xa1.modulemate.mode.help
 import at.xa1.modulemate.Modulemate
 import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.mode.LiveUiMode
-import at.xa1.modulemate.ui.ListBox
-import at.xa1.modulemate.ui.ListItemRenderer
-import at.xa1.modulemate.ui.TextBox
+import at.xa1.modulemate.mode.SearchListScreen
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
 
-class HelpMode(
+internal class HelpMode(
     private val ui: Ui
 ) : LiveUiMode {
-    private var state = HelpScreenState(
-        searchBox = TextBox(
-            hint = "Help Mode",
-            emoji = "ℹ\uFE0F"
-        ),
-        listBox = ListBox(
-            items = listOf(
+    private val screen = SearchListScreen(
+        emoji = "ℹ\uFE0F",
+        hint = "Help Mode",
+        listProvider = {
+            listOf(
                 moduleMate(),
                 "",
                 "Use ${key("TAB")} and ${key("⇧")} + ${key("TAB")} to switch forward and backwards between modes.",
@@ -43,15 +39,28 @@ class HelpMode(
                 header("⚡️ Flash Mode"),
                 "Shows all commands with a one-character-shortcut.",
                 "Type one character, and the corresponding command is immediately executed"
-            ),
-            height = 0,
-            itemRenderer = object : ListItemRenderer<String> {
-                override fun render(item: String, isSelected: Boolean): String {
-                    return " " + CliColor.RESET + " " + item
-                }
-            }
-        )
+            )
+        },
+        listItemRenderer = { item, _ -> " " + CliColor.RESET + " " + item }
     )
+
+    override fun print(input: UiUserInput?) {
+        screen.print(ui)
+
+        while (true) {
+            when (val input = ui.readUserInput()) {
+                UiUserInput.Tab, UiUserInput.Shift.Tab -> return
+                UiUserInput.Arrow.Up,
+                UiUserInput.Arrow.Down
+                -> {
+                    screen.input(input)
+                    screen.print(ui)
+                }
+
+                else -> return
+            }
+        }
+    }
 
     private fun moduleMate() =
         "🧰 ${CliColor.BOLD}${CliColor.RED}modulemate${CliColor.RESET} " +
@@ -59,17 +68,4 @@ class HelpMode(
 
     private fun key(value: String) = CliColor.BACKGROUND_WHITE + CliColor.BLACK + " " + value + " " + CliColor.RESET
     private fun header(text: String) = CliColor.BOLD + CliColor.UNDERLINE + text + CliColor.RESET
-
-    override fun print(input: UiUserInput?) {
-        val context = ui.createScreenContext()
-
-        if (input != null) {
-            state = state.reduce(input, context.size.rows)
-        }
-        state = state.updateHeight(context.size.rows)
-
-        context.printScreen {
-            helpScreen(this, state)
-        }
-    }
 }
