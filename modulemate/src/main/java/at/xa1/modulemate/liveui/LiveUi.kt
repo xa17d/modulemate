@@ -1,5 +1,7 @@
 package at.xa1.modulemate.liveui
 
+import at.xa1.modulemate.command.CommandList
+import at.xa1.modulemate.commandmode.CommandMode
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.modulesmode.ModulesMode
 import at.xa1.modulemate.searchmode.SearchMode
@@ -8,17 +10,19 @@ import at.xa1.modulemate.ui.UiUserInput
 
 class LiveUi(
     private val ui: Ui,
-    modules: Modules
+    modules: Modules,
+    commandList: CommandList
 ) {
     private val searchMode = SearchMode(ui, modules)
     private val modulesMode = ModulesMode(ui, modules)
+    private val commandMode = CommandMode(ui, commandList)
     private val modes = listOf(
         searchMode,
         modulesMode,
-        TestMode(ui)
+        commandMode
     )
 
-    private var currentMode: LiveUiMode = modes[0]
+    private var currentMode: LiveUiMode = searchMode
 
     private fun moveMode(delta: Int) {
         val currentModeIndex = modes.indexOf(currentMode)
