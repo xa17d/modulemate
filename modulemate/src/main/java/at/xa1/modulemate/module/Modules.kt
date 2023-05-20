@@ -5,7 +5,7 @@ import at.xa1.modulemate.module.filter.ModulesFilter
 import java.io.File
 
 class Modules(
-    private val scanner: ModulesScanner,
+    private val scanner: ModulesScanner
 ) {
     private val mActiveModules = HashSet<Module>()
     private val mRecentModules = mutableListOf<Module>()
@@ -36,7 +36,6 @@ class Modules(
         deactivate(module)
         mRecentModules.remove(module)
     }
-
 
     var filteredModules: List<Module> = emptyList()
         private set

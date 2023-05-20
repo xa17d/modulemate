@@ -25,7 +25,7 @@ fun searchScreen(context: ScreenContext, state: SearchScreenState) = context.pri
 
 data class SearchScreenState(
     val searchBox: TextBox,
-    val listBox: ListBox<Module>,
+    val listBox: ListBox<Module>
 )
 
 fun SearchScreenState.reduce(input: UiUserInput, modules: Modules, height: Int): SearchScreenState {

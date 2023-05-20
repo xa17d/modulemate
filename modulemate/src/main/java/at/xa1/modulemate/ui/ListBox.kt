@@ -8,7 +8,7 @@ data class ListBox<T>(
     val selectedIndex: Int = -1,
     val topIndex: Int = 0,
     val height: Int,
-    val renderer: ListBoxItemRenderer<T>,
+    val renderer: ListBoxItemRenderer<T>
 )
 
 interface ListBoxItemRenderer<T> {
@@ -36,7 +36,6 @@ fun <T> ListBox<T>.updateItems(newItems: List<T>): ListBox<T> {
 }
 
 fun <T> ListBox<T>.updateHeight(newHeight: Int): ListBox<T> {
-
     val newTopIndex = when {
         selectedIndex == -1 -> 0
         selectedIndex < topIndex + 2 -> (selectedIndex - 1).coerceAtLeast(0)
@@ -45,11 +44,10 @@ fun <T> ListBox<T>.updateHeight(newHeight: Int): ListBox<T> {
         }
 
         else -> topIndex
-    }.coerceAtMost(max(items.size - newHeight,0))
+    }.coerceAtMost(max(items.size - newHeight, 0))
 
     return copy(height = newHeight, topIndex = newTopIndex)
 }
-
 
 fun <T> ScreenContext.print(listBox: ListBox<T>) {
     val visibleRange =
@@ -74,5 +72,4 @@ fun <T> ScreenContext.print(listBox: ListBox<T>) {
             print("\n")
         }
     }
-
 }

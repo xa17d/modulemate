@@ -19,10 +19,10 @@ import at.xa1.modulemate.config.ConfigMerger
 import at.xa1.modulemate.config.ConfigResolver
 import at.xa1.modulemate.config.Source
 import at.xa1.modulemate.git.GitRepository
+import at.xa1.modulemate.liveui.LiveUi
 import at.xa1.modulemate.module.Modules
 import at.xa1.modulemate.module.RepositoryModulesScanner
 import at.xa1.modulemate.module.filter.PathPrefixFilter
-import at.xa1.modulemate.searchmode.SearchMode
 import at.xa1.modulemate.system.PrintingShell
 import at.xa1.modulemate.system.RuntimeShell
 import at.xa1.modulemate.system.ShellOpenBrowser
@@ -120,10 +120,7 @@ private fun modulemate(
 
         if (promptMode) {
             val ui = Ui.init()
-            SearchMode(
-                ui = ui,
-                modules = modules
-            ).run()
+            LiveUi(ui, modules).run()
         }
     } catch (_: QuitException) {
     }
