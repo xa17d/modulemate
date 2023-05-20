@@ -4,7 +4,7 @@ import at.xa1.modulemate.Modulemate
 import at.xa1.modulemate.cli.CliColor
 import at.xa1.modulemate.mode.LiveUiMode
 import at.xa1.modulemate.ui.ListBox
-import at.xa1.modulemate.ui.ListBoxItemRenderer
+import at.xa1.modulemate.ui.ListItemRenderer
 import at.xa1.modulemate.ui.TextBox
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
@@ -45,7 +45,7 @@ class HelpMode(
                 "Type one character, and the corresponding command is immediately executed"
             ),
             height = 0,
-            renderer = object : ListBoxItemRenderer<String> {
+            itemRenderer = object : ListItemRenderer<String> {
                 override fun render(item: String, isSelected: Boolean): String {
                     return " " + CliColor.RESET + " " + item
                 }

@@ -8,10 +8,10 @@ data class ListBox<T>(
     val selectedIndex: Int = -1,
     val topIndex: Int = 0,
     val height: Int,
-    val renderer: ListBoxItemRenderer<T>
+    val itemRenderer: ListItemRenderer<T>
 )
 
-interface ListBoxItemRenderer<T> {
+interface ListItemRenderer<T> {
     fun render(item: T, isSelected: Boolean): String
 }
 
@@ -57,7 +57,7 @@ fun <T> ScreenContext.print(listBox: ListBox<T>) {
     visibleRange.forEachIndexed { visibleIndex, item ->
         val index = visibleIndex + listBox.topIndex
         val isSelected = (index == listBox.selectedIndex)
-        val renderedItem = listBox.renderer.render(item, isSelected)
+        val renderedItem = listBox.itemRenderer.render(item, isSelected)
         if (isSelected) {
             print(CliColor.REVERSED)
             print(renderedItem)

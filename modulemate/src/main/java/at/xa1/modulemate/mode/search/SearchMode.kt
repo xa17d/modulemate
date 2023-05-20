@@ -20,7 +20,7 @@ class SearchMode(
         listBox = ListBox(
             items = modules.allModules,
             height = 0,
-            renderer = ModulesListItemRenderer(modules)
+            itemRenderer = ModulesListItemRenderer(modules)
         )
     )
 

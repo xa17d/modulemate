@@ -4,7 +4,7 @@ import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.mode.LiveUiMode
 import at.xa1.modulemate.ui.ListBox
-import at.xa1.modulemate.ui.ListBoxItemRenderer
+import at.xa1.modulemate.ui.ListItemRenderer
 import at.xa1.modulemate.ui.TextBox
 import at.xa1.modulemate.ui.Ui
 import at.xa1.modulemate.ui.UiUserInput
@@ -23,7 +23,7 @@ class FlashMode(
                 command.shortcuts.any { shortcut -> shortcut.length == 1 }
             },
             height = 0,
-            renderer = object : ListBoxItemRenderer<Command> {
+            itemRenderer = object : ListItemRenderer<Command> {
                 override fun render(item: Command, isSelected: Boolean): String {
                     return item.shortcuts.filter { it.length == 1 }.toString() + ": " + item.name
                 }

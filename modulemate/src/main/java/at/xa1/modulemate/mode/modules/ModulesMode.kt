@@ -20,7 +20,7 @@ class ModulesMode(
         listBox = ListBox(
             items = modules.recentModules,
             height = 0,
-            renderer = ModulesListItemRenderer(modules)
+            itemRenderer = ModulesListItemRenderer(modules)
         )
     )
 
