@@ -1,9 +1,9 @@
 package at.xa1.modulemate.command.step
 
 import at.xa1.modulemate.cli.Cli
-import at.xa1.modulemate.cli.CliColor.BACKGROUND_BLUE
-import at.xa1.modulemate.cli.CliColor.BOLD
-import at.xa1.modulemate.cli.CliColor.WHITE
+import at.xa1.modulemate.cli.CliFormat.BACKGROUND_BLUE
+import at.xa1.modulemate.cli.CliFormat.BOLD
+import at.xa1.modulemate.cli.CliFormat.WHITE
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.mode.formatModule

@@ -1,9 +1,9 @@
 package at.xa1.modulemate.command.step
 
 import at.xa1.modulemate.cli.Cli
-import at.xa1.modulemate.cli.CliColor.BLUE
-import at.xa1.modulemate.cli.CliColor.RESET
-import at.xa1.modulemate.cli.CliColor.WHITE
+import at.xa1.modulemate.cli.CliFormat.BLUE
+import at.xa1.modulemate.cli.CliFormat.RESET
+import at.xa1.modulemate.cli.CliFormat.WHITE
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.command.step.ActiveWork.Companion.ACTIVE_TIME_SPAN

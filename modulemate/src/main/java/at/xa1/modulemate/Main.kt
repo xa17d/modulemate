@@ -2,11 +2,11 @@ package at.xa1.modulemate
 
 import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
-import at.xa1.modulemate.cli.CliColor
-import at.xa1.modulemate.cli.CliColor.BACKGROUND_RED
-import at.xa1.modulemate.cli.CliColor.BOLD
-import at.xa1.modulemate.cli.CliColor.RESET
-import at.xa1.modulemate.cli.CliColor.YELLOW
+import at.xa1.modulemate.cli.CliFormat
+import at.xa1.modulemate.cli.CliFormat.BACKGROUND_RED
+import at.xa1.modulemate.cli.CliFormat.BOLD
+import at.xa1.modulemate.cli.CliFormat.RESET
+import at.xa1.modulemate.cli.CliFormat.YELLOW
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandStepConfig
 import at.xa1.modulemate.command.StepSuccessCondition
@@ -109,7 +109,7 @@ private fun modulemate(
                 if (!empty) {
                     Cli.heading(
                         "⚠️  Command unknown: ${result.invalidCommand}",
-                        formatting = CliColor.BACKGROUND_BRIGHT_YELLOW
+                        formatting = CliFormat.BACKGROUND_YELLOW
                     )
                 }
                 empty

@@ -1,6 +1,6 @@
 package at.xa1.modulemate.ui
 
-import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.cli.CliFormat
 
 data class TextBox(
     val text: String = "",
@@ -19,9 +19,9 @@ fun ScreenContext.print(textBox: TextBox, width: Int) {
     print(" ")
 
     val contentLength = if (textBox.text.isEmpty()) {
-        print(CliColor.YELLOW)
+        print(CliFormat.YELLOW)
         print(textBox.hint)
-        print(CliColor.RESET)
+        print(CliFormat.RESET)
         textBox.hint.length
     } else {
         print(textBox.text)

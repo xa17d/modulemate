@@ -1,6 +1,6 @@
 package at.xa1.modulemate.ui
 
-import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.cli.CliFormat
 import kotlin.math.max
 
 data class ListBox<T>(
@@ -59,9 +59,9 @@ fun <T> ScreenContext.print(listBox: ListBox<T>) {
         val isSelected = (index == listBox.selectedIndex)
         val renderedItem = listBox.itemRenderer.render(item, isSelected)
         if (isSelected) {
-            print(CliColor.REVERSED)
+            print(CliFormat.REVERSED)
             print(renderedItem)
-            print(CliColor.RESET)
+            print(CliFormat.RESET)
         } else {
             print(renderedItem)
         }

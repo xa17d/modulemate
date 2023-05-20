@@ -2,7 +2,7 @@ package at.xa1.modulemate
 
 import at.xa1.modulemate.cli.Cli
 import at.xa1.modulemate.cli.CliArgs
-import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.cli.CliFormat
 import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandList
@@ -54,7 +54,7 @@ internal class UserCommandRunner(
 
                 if (filterApplied) {
                     Cli.line(
-                        "Couldn't find command: ${CliColor.UNDERLINE}$firstToken${CliColor.RESET}, " +
+                        "Couldn't find command: ${CliFormat.UNDERLINE}$firstToken${CliFormat.RESET}, " +
                             "therefore applied as filter."
                     )
 
@@ -66,14 +66,14 @@ internal class UserCommandRunner(
     }
 
     private fun runCommand(command: Command, context: CommandContext) {
-        Cli.heading("▶️  ${command.name}", formatting = CliColor.BACKGROUND_BRIGHT_BLUE)
+        Cli.heading("▶️  ${command.name}", formatting = CliFormat.BACKGROUND_BRIGHT_BLUE)
         val result = command.run(context)
         when (result) {
             CommandResult.SUCCESS ->
-                Cli.heading("🎉 Success!", formatting = CliColor.BACKGROUND_BRIGHT_GREEN)
+                Cli.heading("🎉 Success!", formatting = CliFormat.BACKGROUND_BRIGHT_GREEN)
 
             CommandResult.FAILURE ->
-                Cli.heading("⚠️ Failed!", formatting = CliColor.BACKGROUND_BRIGHT_RED)
+                Cli.heading("⚠️ Failed!", formatting = CliFormat.BACKGROUND_BRIGHT_RED)
         }
     }
 

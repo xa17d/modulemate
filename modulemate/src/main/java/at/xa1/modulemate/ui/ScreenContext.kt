@@ -1,6 +1,6 @@
 package at.xa1.modulemate.ui
 
-import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.cli.CliFormat
 import org.jline.terminal.Size
 import org.jline.terminal.Terminal
 
@@ -10,12 +10,12 @@ class ScreenContext(terminal: Terminal) {
 
     val size: Size = terminal.size
     fun resetCursor() {
-        print(CliColor.cursorLeft(size.columns) + CliColor.cursorUp(size.rows))
+        print(CliFormat.cursorLeft(size.columns) + CliFormat.cursorUp(size.rows))
     }
 
     fun clear() {
         resetCursor()
-        print(CliColor.CLEAR_ENTIRE_SCREEN)
+        print(CliFormat.CLEAR_ENTIRE_SCREEN)
     }
 
     fun print(s: String) {

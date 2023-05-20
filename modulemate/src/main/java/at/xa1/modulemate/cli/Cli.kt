@@ -1,12 +1,12 @@
 package at.xa1.modulemate.cli
 
-import at.xa1.modulemate.cli.CliColor.BLUE
-import at.xa1.modulemate.cli.CliColor.BOLD
-import at.xa1.modulemate.cli.CliColor.CLEAR_UNTIL_END_OF_LINE
-import at.xa1.modulemate.cli.CliColor.GREEN
-import at.xa1.modulemate.cli.CliColor.RESET
-import at.xa1.modulemate.cli.CliColor.UNDERLINE
-import at.xa1.modulemate.cli.CliColor.YELLOW
+import at.xa1.modulemate.cli.CliFormat.BLUE
+import at.xa1.modulemate.cli.CliFormat.BOLD
+import at.xa1.modulemate.cli.CliFormat.CLEAR_UNTIL_END_OF_LINE
+import at.xa1.modulemate.cli.CliFormat.GREEN
+import at.xa1.modulemate.cli.CliFormat.RESET
+import at.xa1.modulemate.cli.CliFormat.UNDERLINE
+import at.xa1.modulemate.cli.CliFormat.YELLOW
 
 object Cli {
     fun heading(content: String, formatting: String, addendum: String? = null, addendumFormatting: String? = null) {

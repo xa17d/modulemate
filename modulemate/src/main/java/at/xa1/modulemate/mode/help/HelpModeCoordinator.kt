@@ -1,7 +1,7 @@
 package at.xa1.modulemate.mode.help
 
 import at.xa1.modulemate.Modulemate
-import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.cli.CliFormat
 import at.xa1.modulemate.mode.ModeCoordinator
 import at.xa1.modulemate.mode.SearchListScreen
 import at.xa1.modulemate.ui.Ui
@@ -43,7 +43,7 @@ internal class HelpModeCoordinator(
                 "Type one character, and the corresponding command is immediately executed"
             )
         },
-        listItemRenderer = { item, _ -> " " + CliColor.RESET + " " + item }
+        listItemRenderer = { item, _ -> " " + CliFormat.RESET + " " + item }
     )
 
     override fun run(): UiUserInput {
@@ -64,9 +64,9 @@ internal class HelpModeCoordinator(
     }
 
     private fun moduleMate() =
-        "🧰 ${CliColor.BOLD}${CliColor.RED}modulemate${CliColor.RESET} " +
-            "${CliColor.BRIGHT_WHITE}v${Modulemate.VERSION}${CliColor.RESET}"
-    private fun header(text: String) = CliColor.BOLD + CliColor.UNDERLINE + text + CliColor.RESET
+        "🧰 ${CliFormat.BOLD}${CliFormat.RED}modulemate${CliFormat.RESET} " +
+            "${CliFormat.BRIGHT_WHITE}v${Modulemate.VERSION}${CliFormat.RESET}"
+    private fun header(text: String) = CliFormat.BOLD + CliFormat.UNDERLINE + text + CliFormat.RESET
 }
 
-fun formatKey(value: String) = CliColor.BACKGROUND_WHITE + CliColor.BLACK + " " + value + " " + CliColor.RESET
+fun formatKey(value: String) = CliFormat.BACKGROUND_WHITE + CliFormat.BLACK + " " + value + " " + CliFormat.RESET

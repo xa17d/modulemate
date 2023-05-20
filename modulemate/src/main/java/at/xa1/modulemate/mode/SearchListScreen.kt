@@ -1,6 +1,6 @@
 package at.xa1.modulemate.mode
 
-import at.xa1.modulemate.cli.CliColor
+import at.xa1.modulemate.cli.CliFormat
 import at.xa1.modulemate.ui.ListBox
 import at.xa1.modulemate.ui.ListItemRenderer
 import at.xa1.modulemate.ui.ScreenContext
@@ -42,7 +42,7 @@ class SearchListScreen<T>(
         val context = ui.createScreenContext()
 
         context.resetCursor()
-        context.print(CliColor.cursorDown(3) + CliColor.CLEAR_UNTIL_END_OF_SCREEN)
+        context.print(CliFormat.cursorDown(3) + CliFormat.CLEAR_UNTIL_END_OF_SCREEN)
         context.flush()
     }
 
@@ -54,7 +54,7 @@ class SearchListScreen<T>(
         context.print("\n")
         context.print(textBox, context.size.columns)
         context.flush()
-        print(CliColor.cursorUp(2) + CliColor.cursorRight(5 + textBox.cursor))
+        print(CliFormat.cursorUp(2) + CliFormat.cursorRight(5 + textBox.cursor))
         context.flush()
     }
 }
@@ -71,7 +71,7 @@ class SearchListScreenPrinter<T> : ScreenPrinter<SearchListScreenState<T>> {
         print(state.listBox)
 
         resetCursor()
-        print(CliColor.cursorDown(1) + CliColor.cursorRight(5 + state.searchBox.cursor))
+        print(CliFormat.cursorDown(1) + CliFormat.cursorRight(5 + state.searchBox.cursor))
     }
 }
 
