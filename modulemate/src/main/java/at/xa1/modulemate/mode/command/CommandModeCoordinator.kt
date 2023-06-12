@@ -17,13 +17,7 @@ internal class CommandModeCoordinator(
     private val screen = SearchListScreen(
         emoji = CliEmoji.JOYSTICK.toString(),
         hint = "Command Mode: Search and execute commands",
-        listProvider = { filter ->
-            commandList.allCommands.filter { command ->
-                command.shortcuts.any { shortcut ->
-                    shortcut.contains(filter)
-                }
-            }
-        },
+        listProvider = { filter -> commandList.search(filter) },
         listItemRenderer = { item, isSelected ->
             if (isSelected) {
                 " " + item.shortcuts.joinToString { " $it " } + " " + item.name
