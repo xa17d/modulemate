@@ -13,6 +13,7 @@ import at.xa1.modulemate.command.CommandStepConfig
 import at.xa1.modulemate.command.StepSuccessCondition
 import at.xa1.modulemate.command.createCommandList
 import at.xa1.modulemate.command.step.Help
+import at.xa1.modulemate.command.step.KeyTest
 import at.xa1.modulemate.command.step.QuitException
 import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.command.variable.DefaultVariables
@@ -63,6 +64,7 @@ private fun modulemate(
     cliArgs: CliArgs
 ) {
     val prefixFilter = cliArgs.getValueOrNull("--prefixFilter")
+    val debugMode = cliArgs.getBooleanOrNull("--debug") ?: false
     val printingShell = PrintingShell(repositoryRoot)
 
     header(repository.getRemoteOrigin().repositoryName, repository.getBranch())
@@ -83,6 +85,13 @@ private fun modulemate(
         browser,
         printingShell
     )
+
+    val ui by lazy { // only initialize when interactive prompt mode is actually entered.
+        val ui = Ui.init()
+        CleanExit().setup(ui)
+        ui
+    }
+
     commandList.add(
         Command(
             Help.SHORTCUTS,
@@ -91,6 +100,17 @@ private fun modulemate(
             Source.BuiltIn
         )
     )
+
+    if (debugMode) {
+        commandList.add(
+            Command(
+                KeyTest.SHORTCUTS,
+                "Debug and Test Input Keys",
+                listOf(CommandStepConfig(StepSuccessCondition.PREVIOUS_SUCCESS, KeyTest { ui })),
+                Source.BuiltIn
+            )
+        )
+    }
 
     val commandRunner = UserCommandRunner(
         repository = repository,
@@ -121,8 +141,6 @@ private fun modulemate(
         }
 
         if (promptMode) {
-            val ui = Ui.init()
-            CleanExit().setup(ui)
             LiveModeRootCoordinator(ui, modules, commandList, commandRunner).run()
         }
     } catch (_: QuitException) {

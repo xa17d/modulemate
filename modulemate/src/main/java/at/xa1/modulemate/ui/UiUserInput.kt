@@ -16,36 +16,62 @@ sealed interface UiUserInput {
 
     object Return : UiUserInput {
         const val code: Int = 13
+
+        override fun toString(): String = "Return"
     }
 
     object Backspace : UiUserInput {
         const val code: Int = 127
+
+        override fun toString(): String = "Backspace"
     }
 
     /**
      * `Del` key (`⌦`) that deletes the character ahead of the cursor.
      *
      */
-    object Delete : UiUserInput
+    object Delete : UiUserInput {
+        override fun toString(): String = "Delete"
+    }
 
     object Escape : UiUserInput {
         const val code: Int = 27
+
+        override fun toString(): String = "Escape"
     }
 
     object Tab : UiUserInput {
         const val code: Int = 9
+
+        override fun toString(): String = "Tab"
     }
 
     object Shift {
-        object Tab : UiUserInput
+        object Tab : UiUserInput {
+            override fun toString(): String = "Shift+Tab"
+        }
     }
 
-    object EndOfInput : UiUserInput
+    object EndOfInput : UiUserInput {
+        override fun toString(): String = "EndOfInput"
+    }
+
     sealed interface Arrow : UiUserInput {
-        object Left : Arrow
-        object Up : Arrow
-        object Down : Arrow
-        object Right : Arrow
+        object Left : Arrow {
+            override fun toString(): String = "Arrow.Left"
+        }
+
+        object Up : Arrow {
+            override fun toString(): String = "Arrow.Up"
+        }
+
+        object Down : Arrow {
+            override fun toString(): String = "Arrow.Down"
+        }
+
+        object Right : Arrow {
+            override fun toString(): String = "Arrow.Right"
+        }
     }
 }
 
