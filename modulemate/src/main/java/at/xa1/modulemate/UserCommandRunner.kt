@@ -8,10 +8,10 @@ import at.xa1.modulemate.command.Command
 import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.command.CommandResult
+import at.xa1.modulemate.command.variable.CachedVariables
 import at.xa1.modulemate.command.variable.DefaultVariables
 import at.xa1.modulemate.command.variable.Variable
 import at.xa1.modulemate.command.variable.VariableSet
-import at.xa1.modulemate.command.variable.Variables
 import at.xa1.modulemate.config.Source
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
@@ -20,7 +20,7 @@ import at.xa1.modulemate.module.filter.PathPrefixFilter
 internal class UserCommandRunner(
     private val repository: GitRepository,
     private val modules: Modules,
-    private val variables: Variables,
+    private val variables: CachedVariables,
     private val commandList: CommandList
 ) {
     fun run(command: Command, args: List<String> = emptyList()): Result {
@@ -39,6 +39,7 @@ internal class UserCommandRunner(
         }
 
         runCommand(command, CommandContext(repository, modules, extendedVariables))
+        variables.clearCache()
         return Result.CommandRun
     }
 

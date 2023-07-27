@@ -29,8 +29,8 @@ object DefaultVariables {
 
         add(
             Variable(HOT_MODULE_FOLDER) {
-                val activeModule = modules.getByPath(get(HOT_MODULE))
-                activeModule.absolutePath
+                val hotModule = modules.getByPath(get(HOT_MODULE))
+                hotModule.absolutePath
             }
         )
 

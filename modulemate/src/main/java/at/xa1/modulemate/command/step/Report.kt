@@ -34,9 +34,13 @@ class Report(
         return result.isSuccess.successToCommandResult()
     }
 
-    private fun getReportPathByModule(activeModule: Module, variables: Variables): String {
-        val path = when (activeModule.type) {
-            ModuleType.OTHER -> error("Unknown ModuleType for ${activeModule.path}")
+    private fun getReportPathByModule(hotModule: Module, variables: Variables): String {
+        val path = when (hotModule.type) {
+            ModuleType.OTHER -> error(
+                "Unknown ModuleType for ${hotModule.path}. " +
+                    "None of the `module.classification` configs did match the module."
+            )
+
             ModuleType.KOTLIN_LIB -> pathKotlinLib
             ModuleType.ANDROID_LIB -> pathAndroidLib
             ModuleType.ANDROID_APP -> pathAndroidApp
