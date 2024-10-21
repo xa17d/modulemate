@@ -16,7 +16,7 @@
             "steps": [
                 {
                     "type": "browser",
-                    "url": "https://{GIT_HOST}/{GIT_OWNER}/{GIT_REPOSITORY_NAME}/pull/{GIT_BRANCH_NAME}"
+                    "url": "https://{GIT_HOST_SUBSTITUTED}/{GIT_OWNER}/{GIT_REPOSITORY_NAME}/pull/{GIT_BRANCH_NAME}"
                 }
             ]
         },
