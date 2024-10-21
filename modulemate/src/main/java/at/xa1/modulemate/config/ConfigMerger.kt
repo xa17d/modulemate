@@ -17,6 +17,14 @@ class ConfigMerger(
         }
     }
 
+    fun getVariablesConfig(): VariablesConfig {
+        val gitHostSubstitutions = configs.flatMap { it.config.variables.gitHostSubstitutions }
+
+        return VariablesConfig(
+            gitHostSubstitutions = gitHostSubstitutions
+        )
+    }
+
     private val configFiles: String
         get() = configs.mapNotNull { configSource ->
             when (val source = configSource.source) {

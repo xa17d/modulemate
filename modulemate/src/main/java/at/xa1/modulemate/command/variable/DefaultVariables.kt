@@ -1,13 +1,23 @@
 package at.xa1.modulemate.command.variable
 
 import at.xa1.modulemate.Modulemate
+import at.xa1.modulemate.config.VariablesConfig
 import at.xa1.modulemate.git.GitRepository
 import at.xa1.modulemate.module.Modules
 
 object DefaultVariables {
-    fun create(repository: GitRepository, modules: Modules) = VariableSet().apply {
+    fun create(
+        repository: GitRepository,
+        modules: Modules,
+        variablesConfig: VariablesConfig
+    ) = VariableSet().apply {
         add(Variable("GIT_OWNER") { repository.getRemoteOrigin().owner })
         add(Variable("GIT_HOST") { repository.getRemoteOrigin().host })
+        add(
+            Variable("GIT_HOST_SUBSTITUTED") {
+                getHostSubstituted(variablesConfig, repository.getRemoteOrigin().host)
+            }
+        )
         add(Variable("GIT_REPOSITORY_NAME") { repository.getRemoteOrigin().repositoryName })
         add(Variable("GIT_BRANCH_NAME") { repository.getBranch() })
         add(

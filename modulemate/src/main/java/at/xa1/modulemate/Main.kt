@@ -78,7 +78,7 @@ private fun modulemate(
         modules.applyFilter(PathPrefixFilter(prefixFilter))
     }
     val browser = ShellOpenBrowser(shell)
-    val defaultVariables = DefaultVariables.create(repository, modules)
+    val defaultVariables = DefaultVariables.create(repository, modules, configMerger.getVariablesConfig())
     val variables = CachedVariables(defaultVariables)
     val commandList = createCommandList(
         configMerger.getCommandsWithSource(),
