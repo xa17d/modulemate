@@ -1,8 +1,8 @@
 plugins {
     id "java"
-    id "org.jetbrains.kotlin.jvm" version "1.8.20"
-    id "org.jetbrains.kotlin.plugin.serialization" version "1.8.20"
-    id "org.jlleitschuh.gradle.ktlint" version "11.3.1"
+    id "org.jetbrains.kotlin.jvm" version "2.0.21"
+    id "org.jetbrains.kotlin.plugin.serialization" version "2.0.21"
+    id "org.jlleitschuh.gradle.ktlint" version "12.1.1"
 }
 
 repositories {
@@ -10,12 +10,12 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.20"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
-    implementation "org.jline:jline-terminal-jansi:3.23.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.0.21"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
+    implementation "org.jline:jline-terminal-jansi:3.26.3"
 
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit5:1.8.20"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit5:2.0.21"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.2"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
