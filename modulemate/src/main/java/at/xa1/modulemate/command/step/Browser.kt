@@ -11,13 +11,13 @@ import java.nio.charset.Charset
 
 class Browser(
     private val browser: Browser,
-    private val urlPattern: String
+    private val urlPattern: String,
 ) : CommandStep {
-
     override fun run(context: CommandContext): CommandResult {
-        val url = context.variables.replacePlaceholders(urlPattern) { value ->
-            URLEncoder.encode(value, Charset.forName("UTF8"))
-        }
+        val url =
+            context.variables.replacePlaceholders(urlPattern) { value ->
+                URLEncoder.encode(value, Charset.forName("UTF8"))
+            }
 
         Cli.stepCommand(url)
 

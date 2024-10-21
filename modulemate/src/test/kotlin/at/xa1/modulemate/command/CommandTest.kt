@@ -8,28 +8,30 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class CommandTest {
-
     @Test
     fun `step with runWhen=PREVIOUS_FAILURE does not run if previous step succeeds`() {
         val step1 = FakeCommandStep(CommandResult.SUCCESS)
         val step2 = FakeCommandStep(CommandResult.SUCCESS)
 
-        val stepConfig1 = CommandStepConfig(
-            successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-            step = step1
-        )
+        val stepConfig1 =
+            CommandStepConfig(
+                successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
+                step = step1,
+            )
 
-        val stepConfig2 = CommandStepConfig(
-            successCondition = StepSuccessCondition.PREVIOUS_FAILURE,
-            step = step2
-        )
+        val stepConfig2 =
+            CommandStepConfig(
+                successCondition = StepSuccessCondition.PREVIOUS_FAILURE,
+                step = step2,
+            )
 
-        val command = Command(
-            shortcuts = listOf("test"),
-            name = "test",
-            stepConfigs = listOf(stepConfig1, stepConfig2),
-            source = Source.BuiltIn
-        )
+        val command =
+            Command(
+                shortcuts = listOf("test"),
+                name = "test",
+                stepConfigs = listOf(stepConfig1, stepConfig2),
+                source = Source.BuiltIn,
+            )
 
         val result = command.run(testCommandContext())
 
@@ -44,22 +46,25 @@ class CommandTest {
         val step1 = FakeCommandStep(CommandResult.FAILURE)
         val step2 = FakeCommandStep(CommandResult.SUCCESS)
 
-        val stepConfig1 = CommandStepConfig(
-            successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-            step = step1
-        )
+        val stepConfig1 =
+            CommandStepConfig(
+                successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
+                step = step1,
+            )
 
-        val stepConfig2 = CommandStepConfig(
-            successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-            step = step2
-        )
+        val stepConfig2 =
+            CommandStepConfig(
+                successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
+                step = step2,
+            )
 
-        val command = Command(
-            shortcuts = listOf("test"),
-            name = "test",
-            stepConfigs = listOf(stepConfig1, stepConfig2),
-            source = Source.BuiltIn
-        )
+        val command =
+            Command(
+                shortcuts = listOf("test"),
+                name = "test",
+                stepConfigs = listOf(stepConfig1, stepConfig2),
+                source = Source.BuiltIn,
+            )
 
         val result = command.run(testCommandContext())
 
@@ -74,22 +79,25 @@ class CommandTest {
         val step1 = FakeCommandStep(CommandResult.FAILURE)
         val step2 = FakeCommandStep(CommandResult.SUCCESS)
 
-        val stepConfig1 = CommandStepConfig(
-            successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-            step = step1
-        )
+        val stepConfig1 =
+            CommandStepConfig(
+                successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
+                step = step1,
+            )
 
-        val stepConfig2 = CommandStepConfig(
-            successCondition = StepSuccessCondition.PREVIOUS_FAILURE,
-            step = step2
-        )
+        val stepConfig2 =
+            CommandStepConfig(
+                successCondition = StepSuccessCondition.PREVIOUS_FAILURE,
+                step = step2,
+            )
 
-        val command = Command(
-            shortcuts = listOf("test"),
-            name = "test",
-            stepConfigs = listOf(stepConfig1, stepConfig2),
-            source = Source.BuiltIn
-        )
+        val command =
+            Command(
+                shortcuts = listOf("test"),
+                name = "test",
+                stepConfigs = listOf(stepConfig1, stepConfig2),
+                source = Source.BuiltIn,
+            )
 
         val result = command.run(testCommandContext())
 
@@ -105,27 +113,31 @@ class CommandTest {
         val step2 = FakeCommandStep(CommandResult.FAILURE)
         val step3 = FakeCommandStep(CommandResult.FAILURE)
 
-        val stepConfig1 = CommandStepConfig(
-            successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
-            step = step1
-        )
+        val stepConfig1 =
+            CommandStepConfig(
+                successCondition = StepSuccessCondition.PREVIOUS_SUCCESS,
+                step = step1,
+            )
 
-        val stepConfig2 = CommandStepConfig(
-            successCondition = StepSuccessCondition.ALWAYS,
-            step = step2
-        )
+        val stepConfig2 =
+            CommandStepConfig(
+                successCondition = StepSuccessCondition.ALWAYS,
+                step = step2,
+            )
 
-        val stepConfig3 = CommandStepConfig(
-            successCondition = StepSuccessCondition.ALWAYS,
-            step = step3
-        )
+        val stepConfig3 =
+            CommandStepConfig(
+                successCondition = StepSuccessCondition.ALWAYS,
+                step = step3,
+            )
 
-        val command = Command(
-            shortcuts = listOf("test"),
-            name = "test",
-            stepConfigs = listOf(stepConfig1, stepConfig2, stepConfig3),
-            source = Source.BuiltIn
-        )
+        val command =
+            Command(
+                shortcuts = listOf("test"),
+                name = "test",
+                stepConfigs = listOf(stepConfig1, stepConfig2, stepConfig3),
+                source = Source.BuiltIn,
+            )
 
         val result = command.run(testCommandContext())
 

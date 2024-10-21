@@ -1,6 +1,9 @@
 package at.xa1.modulemate.command
 
-fun findMostSimilarCommand(commands: List<String>, input: String): String {
+fun findMostSimilarCommand(
+    commands: List<String>,
+    input: String,
+): String {
     val mostSimilarCommand =
         commands.fold(CommandSimilarity("", Int.MAX_VALUE)) { mostSimilar, currentCommand ->
             val distance = levenshteinDistance(currentCommand, input)
@@ -17,10 +20,13 @@ fun findMostSimilarCommand(commands: List<String>, input: String): String {
 
 private data class CommandSimilarity(
     val command: String,
-    val distance: Int
+    val distance: Int,
 )
 
-fun findMostSimilarWord(word: String, wordList: List<String>): String? {
+fun findMostSimilarWord(
+    word: String,
+    wordList: List<String>,
+): String? {
     var minDistance = Int.MAX_VALUE
     var mostSimilarWord: String? = null
     for (w in wordList) {
@@ -33,7 +39,10 @@ fun findMostSimilarWord(word: String, wordList: List<String>): String? {
     return mostSimilarWord
 }
 
-private fun levenshteinDistance(s1: String, s2: String): Int {
+private fun levenshteinDistance(
+    s1: String,
+    s2: String,
+): Int {
     val m = s1.length
     val n = s2.length
     val d = Array(m + 1) { IntArray(n + 1) }

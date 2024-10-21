@@ -4,7 +4,7 @@ import org.jline.terminal.Terminal
 import org.jline.terminal.TerminalBuilder
 
 class Ui private constructor(
-    private val terminal: Terminal
+    private val terminal: Terminal,
 ) {
     fun createScreenContext(): ScreenContext = ScreenContext(terminal)
 
@@ -12,8 +12,9 @@ class Ui private constructor(
 
     companion object {
         fun init(): Ui {
-            val terminal = TerminalBuilder.builder()
-                .build()
+            val terminal =
+                TerminalBuilder.builder()
+                    .build()
 
             terminal.enterRawMode()
             terminal.echo(false)

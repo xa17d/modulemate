@@ -5,15 +5,17 @@ import at.xa1.modulemate.ui.Ui
 
 open class Screen<State>(
     initialState: State,
-    private val printer: ScreenPrinter<State>
+    private val printer: ScreenPrinter<State>,
 ) {
     var state: State = initialState
+
     inline fun update(crossinline transform: (old: State) -> State) {
         state = transform(state)
     }
 
     protected open fun onPrint(context: ScreenContext) {
     }
+
     fun print(ui: Ui) {
         val context = ui.createScreenContext()
         onPrint(context)
@@ -22,5 +24,8 @@ open class Screen<State>(
 }
 
 interface ScreenPrinter<State> {
-    fun print(context: ScreenContext, state: State)
+    fun print(
+        context: ScreenContext,
+        state: State,
+    )
 }

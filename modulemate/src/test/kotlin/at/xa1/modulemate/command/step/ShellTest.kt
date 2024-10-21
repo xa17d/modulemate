@@ -11,18 +11,18 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class ShellTest {
-
     private val fakeShell = FakeShell()
 
     @Test
     fun `command is not run if mode=RUN_IF_AT_LEAST_ONE_ANDROID_MODULE but only kotlinLib module present`() {
         val modules = testModules(Module(":kotlin-lib", "", "", ModuleType.KOTLIN_LIB))
 
-        val step = Shell(
-            mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
-            shell = fakeShell,
-            command = listOf("myCommand")
-        )
+        val step =
+            Shell(
+                mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
+                shell = fakeShell,
+                command = listOf("myCommand"),
+            )
 
         val result = step.run(testCommandContext(modules = modules))
 
@@ -32,16 +32,18 @@ class ShellTest {
 
     @Test
     fun `command is run if mode=RUN_IF_AT_LEAST_ONE_ANDROID_MODULE and there is android-lib module present`() {
-        val modules = testModules(
-            Module(":kotlin-lib", "", "", ModuleType.KOTLIN_LIB),
-            Module(":android-lib", "", "", ModuleType.ANDROID_LIB)
-        )
+        val modules =
+            testModules(
+                Module(":kotlin-lib", "", "", ModuleType.KOTLIN_LIB),
+                Module(":android-lib", "", "", ModuleType.ANDROID_LIB),
+            )
 
-        val step = Shell(
-            mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
-            shell = fakeShell,
-            command = listOf("myCommand")
-        )
+        val step =
+            Shell(
+                mode = ShellMode.RUN_IF_AT_LEAST_ONE_ANDROID_MODULE,
+                shell = fakeShell,
+                command = listOf("myCommand"),
+            )
 
         fakeShell.whenRun("myCommand", result = ShellResult.SUCCESS_EMPTY)
 
@@ -50,7 +52,7 @@ class ShellTest {
         assertEquals(CommandResult.SUCCESS, result)
         assertEquals(
             listOf(listOf("myCommand")),
-            fakeShell.actualCommands
+            fakeShell.actualCommands,
         )
     }
 }

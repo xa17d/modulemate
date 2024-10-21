@@ -8,12 +8,14 @@ import kotlin.test.assertEquals
 class GetHostSubstitutedTest {
     @Test
     fun `hosts in config are replaced, hosts not in config are unchanged`() {
-        val config = VariablesConfig(
-            gitHostSubstitutions = listOf(
-                GitHostSubstitutionConfig(value = "localhost", replacement = "example.com"),
-                GitHostSubstitutionConfig(value = "github.com-ACME", replacement = "github.com")
+        val config =
+            VariablesConfig(
+                gitHostSubstitutions =
+                    listOf(
+                        GitHostSubstitutionConfig(value = "localhost", replacement = "example.com"),
+                        GitHostSubstitutionConfig(value = "github.com-ACME", replacement = "github.com"),
+                    ),
             )
-        )
 
         assertEquals("example.com", getHostSubstituted(config, "localhost")) // replaced
         assertEquals("github.com", getHostSubstituted(config, "github.com-ACME")) // replaced
@@ -22,11 +24,13 @@ class GetHostSubstitutedTest {
 
     @Test
     fun `substitution is not case sensitive`() {
-        val config = VariablesConfig(
-            gitHostSubstitutions = listOf(
-                GitHostSubstitutionConfig(value = "github.com-ACME", replacement = "github.com")
+        val config =
+            VariablesConfig(
+                gitHostSubstitutions =
+                    listOf(
+                        GitHostSubstitutionConfig(value = "github.com-ACME", replacement = "github.com"),
+                    ),
             )
-        )
 
         assertEquals("github.com", getHostSubstituted(config, "GitHub.com-Acme"))
     }

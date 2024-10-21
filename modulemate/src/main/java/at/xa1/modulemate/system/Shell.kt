@@ -5,6 +5,7 @@ import java.io.InputStreamReader
 
 interface Shell {
     fun folder(folder: File): Shell
+
     fun run(command: Array<out String>): ShellResult
 }
 
@@ -13,15 +14,16 @@ fun Shell.run(vararg command: String) = run(command)
 data class ShellResult(
     val out: String,
     val error: String,
-    val exitCode: Int
+    val exitCode: Int,
 ) {
     companion object {
         val SUCCESS_EMPTY: ShellResult
-            get() = ShellResult(
-                out = "",
-                error = "",
-                exitCode = 0
-            )
+            get() =
+                ShellResult(
+                    out = "",
+                    error = "",
+                    exitCode = 0,
+                )
     }
 }
 
@@ -61,7 +63,7 @@ class RuntimeShell(private val folder: File) : Shell {
         return ShellResult(
             out = out,
             error = error,
-            exitCode = exitCode
+            exitCode = exitCode,
         )
     }
 

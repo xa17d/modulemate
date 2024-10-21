@@ -17,7 +17,7 @@ class Report(
     private val shell: Shell,
     private val pathKotlinLib: String,
     private val pathAndroidLib: String,
-    private val pathAndroidApp: String
+    private val pathAndroidApp: String,
 ) : CommandStep {
     override fun run(context: CommandContext): CommandResult {
         context.modules.activeModules.forEach { module ->
@@ -34,17 +34,22 @@ class Report(
         return result.isSuccess.successToCommandResult()
     }
 
-    private fun getReportPathByModule(hotModule: Module, variables: Variables): String {
-        val path = when (hotModule.type) {
-            ModuleType.OTHER -> error(
-                "Unknown ModuleType for ${hotModule.path}. " +
-                    "None of the `module.classification` configs did match the module."
-            )
+    private fun getReportPathByModule(
+        hotModule: Module,
+        variables: Variables,
+    ): String {
+        val path =
+            when (hotModule.type) {
+                ModuleType.OTHER ->
+                    error(
+                        "Unknown ModuleType for ${hotModule.path}. " +
+                            "None of the `module.classification` configs did match the module.",
+                    )
 
-            ModuleType.KOTLIN_LIB -> pathKotlinLib
-            ModuleType.ANDROID_LIB -> pathAndroidLib
-            ModuleType.ANDROID_APP -> pathAndroidApp
-        }
+                ModuleType.KOTLIN_LIB -> pathKotlinLib
+                ModuleType.ANDROID_LIB -> pathAndroidLib
+                ModuleType.ANDROID_APP -> pathAndroidApp
+            }
 
         return variables.replacePlaceholders(path)
     }

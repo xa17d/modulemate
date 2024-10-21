@@ -16,7 +16,7 @@ import at.xa1.modulemate.cli.CliEmoji.Terminal.UNKNOWN
 internal class CliEmoji private constructor(
     private val raw: String,
     private val appleNeedsExtraChar: Boolean = false,
-    private val jetBrainsNeedsExtraChar: Boolean = false
+    private val jetBrainsNeedsExtraChar: Boolean = false,
 ) {
     override fun toString(): String =
         if (appleNeedsExtraChar && terminal == APPLE_TERMINAL ||
@@ -92,12 +92,13 @@ internal class CliEmoji private constructor(
         val PARTY_POPPER: CliEmoji = CliEmoji("\uD83C\uDF89")
 
         fun printTest() {
-            val definedEmojis = Companion::class.java.methods
-                .filter { method -> method.name.startsWith("get") && method.returnType == CliEmoji::class.java }
-                .map { field ->
-                    field.isAccessible = true
-                    field.invoke(Companion) as CliEmoji
-                }
+            val definedEmojis =
+                Companion::class.java.methods
+                    .filter { method -> method.name.startsWith("get") && method.returnType == CliEmoji::class.java }
+                    .map { field ->
+                        field.isAccessible = true
+                        field.invoke(Companion) as CliEmoji
+                    }
 
             println("Terminal: $terminal")
             println("Corrected:  Raw:")
@@ -111,6 +112,6 @@ internal class CliEmoji private constructor(
     private enum class Terminal {
         UNKNOWN,
         JETBRAINS_JEDITERM,
-        APPLE_TERMINAL
+        APPLE_TERMINAL,
     }
 }

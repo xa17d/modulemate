@@ -5,15 +5,14 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class FindMostSimilarCommandTest {
-
     @Test
     fun `find activeWork by axtvewor`() {
         assertEquals(
             "activeWork",
             findMostSimilarCommand(
                 listOf("activeWork", "conflictAnalysis", "changedModules"),
-                "axtvewor"
-            )
+                "axtvewor",
+            ),
         )
     }
 
@@ -23,8 +22,8 @@ class FindMostSimilarCommandTest {
             "conflictAnalysis",
             findMostSimilarCommand(
                 listOf("activeWork", "conflictAnalysis", "changedModules"),
-                "conflicts"
-            )
+                "conflicts",
+            ),
         )
     }
 }

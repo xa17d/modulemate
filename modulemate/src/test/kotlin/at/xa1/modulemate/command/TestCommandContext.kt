@@ -11,10 +11,10 @@ import java.io.File
 fun testCommandContext(
     repository: GitRepository = GitRepository(FakeShell(), File(".")),
     modules: Modules = testModules(),
-    variables: Variables = VariableSet()
+    variables: Variables = VariableSet(),
 ): CommandContext =
     CommandContext(
         repository = repository,
         modules = modules,
-        variables = variables
+        variables = variables,
     )

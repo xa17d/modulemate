@@ -8,20 +8,21 @@ import at.xa1.modulemate.command.CommandList
 import at.xa1.modulemate.command.CommandResult
 
 class Help(
-    private val commandList: CommandList
+    private val commandList: CommandList,
 ) : CommandStep {
     override fun run(context: CommandContext): CommandResult {
         Cli.subHeading("Variables:")
         Cli.table {
             context.variables.getAll().forEach { variable ->
-                val value = try {
-                    variable.getValue()
-                } catch (e: IllegalStateException) {
-                    CliTable.FormattedCell(
-                        content = "Error: " + e.message,
-                        formatting = CliFormat.RED + CliFormat.BOLD
-                    )
-                }
+                val value =
+                    try {
+                        variable.getValue()
+                    } catch (e: IllegalStateException) {
+                        CliTable.FormattedCell(
+                            content = "Error: " + e.message,
+                            formatting = CliFormat.RED + CliFormat.BOLD,
+                        )
+                    }
 
                 row(variable.name, value)
             }

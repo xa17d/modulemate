@@ -9,7 +9,12 @@ import at.xa1.modulemate.cli.CliFormat.UNDERLINE
 import at.xa1.modulemate.cli.CliFormat.YELLOW
 
 object Cli {
-    fun heading(content: String, formatting: String, addendum: String? = null, addendumFormatting: String? = null) {
+    fun heading(
+        content: String,
+        formatting: String,
+        addendum: String? = null,
+        addendumFormatting: String? = null,
+    ) {
         print("$formatting $content")
 
         if (addendum != null) {
@@ -30,11 +35,12 @@ object Cli {
     }
 
     fun prompt(default: String = ""): String {
-        val defaultPrint = if (default.isEmpty()) {
-            ""
-        } else {
-            "[$GREEN$default$BLUE]"
-        }
+        val defaultPrint =
+            if (default.isEmpty()) {
+                ""
+            } else {
+                "[$GREEN$default$BLUE]"
+            }
 
         print("$BLUE$defaultPrint〉$RESET")
 

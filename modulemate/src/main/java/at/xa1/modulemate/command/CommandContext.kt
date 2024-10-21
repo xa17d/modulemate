@@ -9,7 +9,7 @@ import at.xa1.modulemate.module.Modules
 data class CommandContext(
     val repository: GitRepository,
     val modules: Modules,
-    val variables: Variables
+    val variables: Variables,
 )
 
 val CommandContext.hotModule: Module

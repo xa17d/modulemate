@@ -17,9 +17,8 @@ import java.io.File
  */
 class ConfigResolver(
     private val repositoryRoot: File,
-    private val userHome: File = File(System.getProperty("user.home"))
+    private val userHome: File = File(System.getProperty("user.home")),
 ) {
-
     /**
      * @return A list of all configurations found, ordered by priority. Item at index 0 has the highest priority.
      */
@@ -31,7 +30,7 @@ class ConfigResolver(
         return listOfNotNull(
             repositoryConfig,
             userConfig,
-            defaultConfig
+            defaultConfig,
         )
     }
 
@@ -49,7 +48,7 @@ class ConfigResolver(
             val config = Json.decodeFromString<Config>(configFile.readText())
             return ConfigSource(
                 source = Source.ConfigFile(configFile),
-                config = config
+                config = config,
             )
         } catch (e: SerializationException) {
             throw IllegalArgumentException("Serialization error in config file: $configFile", e)

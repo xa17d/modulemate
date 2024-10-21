@@ -10,14 +10,15 @@ import at.xa1.modulemate.ui.UiUserInput
 
 internal class ModulesModeCoordinator(
     private val ui: Ui,
-    private val modules: Modules
+    private val modules: Modules,
 ) : ModeCoordinator {
-    private val screen = SearchListScreen(
-        emoji = CliEmoji.PACKAGE.toString(),
-        hint = "Module Mode: Select active modules",
-        listProvider = { modules.recentModules },
-        listItemRenderer = ModulesListItemRenderer(modules)
-    )
+    private val screen =
+        SearchListScreen(
+            emoji = CliEmoji.PACKAGE.toString(),
+            hint = "Module Mode: Select active modules",
+            listProvider = { modules.recentModules },
+            listItemRenderer = ModulesListItemRenderer(modules),
+        )
 
     override fun run(): UiUserInput {
         while (true) {

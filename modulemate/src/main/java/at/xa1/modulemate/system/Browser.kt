@@ -5,7 +5,7 @@ interface Browser {
 }
 
 class ShellOpenBrowser(
-    private val shell: Shell
+    private val shell: Shell,
 ) : Browser {
     override fun open(url: String): Boolean {
         val shellResult = shell.run("open", url)

@@ -13,24 +13,26 @@ import at.xa1.modulemate.ui.UiUserInput
 internal class FlashModeCoordinator(
     private val ui: Ui,
     private val commandList: CommandList,
-    private val commandRunner: UserCommandRunner
+    private val commandRunner: UserCommandRunner,
 ) : ModeCoordinator {
-    private val screen = SearchListScreen(
-        emoji = CliEmoji.HIGH_VOLTAGE.toString(),
-        hint = "Flash Mode: Execute commands with one key stroke",
-        listProvider = {
-            commandList.allCommands.filter { command -> command.oneCharShortCuts.isNotEmpty() }
-        },
-        listItemRenderer = { item, isSelected ->
-            if (isSelected) {
-                " " + item.oneCharShortCuts.joinToString { " $it " } + " " + item.name
-            } else {
-                " " + item.oneCharShortCuts.joinToString { formatKey(it) } + " " + item.name
-            }
-        }
-    )
+    private val screen =
+        SearchListScreen(
+            emoji = CliEmoji.HIGH_VOLTAGE.toString(),
+            hint = "Flash Mode: Execute commands with one key stroke",
+            listProvider = {
+                commandList.allCommands.filter { command -> command.oneCharShortCuts.isNotEmpty() }
+            },
+            listItemRenderer = { item, isSelected ->
+                if (isSelected) {
+                    " " + item.oneCharShortCuts.joinToString { " $it " } + " " + item.name
+                } else {
+                    " " + item.oneCharShortCuts.joinToString { formatKey(it) } + " " + item.name
+                }
+            },
+        )
 
     private var lastCommand: Command? = null
+
     override fun run(): UiUserInput {
         screen.print(ui)
 

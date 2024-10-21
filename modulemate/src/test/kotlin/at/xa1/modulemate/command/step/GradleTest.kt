@@ -9,19 +9,20 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class GradleTest {
-
-    private val fakeShell = FakeShell().apply {
-        failOnUnexpectedCommand = false
-    }
+    private val fakeShell =
+        FakeShell().apply {
+            failOnUnexpectedCommand = false
+        }
 
     @Test
     fun `gradle shell command is constructed correctly`() {
-        val modules = testModules(
-            Module(":test-android", "", "", ModuleType.ANDROID_LIB),
-            Module(":test-app", "", "", ModuleType.ANDROID_APP),
-            Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
-            Module(":test-other", "", "", ModuleType.OTHER)
-        )
+        val modules =
+            testModules(
+                Module(":test-android", "", "", ModuleType.ANDROID_LIB),
+                Module(":test-app", "", "", ModuleType.ANDROID_APP),
+                Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
+                Module(":test-other", "", "", ModuleType.OTHER),
+            )
 
         Gradle(
             shell = fakeShell,
@@ -31,7 +32,7 @@ class GradleTest {
             androidAppFlags = listOf("-PandroidAppFlag1", "-PandroidAppFlag2"),
             kotlinLibTasks = listOf("javaTask1", "javaTask2"),
             androidLibTasks = listOf("androidLibTask1", "androidLibTask2"),
-            androidAppTasks = listOf("androidAppTask1", "androidAppTask2")
+            androidAppTasks = listOf("androidAppTask1", "androidAppTask2"),
         ).run(testCommandContext(modules = modules))
 
         assertEquals(
@@ -49,17 +50,18 @@ class GradleTest {
                 ":test-app:androidAppTask1",
                 ":test-app:androidAppTask2",
                 ":test-core:javaTask1",
-                ":test-core:javaTask2"
+                ":test-core:javaTask2",
             ),
-            fakeShell.actualCommands.single()
+            fakeShell.actualCommands.single(),
         )
     }
 
     @Test
     fun `gradle shell command only contains flags of module types present`() {
-        val modules = testModules(
-            Module(":test-core", "", "", ModuleType.KOTLIN_LIB)
-        )
+        val modules =
+            testModules(
+                Module(":test-core", "", "", ModuleType.KOTLIN_LIB),
+            )
 
         Gradle(
             shell = fakeShell,
@@ -69,7 +71,7 @@ class GradleTest {
             androidAppFlags = listOf("-PandroidAppFlag1", "-PandroidAppFlag2"),
             kotlinLibTasks = listOf("javaTask1", "javaTask2"),
             androidLibTasks = listOf("androidLibTask1", "androidLibTask2"),
-            androidAppTasks = listOf("androidAppTask1", "androidAppTask2")
+            androidAppTasks = listOf("androidAppTask1", "androidAppTask2"),
         ).run(testCommandContext(modules = modules))
 
         assertEquals(
@@ -78,9 +80,9 @@ class GradleTest {
                 "-PkotlinLibFlag1",
                 "-PkotlinLibFlag2",
                 ":test-core:javaTask1",
-                ":test-core:javaTask2"
+                ":test-core:javaTask2",
             ),
-            fakeShell.actualCommands.single()
+            fakeShell.actualCommands.single(),
         )
     }
 }

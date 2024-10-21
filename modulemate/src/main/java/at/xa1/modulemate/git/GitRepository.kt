@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 
 class GitRepository(
     shell: Shell,
-    folder: File
+    folder: File,
 ) {
     private val shell: Shell = shell.folder(folder)
 
@@ -35,7 +35,10 @@ class GitRepository(
             .filter { line -> line.isNotEmpty() }
     }
 
-    fun getAuthors(after: ZonedDateTime, ref: String): Set<String> {
+    fun getAuthors(
+        after: ZonedDateTime,
+        ref: String,
+    ): Set<String> {
         val mergeBase = getMergeBase(ref)
         val afterFormatted = after.format(DateTimeFormatter.ISO_DATE_TIME)
         return shell.run(
@@ -43,7 +46,7 @@ class GitRepository(
             "log",
             "--after=\"$afterFormatted\"",
             "--pretty=format:\"%an <%ae>\"",
-            "$mergeBase..$ref"
+            "$mergeBase..$ref",
         ).getLines().toSet()
     }
 
@@ -52,13 +55,14 @@ class GitRepository(
     }
 
     fun getLatestChangeOnRemote(): List<RefLatestChange> {
-        val lines = shell.run(
-            "git",
-            "for-each-ref",
-            "--format=%(committerdate:iso-strict)|%(refname)",
-            "refs/remotes"
-        ).getLines()
-            .filter { line -> line.isNotEmpty() }
+        val lines =
+            shell.run(
+                "git",
+                "for-each-ref",
+                "--format=%(committerdate:iso-strict)|%(refname)",
+                "refs/remotes",
+            ).getLines()
+                .filter { line -> line.isNotEmpty() }
 
         return lines.map { line ->
             val parts = line.split('|', limit = 2)
@@ -69,7 +73,7 @@ class GitRepository(
 
             RefLatestChange(
                 ref = parts[1],
-                latestCommitDate = ZonedDateTime.parse(parts[0], DateTimeFormatter.ISO_DATE_TIME)
+                latestCommitDate = ZonedDateTime.parse(parts[0], DateTimeFormatter.ISO_DATE_TIME),
             )
         }
     }
@@ -89,7 +93,10 @@ class GitRepository(
         }
     }
 
-    private fun getMergeBase(ref: String, mainBranch: String = getMainBranch()): String {
+    private fun getMergeBase(
+        ref: String,
+        mainBranch: String = getMainBranch(),
+    ): String {
         return shell.run("git", "merge-base", ref, mainBranch).getSingleLine()
     }
 
@@ -100,5 +107,5 @@ class GitRepository(
 
 data class RefLatestChange(
     val ref: String,
-    val latestCommitDate: ZonedDateTime
+    val latestCommitDate: ZonedDateTime,
 )

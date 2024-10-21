@@ -8,20 +8,21 @@ data class ListBox<T>(
     val selectedIndex: Int = -1,
     val topIndex: Int = 0,
     val height: Int,
-    val itemRenderer: ListItemRenderer<T>
+    val itemRenderer: ListItemRenderer<T>,
 )
 
 fun interface ListItemRenderer<T> {
-    fun render(item: T, isSelected: Boolean): String
+    fun render(
+        item: T,
+        isSelected: Boolean,
+    ): String
 }
 
 fun <T> ListBox<T>.selectedItemOrNull(): T? = items.getOrNull(selectedIndex)
 
-fun <T> ListBox<T>.moveDown(): ListBox<T> =
-    copy(selectedIndex = (selectedIndex + 1).coerceAtMost(items.lastIndex))
+fun <T> ListBox<T>.moveDown(): ListBox<T> = copy(selectedIndex = (selectedIndex + 1).coerceAtMost(items.lastIndex))
 
-fun <T> ListBox<T>.moveUp(): ListBox<T> =
-    copy(selectedIndex = (selectedIndex - 1).coerceAtLeast(-1))
+fun <T> ListBox<T>.moveUp(): ListBox<T> = copy(selectedIndex = (selectedIndex - 1).coerceAtLeast(-1))
 
 fun <T> ListBox<T>.updateItems(newItems: List<T>): ListBox<T> {
     val selectedItem = selectedItemOrNull()
@@ -29,20 +30,21 @@ fun <T> ListBox<T>.updateItems(newItems: List<T>): ListBox<T> {
 
     return copy(
         items = newItems,
-        selectedIndex = newSelectedIndex
+        selectedIndex = newSelectedIndex,
     ).updateHeight(height)
 }
 
 fun <T> ListBox<T>.updateHeight(newHeight: Int): ListBox<T> {
-    val newTopIndex = when {
-        selectedIndex == -1 -> 0
-        selectedIndex < topIndex + 2 -> (selectedIndex - 1).coerceAtLeast(0)
-        selectedIndex > topIndex + newHeight - 2 -> {
-            selectedIndex - newHeight + 2
-        }
+    val newTopIndex =
+        when {
+            selectedIndex == -1 -> 0
+            selectedIndex < topIndex + 2 -> (selectedIndex - 1).coerceAtLeast(0)
+            selectedIndex > topIndex + newHeight - 2 -> {
+                selectedIndex - newHeight + 2
+            }
 
-        else -> topIndex
-    }.coerceAtMost(max(items.size - newHeight, 0))
+            else -> topIndex
+        }.coerceAtMost(max(items.size - newHeight, 0))
 
     return copy(height = newHeight, topIndex = newTopIndex)
 }
@@ -51,7 +53,7 @@ fun <T> ScreenContext.print(listBox: ListBox<T>) {
     val visibleRange =
         listBox.items.subList(
             listBox.topIndex,
-            listBox.items.size.coerceIn(0, listBox.height + listBox.topIndex)
+            listBox.items.size.coerceIn(0, listBox.height + listBox.topIndex),
         )
 
     visibleRange.forEachIndexed { visibleIndex, item ->

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class GitRemoteTest {
-
     @Test
     fun `ssh remote`() {
         val gitRemote = GitRemote.create("git@github.com:xa17d/modulemate.git")

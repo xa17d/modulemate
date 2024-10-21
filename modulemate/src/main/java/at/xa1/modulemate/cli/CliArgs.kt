@@ -6,6 +6,7 @@ package at.xa1.modulemate.cli
  */
 internal class CliArgs(args: Array<String>) {
     private val remainingArgs = args.toMutableList()
+
     fun getRemainingArgs(): List<String> = remainingArgs.toList()
 
     fun nextOrNull(): String? {
@@ -16,11 +17,12 @@ internal class CliArgs(args: Array<String>) {
         return remainingArgs.removeAt(0)
     }
 
-    fun requireValue(key: String): String =
-        getValueOrNull(key) ?: error("Argument expected but not provided: $key")
+    fun requireValue(key: String): String = getValueOrNull(key) ?: error("Argument expected but not provided: $key")
 
-    fun getValueOrDefault(key: String, default: String): String =
-        getValueOrNull(key) ?: default
+    fun getValueOrDefault(
+        key: String,
+        default: String,
+    ): String = getValueOrNull(key) ?: default
 
     fun getValueOrNull(key: String): String? {
         val valueIndex = remainingArgs.indexOf(key)
@@ -57,7 +59,7 @@ internal class CliArgs(args: Array<String>) {
                         } else {
                             it
                         }
-                    }
+                    },
             )
         }
     }

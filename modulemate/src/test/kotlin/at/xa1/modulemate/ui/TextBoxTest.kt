@@ -8,7 +8,7 @@ class TextBoxTest {
     fun `character can be added to empty text`() {
         assertEquals(
             TextBox(text = "H", cursor = 1),
-            TextBox(text = "").reduce(UiUserInput.Char('H'))
+            TextBox(text = "").reduce(UiUserInput.Char('H')),
         )
     }
 
@@ -16,7 +16,7 @@ class TextBoxTest {
     fun `character can be added to text`() {
         assertEquals(
             TextBox(text = "Hi!", cursor = 3),
-            TextBox(text = "Hi", cursor = 2).reduce(UiUserInput.Char('!'))
+            TextBox(text = "Hi", cursor = 2).reduce(UiUserInput.Char('!')),
         )
     }
 
@@ -24,7 +24,7 @@ class TextBoxTest {
     fun `character can be added mid text`() {
         assertEquals(
             TextBox(text = "ABC", cursor = 2),
-            TextBox(text = "AC", cursor = 1).reduce(UiUserInput.Char('B'))
+            TextBox(text = "AC", cursor = 1).reduce(UiUserInput.Char('B')),
         )
     }
 
@@ -32,7 +32,7 @@ class TextBoxTest {
     fun `character can be added at beginning of text`() {
         assertEquals(
             TextBox(text = "dog", cursor = 1),
-            TextBox(text = "og", cursor = 0).reduce(UiUserInput.Char('d'))
+            TextBox(text = "og", cursor = 0).reduce(UiUserInput.Char('d')),
         )
     }
 
@@ -40,7 +40,7 @@ class TextBoxTest {
     fun `cursor can be moved left from end`() {
         assertEquals(
             TextBox(text = "Hi", cursor = 1),
-            TextBox(text = "Hi", cursor = 2).reduce(UiUserInput.Arrow.Left)
+            TextBox(text = "Hi", cursor = 2).reduce(UiUserInput.Arrow.Left),
         )
     }
 
@@ -48,7 +48,7 @@ class TextBoxTest {
     fun `cursor cannot be moved left when at start`() {
         assertEquals(
             TextBox(text = "Hi", cursor = 0),
-            TextBox(text = "Hi", cursor = 0).reduce(UiUserInput.Arrow.Left)
+            TextBox(text = "Hi", cursor = 0).reduce(UiUserInput.Arrow.Left),
         )
     }
 
@@ -56,7 +56,7 @@ class TextBoxTest {
     fun `cursor can be moved right to last char`() {
         assertEquals(
             TextBox(text = "Hi", cursor = 2),
-            TextBox(text = "Hi", cursor = 1).reduce(UiUserInput.Arrow.Right)
+            TextBox(text = "Hi", cursor = 1).reduce(UiUserInput.Arrow.Right),
         )
     }
 
@@ -64,7 +64,7 @@ class TextBoxTest {
     fun `cursor cannot be moved right when at end`() {
         assertEquals(
             TextBox(text = "Hi", cursor = 2),
-            TextBox(text = "Hi", cursor = 2).reduce(UiUserInput.Arrow.Right)
+            TextBox(text = "Hi", cursor = 2).reduce(UiUserInput.Arrow.Right),
         )
     }
 
@@ -72,7 +72,7 @@ class TextBoxTest {
     fun `backspace removes character at end when cursor at end`() {
         assertEquals(
             TextBox(text = "Hi", cursor = 2),
-            TextBox(text = "Hi!", cursor = 3).reduce(UiUserInput.Backspace)
+            TextBox(text = "Hi!", cursor = 3).reduce(UiUserInput.Backspace),
         )
     }
 
@@ -80,7 +80,7 @@ class TextBoxTest {
     fun `backspace removes only character when cursor at end`() {
         assertEquals(
             TextBox(text = "", cursor = 0),
-            TextBox(text = "H", cursor = 1).reduce(UiUserInput.Backspace)
+            TextBox(text = "H", cursor = 1).reduce(UiUserInput.Backspace),
         )
     }
 
@@ -88,7 +88,7 @@ class TextBoxTest {
     fun `backspace does nothing when cursor is at beginning`() {
         assertEquals(
             TextBox(text = "Hi!", cursor = 0),
-            TextBox(text = "Hi!", cursor = 0).reduce(UiUserInput.Backspace)
+            TextBox(text = "Hi!", cursor = 0).reduce(UiUserInput.Backspace),
         )
     }
 
@@ -96,7 +96,7 @@ class TextBoxTest {
     fun `backspace does nothing when text empty`() {
         assertEquals(
             TextBox(text = "", cursor = 0),
-            TextBox(text = "", cursor = 0).reduce(UiUserInput.Backspace)
+            TextBox(text = "", cursor = 0).reduce(UiUserInput.Backspace),
         )
     }
 
@@ -104,7 +104,7 @@ class TextBoxTest {
     fun `delete does nothing when cursor is at end`() {
         assertEquals(
             TextBox(text = "Hi!", cursor = 3),
-            TextBox(text = "Hi!", cursor = 3).reduce(UiUserInput.Delete)
+            TextBox(text = "Hi!", cursor = 3).reduce(UiUserInput.Delete),
         )
     }
 
@@ -112,7 +112,7 @@ class TextBoxTest {
     fun `delete removes last character when cursor is before last`() {
         assertEquals(
             TextBox(text = "Hi", cursor = 2),
-            TextBox(text = "Hi!", cursor = 2).reduce(UiUserInput.Delete)
+            TextBox(text = "Hi!", cursor = 2).reduce(UiUserInput.Delete),
         )
     }
 
@@ -120,7 +120,7 @@ class TextBoxTest {
     fun `delete removes first character when cursor is at beginning`() {
         assertEquals(
             TextBox(text = "i!", cursor = 0),
-            TextBox(text = "Hi!", cursor = 0).reduce(UiUserInput.Delete)
+            TextBox(text = "Hi!", cursor = 0).reduce(UiUserInput.Delete),
         )
     }
 }

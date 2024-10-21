@@ -15,13 +15,13 @@ sealed interface UiUserInput {
     data class Char(val char: kotlin.Char) : UiUserInput
 
     object Return : UiUserInput {
-        const val code: Int = 13
+        const val CODE: Int = 13
 
         override fun toString(): String = "Return"
     }
 
     object Backspace : UiUserInput {
-        const val code: Int = 127
+        const val CODE: Int = 127
 
         override fun toString(): String = "Backspace"
     }
@@ -35,13 +35,13 @@ sealed interface UiUserInput {
     }
 
     object Escape : UiUserInput {
-        const val code: Int = 27
+        const val CODE: Int = 27
 
         override fun toString(): String = "Escape"
     }
 
     object Tab : UiUserInput {
-        const val code: Int = 9
+        const val CODE: Int = 9
 
         override fun toString(): String = "Tab"
     }
@@ -79,10 +79,10 @@ internal fun readUserInput(reader: NonBlockingReader): UiUserInput {
     val code = reader.read()
 
     when (code) {
-        UiUserInput.Return.code -> return UiUserInput.Return
-        UiUserInput.Escape.code -> return readEscape(reader)
-        UiUserInput.Backspace.code -> return UiUserInput.Backspace
-        UiUserInput.Tab.code -> return UiUserInput.Tab
+        UiUserInput.Return.CODE -> return UiUserInput.Return
+        UiUserInput.Escape.CODE -> return readEscape(reader)
+        UiUserInput.Backspace.CODE -> return UiUserInput.Backspace
+        UiUserInput.Tab.CODE -> return UiUserInput.Tab
         NonBlockingReader.EOF -> return UiUserInput.EndOfInput
     }
 
@@ -108,25 +108,26 @@ private fun readEscape(reader: NonBlockingReader): UiUserInput {
                 '3' -> {
                     when (val subIndicator = reader.read().toChar()) {
                         '~' -> UiUserInput.Delete
-                        else -> UiUserInput.Unknown.of(
-                            UiUserInput.Escape.code,
-                            escaped.code,
-                            indicator,
-                            subIndicator.code
-                        )
+                        else ->
+                            UiUserInput.Unknown.of(
+                                UiUserInput.Escape.CODE,
+                                escaped.code,
+                                indicator,
+                                subIndicator.code,
+                            )
                     }
                 }
 
                 'Z' -> UiUserInput.Shift.Tab
 
-                else -> UiUserInput.Unknown.of(UiUserInput.Escape.code, escaped.code, indicator)
+                else -> UiUserInput.Unknown.of(UiUserInput.Escape.CODE, escaped.code, indicator)
             }
         }
 
         '~' -> UiUserInput.Delete
         NonBlockingReader.READ_EXPIRED.toChar() -> UiUserInput.Escape
         NonBlockingReader.EOF.toChar() -> UiUserInput.EndOfInput
-        else -> UiUserInput.Unknown.of(UiUserInput.Escape.code, escaped.code)
+        else -> UiUserInput.Unknown.of(UiUserInput.Escape.CODE, escaped.code)
     }
 }
 

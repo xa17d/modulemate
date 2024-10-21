@@ -6,7 +6,7 @@ import at.xa1.modulemate.module.filter.ModulesFilter
 import java.io.File
 
 class Modules(
-    private val scanner: ModulesScanner
+    private val scanner: ModulesScanner,
 ) {
     private val mActiveModules = mutableSetOf<Module>()
     private val mRecentModules = mutableListOf<Module>()
@@ -19,6 +19,7 @@ class Modules(
         get() = mActiveModules
 
     fun isActive(module: Module) = activeModules.contains(module)
+
     fun activate(module: Module) {
         if (!isActive(module)) {
             mActiveModules.add(module)

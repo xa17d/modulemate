@@ -19,14 +19,15 @@ class SearchListScreen<T>(
     emoji: String,
     hint: String,
     private val listProvider: (filter: String) -> List<T>,
-    listItemRenderer: ListItemRenderer<T>
+    listItemRenderer: ListItemRenderer<T>,
 ) : Screen<SearchListScreenState<T>>(
-    initialState = SearchListScreenState(
-        searchBox = TextBox(hint = hint, emoji = emoji),
-        listBox = ListBox(items = listProvider(""), height = 0, itemRenderer = listItemRenderer)
-    ),
-    printer = SearchListScreenPrinter()
-) {
+        initialState =
+            SearchListScreenState(
+                searchBox = TextBox(hint = hint, emoji = emoji),
+                listBox = ListBox(items = listProvider(""), height = 0, itemRenderer = listItemRenderer),
+            ),
+        printer = SearchListScreenPrinter(),
+    ) {
     fun input(input: UiUserInput) {
         update { old -> old.reduce(input, listProvider) }
     }
@@ -46,7 +47,10 @@ class SearchListScreen<T>(
         context.flush()
     }
 
-    fun printOnlyTextBox(ui: Ui, hintOverride: String? = null) {
+    fun printOnlyTextBox(
+        ui: Ui,
+        hintOverride: String? = null,
+    ) {
         val context = ui.createScreenContext()
 
         val textBox = state.searchBox.copy(hint = hintOverride ?: state.searchBox.hint)
@@ -61,11 +65,14 @@ class SearchListScreen<T>(
 
 data class SearchListScreenState<T>(
     val searchBox: TextBox,
-    val listBox: ListBox<T>
+    val listBox: ListBox<T>,
 )
 
 class SearchListScreenPrinter<T> : ScreenPrinter<SearchListScreenState<T>> {
-    override fun print(context: ScreenContext, state: SearchListScreenState<T>) = context.printScreen {
+    override fun print(
+        context: ScreenContext,
+        state: SearchListScreenState<T>,
+    ) = context.printScreen {
         print(state.searchBox, size.columns)
 
         print(state.listBox)
@@ -77,7 +84,7 @@ class SearchListScreenPrinter<T> : ScreenPrinter<SearchListScreenState<T>> {
 
 fun <T> SearchListScreenState<T>.reduce(
     input: UiUserInput,
-    listProvider: (filter: String) -> List<T>
+    listProvider: (filter: String) -> List<T>,
 ): SearchListScreenState<T> {
     return when (input) {
         UiUserInput.Arrow.Down -> copy(listBox = listBox.moveDown())
