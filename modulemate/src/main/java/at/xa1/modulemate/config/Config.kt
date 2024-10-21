@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Config(
     val version: String,
+    val variables: VariablesConfig = VariablesConfig(),
     val module: ModuleConfig = ModuleConfig(),
     val commands: List<Command> = emptyList()
 )
@@ -15,6 +16,17 @@ data class Config(
 @Serializable
 data class ModuleConfig(
     val classification: ModuleClassificationConfig? = null
+)
+
+@Serializable
+data class VariablesConfig(
+    val gitHostSubstitutions: List<GitHostSubstitutionConfig> = emptyList()
+)
+
+@Serializable
+data class GitHostSubstitutionConfig(
+    val value: String,
+    val replacement: String
 )
 
 @Serializable

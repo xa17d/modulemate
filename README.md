@@ -128,7 +128,8 @@ Opens the default browser to a specified URL.
 }
 ```
 
-- `url`: The url to open. You may use variables.
+- `url`: The url to open. You may use variables.<br>
+  **Tipp:** Prefer `GIT_HOST_SUBSTITUTED` over `GIT_HOST` for URLs, because some people may apply [Git-Host-Substitutions](https://github.com/xa17d/modulemate/pull/2#issue-2601844915).
 
 #### Gradle
 
