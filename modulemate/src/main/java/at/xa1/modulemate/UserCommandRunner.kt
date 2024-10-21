@@ -21,22 +21,26 @@ internal class UserCommandRunner(
     private val repository: GitRepository,
     private val modules: Modules,
     private val variables: CachedVariables,
-    private val commandList: CommandList
+    private val commandList: CommandList,
 ) {
-    fun run(command: Command, args: List<String> = emptyList()): Result {
-        val extendedVariables = VariableSet(variables).apply {
-            args.forEachIndexed { index, argsValue ->
-                add(Variable(DefaultVariables.COMMAND_ARG(index)) { argsValue })
-            }
-            add(
-                Variable(DefaultVariables.CONFIG_FOLDER) {
-                    when (val source = command.source) {
-                        Source.BuiltIn -> error("Only available for commands defined in config files.")
-                        is Source.ConfigFile -> source.file.parentFile.absolutePath
-                    }
+    fun run(
+        command: Command,
+        args: List<String> = emptyList(),
+    ): Result {
+        val extendedVariables =
+            VariableSet(variables).apply {
+                args.forEachIndexed { index, argsValue ->
+                    add(Variable(DefaultVariables.getCommandArgVariableName(index)) { argsValue })
                 }
-            )
-        }
+                add(
+                    Variable(DefaultVariables.CONFIG_FOLDER) {
+                        when (val source = command.source) {
+                            Source.BuiltIn -> error("Only available for commands defined in config files.")
+                            is Source.ConfigFile -> source.file.parentFile.absolutePath
+                        }
+                    },
+                )
+            }
 
         runCommand(command, CommandContext(repository, modules, extendedVariables))
         variables.clearCache()
@@ -57,7 +61,7 @@ internal class UserCommandRunner(
                 if (filterApplied) {
                     Cli.line(
                         "Couldn't find command: ${CliFormat.UNDERLINE}$firstToken${CliFormat.RESET}, " +
-                            "therefore applied as filter."
+                            "therefore applied as filter.",
                     )
 
                     return Result.FilterApplied
@@ -67,7 +71,10 @@ internal class UserCommandRunner(
         }
     }
 
-    private fun runCommand(command: Command, context: CommandContext) {
+    private fun runCommand(
+        command: Command,
+        context: CommandContext,
+    ) {
         Cli.heading("${CliEmoji.PLAY_BUTTON} ${command.name}", formatting = CliFormat.BACKGROUND_BRIGHT_BLUE)
         val result = command.run(context)
         when (result) {
@@ -81,7 +88,9 @@ internal class UserCommandRunner(
 
     sealed class Result {
         data class InputInvalid(val invalidCommand: String) : Result()
+
         object CommandRun : Result()
+
         object FilterApplied : Result()
     }
 }

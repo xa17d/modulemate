@@ -12,20 +12,21 @@ import at.xa1.modulemate.ui.UiUserInput
 internal class CommandModeCoordinator(
     private val ui: Ui,
     private val commandList: CommandList,
-    private val commandRunner: UserCommandRunner
+    private val commandRunner: UserCommandRunner,
 ) : ModeCoordinator {
-    private val screen = SearchListScreen(
-        emoji = CliEmoji.JOYSTICK.toString(),
-        hint = "Command Mode: Search and execute commands",
-        listProvider = { filter -> commandList.search(filter) },
-        listItemRenderer = { item, isSelected ->
-            if (isSelected) {
-                " " + item.shortcuts.joinToString { " $it " } + " " + item.name
-            } else {
-                " " + item.shortcuts.joinToString { formatKey(it) } + " " + item.name
-            }
-        }
-    )
+    private val screen =
+        SearchListScreen(
+            emoji = CliEmoji.JOYSTICK.toString(),
+            hint = "Command Mode: Search and execute commands",
+            listProvider = { filter -> commandList.search(filter) },
+            listItemRenderer = { item, isSelected ->
+                if (isSelected) {
+                    " " + item.shortcuts.joinToString { " $it " } + " " + item.name
+                } else {
+                    " " + item.shortcuts.joinToString { formatKey(it) } + " " + item.name
+                }
+            },
+        )
 
     override fun run(): UiUserInput {
         screen.print(ui)

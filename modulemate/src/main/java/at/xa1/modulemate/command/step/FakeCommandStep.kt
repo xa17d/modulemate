@@ -4,10 +4,10 @@ import at.xa1.modulemate.command.CommandContext
 import at.xa1.modulemate.command.CommandResult
 
 class FakeCommandStep(
-    private val runResult: CommandResult
+    private val runResult: CommandResult,
 ) : CommandStep {
-
     var didRun: Boolean = false
+
     override fun run(context: CommandContext): CommandResult {
         didRun = true
         return runResult

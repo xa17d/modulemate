@@ -5,10 +5,10 @@ import org.jline.terminal.Size
 import org.jline.terminal.Terminal
 
 class ScreenContext(terminal: Terminal) {
-
     private val writer = terminal.writer()
 
     val size: Size = terminal.size
+
     fun resetCursor() {
         print(CliFormat.cursorLeft(size.columns) + CliFormat.cursorUp(size.rows))
     }
@@ -26,7 +26,10 @@ class ScreenContext(terminal: Terminal) {
         writer.flush()
     }
 
-    inline fun printScreen(clear: Boolean = true, block: ScreenContext.() -> Unit) {
+    inline fun printScreen(
+        clear: Boolean = true,
+        block: ScreenContext.() -> Unit,
+    ) {
         if (clear) {
             this.clear()
         }

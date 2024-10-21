@@ -13,7 +13,6 @@ import at.xa1.modulemate.module.filter.findModulesByFiles
 import java.time.ZonedDateTime
 
 class ConflictAnalysis : CommandStep {
-
     override fun run(context: CommandContext): CommandResult {
         val repository = context.repository
 
@@ -52,7 +51,7 @@ class ConflictAnalysis : CommandStep {
                 .forEach { branch ->
                     Cli.line(
                         "  on $BLUE${branch.ref}$RESET" +
-                            " by $WHITE${branch.authors.joinToString(separator = ", ")}$RESET"
+                            " by $WHITE${branch.authors.joinToString(separator = ", ")}$RESET",
                     )
                 }
         }
@@ -62,11 +61,11 @@ class ConflictAnalysis : CommandStep {
 
     data class ModuleConflicts(
         val module: Module,
-        val branches: MutableList<ModuleChangeBranch>
+        val branches: MutableList<ModuleChangeBranch>,
     )
 
     data class ModuleChangeBranch(
         val ref: String,
-        val authors: Set<String>
+        val authors: Set<String>,
     )
 }

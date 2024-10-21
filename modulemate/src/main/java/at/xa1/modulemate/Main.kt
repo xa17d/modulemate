@@ -39,21 +39,25 @@ fun main(args: Array<String>) {
     val shell = RuntimeShell(folder)
     val repository = GitRepository(shell, folder)
 
-    val repositoryRoot = try {
-        repository.getRepositoryRoot()
-    } catch (e: IllegalStateException) {
-        errorNoGitRepository(folder)
-        return
-    }
+    val repositoryRoot =
+        try {
+            repository.getRepositoryRoot()
+        } catch (e: IllegalStateException) {
+            errorNoGitRepository(folder)
+            return
+        }
 
     modulemate(repository, repositoryRoot, shell, cliArgs)
 }
 
-private fun header(repoName: String, branch: String) {
+private fun header(
+    repoName: String,
+    branch: String,
+) {
     Cli.heading(
         "${CliEmoji.TOOLBOX} modulemate v${Modulemate.VERSION} " +
             "〉$repoName 〉$branch",
-        formatting = "$BOLD$BACKGROUND_RED"
+        formatting = "$BOLD$BACKGROUND_RED",
     )
 }
 
@@ -61,7 +65,7 @@ private fun modulemate(
     repository: GitRepository,
     repositoryRoot: File,
     shell: RuntimeShell,
-    cliArgs: CliArgs
+    cliArgs: CliArgs,
 ) {
     val prefixFilter = cliArgs.getValueOrNull("--prefixFilter")
     val debugMode = cliArgs.getBooleanOrNull("--debug") ?: false
@@ -71,20 +75,22 @@ private fun modulemate(
 
     val configList = ConfigResolver(repositoryRoot).getConfigs()
     val configMerger = ConfigMerger(configList)
-    val modules = Modules(
-        scanner = RepositoryModulesScanner(configMerger.getModuleClassification(), repositoryRoot)
-    )
+    val modules =
+        Modules(
+            scanner = RepositoryModulesScanner(configMerger.getModuleClassification(), repositoryRoot),
+        )
     if (prefixFilter != null) {
         modules.applyFilter(PathPrefixFilter(prefixFilter))
     }
     val browser = ShellOpenBrowser(shell)
     val defaultVariables = DefaultVariables.create(repository, modules, configMerger.getVariablesConfig())
     val variables = CachedVariables(defaultVariables)
-    val commandList = createCommandList(
-        configMerger.getCommandsWithSource(),
-        browser,
-        printingShell
-    )
+    val commandList =
+        createCommandList(
+            configMerger.getCommandsWithSource(),
+            browser,
+            printingShell,
+        )
 
     val ui by lazy { // only initialize when interactive prompt mode is actually entered.
         val ui = Ui.init()
@@ -97,8 +103,8 @@ private fun modulemate(
             Help.SHORTCUTS,
             "Help",
             listOf(CommandStepConfig(StepSuccessCondition.PREVIOUS_SUCCESS, Help(commandList))),
-            Source.BuiltIn
-        )
+            Source.BuiltIn,
+        ),
     )
 
     if (debugMode) {
@@ -107,38 +113,40 @@ private fun modulemate(
                 KeyTest.SHORTCUTS,
                 "Debug and Test Input Keys",
                 listOf(CommandStepConfig(StepSuccessCondition.PREVIOUS_SUCCESS, KeyTest { ui })),
-                Source.BuiltIn
-            )
+                Source.BuiltIn,
+            ),
         )
     }
 
-    val commandRunner = UserCommandRunner(
-        repository = repository,
-        modules = modules,
-        variables = variables,
-        commandList = commandList
-    )
+    val commandRunner =
+        UserCommandRunner(
+            repository = repository,
+            modules = modules,
+            variables = variables,
+            commandList = commandList,
+        )
 
     try {
         val filterBeforeCommand = modules.filter
 
-        val promptMode = when (val result = commandRunner.run(cliArgs)) {
-            UserCommandRunner.Result.CommandRun ->
-                modules.filter != filterBeforeCommand // enter prompt mode when filter changed.
+        val promptMode =
+            when (val result = commandRunner.run(cliArgs)) {
+                UserCommandRunner.Result.CommandRun ->
+                    modules.filter != filterBeforeCommand // enter prompt mode when filter changed.
 
-            is UserCommandRunner.Result.InputInvalid -> {
-                val empty = result.invalidCommand.isEmpty()
-                if (!empty) {
-                    Cli.heading(
-                        "${CliEmoji.WARNING_SIGN} Command unknown: ${result.invalidCommand}",
-                        formatting = CliFormat.BACKGROUND_YELLOW
-                    )
+                is UserCommandRunner.Result.InputInvalid -> {
+                    val empty = result.invalidCommand.isEmpty()
+                    if (!empty) {
+                        Cli.heading(
+                            "${CliEmoji.WARNING_SIGN} Command unknown: ${result.invalidCommand}",
+                            formatting = CliFormat.BACKGROUND_YELLOW,
+                        )
+                    }
+                    empty
                 }
-                empty
-            }
 
-            UserCommandRunner.Result.FilterApplied -> true
-        }
+                UserCommandRunner.Result.FilterApplied -> true
+            }
 
         if (promptMode) {
             LiveModeRootCoordinator(ui, modules, commandList, commandRunner).run()
@@ -154,7 +162,7 @@ private fun errorNoGitRepository(folder: File) {
     Cli.line(
         "Folder is not within a git repository. " +
             "modulemate requires a git repository. " +
-            "Please navigate to a git repository and try again."
+            "Please navigate to a git repository and try again.",
     )
     Cli.line("current folder: $YELLOW${folder.canonicalFile.absolutePath}$RESET")
 }

@@ -1,7 +1,7 @@
 package at.xa1.modulemate.command.variable
 
 class VariableSet(
-    private val parent: Variables? = null
+    private val parent: Variables? = null,
 ) : Variables {
     private val variables = mutableMapOf<String, Variable>()
 

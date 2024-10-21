@@ -5,15 +5,18 @@ import kotlin.test.assertEquals
 import kotlin.test.fail
 
 class FakeShell : Shell {
-
     var failOnUnexpectedCommand: Boolean = true
     private val expectedCommands = mutableListOf<Pair<List<String>, ShellResult>>()
     val actualCommands: MutableList<List<String>> = mutableListOf<List<String>>()
+
     override fun folder(folder: File): FakeShell {
         return this
     }
 
-    fun whenRun(vararg command: String, result: ShellResult) {
+    fun whenRun(
+        vararg command: String,
+        result: ShellResult,
+    ) {
         expectedCommands.add(command.toList() to result)
     }
 

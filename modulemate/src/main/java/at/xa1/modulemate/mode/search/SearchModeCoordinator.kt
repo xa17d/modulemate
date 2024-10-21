@@ -10,27 +10,29 @@ import at.xa1.modulemate.ui.UiUserInput
 
 internal class SearchModeCoordinator(
     private val ui: Ui,
-    private val modules: Modules
+    private val modules: Modules,
 ) : ModeCoordinator {
-    private val screen = SearchListScreen(
-        emoji = CliEmoji.MAGNIFYING_GLASS.toString(),
-        hint = "Search Mode: Type to search modules",
-        listProvider = { filter ->
-            val filterTokens = filter.split(' ')
-            modules.allModules.filter { module ->
-                filterTokens.all { token -> module.path.contains(token) }
-            }
-        },
-        listItemRenderer = ModulesListItemRenderer(modules)
-    )
+    private val screen =
+        SearchListScreen(
+            emoji = CliEmoji.MAGNIFYING_GLASS.toString(),
+            hint = "Search Mode: Type to search modules",
+            listProvider = { filter ->
+                val filterTokens = filter.split(' ')
+                modules.allModules.filter { module ->
+                    filterTokens.all { token -> module.path.contains(token) }
+                }
+            },
+            listItemRenderer = ModulesListItemRenderer(modules),
+        )
 
     fun setSearchText(searchText: String) {
         screen.update { old ->
             old.copy(
-                searchBox = old.searchBox.copy(
-                    text = searchText,
-                    cursor = searchText.length
-                )
+                searchBox =
+                    old.searchBox.copy(
+                        text = searchText,
+                        cursor = searchText.length,
+                    ),
             )
         }
     }

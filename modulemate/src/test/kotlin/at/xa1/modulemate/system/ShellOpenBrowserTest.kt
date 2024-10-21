@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class ShellOpenBrowserTest {
-
     private val fakeShell = FakeShell()
     private val instance = ShellOpenBrowser(fakeShell)
 

@@ -9,33 +9,38 @@ interface ModulesScanner {
 
 class RepositoryModulesScanner(
     config: ModuleClassificationConfig,
-    private val root: File
+    private val root: File,
 ) : ModulesScanner {
     private val javaLibraryRegex = Regex(config.kotlinLib)
     private val androidLibraryRegex = Regex(config.androidLib)
     private val androidAppRegex = Regex(config.androidApp)
+
     override fun scan(): List<Module> {
         val buildGradleFiles = mutableListOf<File>()
         scanFolderForBuildGradle(buildGradleFiles, root)
 
-        val modules = buildGradleFiles.map { buildGradleFile ->
-            val moduleFile = buildGradleFile.parentFile
-            val relativePath = moduleFile.toRelativeString(root)
-            val absolutePath = moduleFile.absolutePath
-            val path = ":" + relativePath.replace("/", ":")
+        val modules =
+            buildGradleFiles.map { buildGradleFile ->
+                val moduleFile = buildGradleFile.parentFile
+                val relativePath = moduleFile.toRelativeString(root)
+                val absolutePath = moduleFile.absolutePath
+                val path = ":" + relativePath.replace("/", ":")
 
-            Module(
-                path = path,
-                relativePath = relativePath,
-                absolutePath = absolutePath,
-                type = getType(buildGradleFile.readText())
-            )
-        }
+                Module(
+                    path = path,
+                    relativePath = relativePath,
+                    absolutePath = absolutePath,
+                    type = getType(buildGradleFile.readText()),
+                )
+            }
 
         return modules
     }
 
-    private fun scanFolderForBuildGradle(result: MutableList<File>, folder: File) {
+    private fun scanFolderForBuildGradle(
+        result: MutableList<File>,
+        folder: File,
+    ) {
         if (folder.name in setOf("build", "src", ".git")) return // skip for performance
 
         (folder.listFiles() ?: emptyArray())

@@ -6,7 +6,10 @@ interface Variables {
     fun getAll(): List<Variable>
 }
 
-fun Variables.replacePlaceholders(patternString: String, encoder: VariableEncoder = NopVariableEncoder): String {
+fun Variables.replacePlaceholders(
+    patternString: String,
+    encoder: VariableEncoder = NopVariableEncoder,
+): String {
     return patternString.replace(Regex("\\{([^\\}]+)\\}")) { matchResult ->
         val variableName = matchResult.groupValues[1]
         val value = get(variableName)
@@ -26,7 +29,7 @@ object NopVariableEncoder : VariableEncoder {
 
 class Variable(
     val name: String,
-    private val value: () -> String
+    private val value: () -> String,
 ) {
     fun getValue(): String = value()
 }

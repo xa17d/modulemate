@@ -20,44 +20,46 @@ import at.xa1.modulemate.module.filter.PathPrefixFilter
 import at.xa1.modulemate.system.ShellOpenBrowser
 
 class CommandList {
-    private val _commands = mutableListOf<Command>()
+    private val commands = mutableListOf<Command>()
 
     val allCommands: List<Command>
-        get() = _commands
+        get() = commands
 
     fun add(command: Command) {
-        _commands.add(command)
+        commands.add(command)
     }
 
     fun addAll(command: Iterable<Command>) {
-        _commands.addAll(command)
+        commands.addAll(command)
     }
 
     fun getOrNull(shortcut: String): Command? {
-        return _commands.find { it.shortcuts.contains(shortcut) }
+        return commands.find { it.shortcuts.contains(shortcut) }
     }
 }
 
 internal fun createCommandList(
     commandConfigs: List<CommandSource>,
     browser: ShellOpenBrowser,
-    shell: at.xa1.modulemate.system.Shell
+    shell: at.xa1.modulemate.system.Shell,
 ): CommandList {
-    val commandList = commandConfigs.map { commandSource ->
-        val command = commandSource.command
+    val commandList =
+        commandConfigs.map { commandSource ->
+            val command = commandSource.command
 
-        Command(
-            shortcuts = command.shortcuts,
-            name = command.name,
-            stepConfigs = command.steps.map { step ->
-                CommandStepConfig(
-                    successCondition = step.runWhen.toSuccessCondition(),
-                    step = createCommandStep(step, browser, shell)
-                )
-            },
-            source = commandSource.source
-        )
-    }
+            Command(
+                shortcuts = command.shortcuts,
+                name = command.name,
+                stepConfigs =
+                    command.steps.map { step ->
+                        CommandStepConfig(
+                            successCondition = step.runWhen.toSuccessCondition(),
+                            step = createCommandStep(step, browser, shell),
+                        )
+                    },
+                source = commandSource.source,
+            )
+        }
 
     return CommandList().apply {
         addAll(commandList)
@@ -67,39 +69,46 @@ internal fun createCommandList(
 private fun createCommandStep(
     step: CommandStep,
     browser: ShellOpenBrowser,
-    shell: at.xa1.modulemate.system.Shell
+    shell: at.xa1.modulemate.system.Shell,
 ) = when (step) {
-    is CommandStep.Browser -> Browser(
-        browser = browser,
-        urlPattern = step.url
-    )
+    is CommandStep.Browser ->
+        Browser(
+            browser = browser,
+            urlPattern = step.url,
+        )
 
-    is CommandStep.Gradle -> Gradle(
-        shell = shell,
-        richConsole = step.richConsole,
-        kotlinLibFlags = step.flags.getForKotlinLib(),
-        androidLibFlags = step.flags.getForAndroidLib(),
-        androidAppFlags = step.flags.getForAndroidApp(),
-        kotlinLibTasks = step.tasks.getForKotlinLib(),
-        androidLibTasks = step.tasks.getForAndroidLib(),
-        androidAppTasks = step.tasks.getForAndroidApp()
-    )
+    is CommandStep.Gradle ->
+        Gradle(
+            shell = shell,
+            richConsole = step.richConsole,
+            kotlinLibFlags = step.flags.getForKotlinLib(),
+            androidLibFlags = step.flags.getForAndroidLib(),
+            androidAppFlags = step.flags.getForAndroidApp(),
+            kotlinLibTasks = step.tasks.getForKotlinLib(),
+            androidLibTasks = step.tasks.getForAndroidLib(),
+            androidAppTasks = step.tasks.getForAndroidApp(),
+        )
 
-    is CommandStep.Shell -> at.xa1.modulemate.command.step.Shell(
-        mode = step.mode.toShellMode(),
-        shell = shell,
-        command = step.command
-    )
+    is CommandStep.Shell ->
+        at.xa1.modulemate.command.step.Shell(
+            mode = step.mode.toShellMode(),
+            shell = shell,
+            command = step.command,
+        )
 
-    is CommandStep.Report -> Report(
-        shell = shell,
-        pathKotlinLib = step.path.getForKotlinLib().singleOrNull()
-            ?: error("pathKotlinLib is not unique"),
-        pathAndroidLib = step.path.getForAndroidLib().singleOrNull()
-            ?: error("pathAndroidLib is not unique"),
-        pathAndroidApp = step.path.getForAndroidApp().singleOrNull()
-            ?: error("pathAndroidApp is not unique")
-    )
+    is CommandStep.Report ->
+        Report(
+            shell = shell,
+            pathKotlinLib =
+                step.path.getForKotlinLib().singleOrNull()
+                    ?: error("pathKotlinLib is not unique"),
+            pathAndroidLib =
+                step.path.getForAndroidLib().singleOrNull()
+                    ?: error("pathAndroidLib is not unique"),
+            pathAndroidApp =
+                step.path.getForAndroidApp().singleOrNull()
+                    ?: error("pathAndroidApp is not unique"),
+        )
 
     is CommandStep.FilterChangedModules ->
         ChangeFilter { context -> ChangedModulesFilter(context.repository) }

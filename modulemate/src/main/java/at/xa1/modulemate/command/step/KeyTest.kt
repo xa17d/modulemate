@@ -5,7 +5,7 @@ import at.xa1.modulemate.command.CommandResult
 import at.xa1.modulemate.ui.Ui
 
 class KeyTest(
-    private val getUi: () -> Ui
+    private val getUi: () -> Ui,
 ) : CommandStep {
     override fun run(context: CommandContext): CommandResult {
         val ui = getUi()

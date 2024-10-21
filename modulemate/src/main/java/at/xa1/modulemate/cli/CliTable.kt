@@ -3,9 +3,9 @@ package at.xa1.modulemate.cli
 import kotlin.math.max
 
 class CliTable {
-
     private var columnWidth = emptyArray<Int>()
     private val rows = mutableListOf<List<Any>>()
+
     fun row(vararg columns: Any) {
         require(columns.isNotEmpty())
 
@@ -19,10 +19,11 @@ class CliTable {
 
         columns.forEachIndexed { index, value ->
 
-            val length = when (value) {
-                is FormattedCell -> value.content.length
-                else -> value.toString().length
-            }
+            val length =
+                when (value) {
+                    is FormattedCell -> value.content.length
+                    else -> value.toString().length
+                }
 
             columnWidth[index] = max(columnWidth[index], length)
         }
@@ -30,42 +31,44 @@ class CliTable {
         rows.add(columns.toList())
     }
 
-    override fun toString(): String = buildString {
-        rows.forEachIndexed { _, row ->
-            row.forEachIndexed { columnIndex, cellValue ->
-                val columnFormat = if (columnIndex == 0) {
-                    CliFormat.BOLD
-                } else {
-                    ""
-                }
+    override fun toString(): String =
+        buildString {
+            rows.forEachIndexed { _, row ->
+                row.forEachIndexed { columnIndex, cellValue ->
+                    val columnFormat =
+                        if (columnIndex == 0) {
+                            CliFormat.BOLD
+                        } else {
+                            ""
+                        }
 
-                val content: String
-                val formatting: String
+                    val content: String
+                    val formatting: String
 
-                when (cellValue) {
-                    is FormattedCell -> {
-                        content = cellValue.content
-                        formatting = cellValue.formatting
+                    when (cellValue) {
+                        is FormattedCell -> {
+                            content = cellValue.content
+                            formatting = cellValue.formatting
+                        }
+
+                        else -> {
+                            content = cellValue.toString()
+                            formatting = ""
+                        }
                     }
 
-                    else -> {
-                        content = cellValue.toString()
-                        formatting = ""
-                    }
+                    val maxLength = columnWidth[columnIndex]
+                    val cell = " $columnFormat$formatting${content.padEnd(maxLength)} "
+
+                    append(cell)
+                    append(CliFormat.RESET)
                 }
-
-                val maxLength = columnWidth[columnIndex]
-                val cell = " $columnFormat$formatting${content.padEnd(maxLength)} "
-
-                append(cell)
-                append(CliFormat.RESET)
+                appendLine()
             }
-            appendLine()
         }
-    }
 
     data class FormattedCell(
         val content: String,
-        val formatting: String
+        val formatting: String,
     )
 }

@@ -16,7 +16,7 @@ class Gradle(
     private val androidAppFlags: List<String>,
     private val kotlinLibTasks: List<String>,
     private val androidLibTasks: List<String>,
-    private val androidAppTasks: List<String>
+    private val androidAppTasks: List<String>,
 ) : CommandStep {
     override fun run(context: CommandContext): CommandResult {
         val modules = context.modules.activeModules
@@ -35,18 +35,20 @@ class Gradle(
             }
         }
 
-        val command = listOf("./gradlew") +
-            flags +
-            modules.flatMap { module ->
-                val tasks = when (module.type) {
-                    ModuleType.OTHER -> emptyList()
-                    ModuleType.KOTLIN_LIB -> kotlinLibTasks
-                    ModuleType.ANDROID_LIB -> androidLibTasks
-                    ModuleType.ANDROID_APP -> androidAppTasks
-                }
+        val command =
+            listOf("./gradlew") +
+                flags +
+                modules.flatMap { module ->
+                    val tasks =
+                        when (module.type) {
+                            ModuleType.OTHER -> emptyList()
+                            ModuleType.KOTLIN_LIB -> kotlinLibTasks
+                            ModuleType.ANDROID_LIB -> androidLibTasks
+                            ModuleType.ANDROID_APP -> androidAppTasks
+                        }
 
-                tasks.map { task -> module.path + ":" + task }
-            }
+                    tasks.map { task -> module.path + ":" + task }
+                }
 
         Cli.stepCommand(command.joinToString(separator = " "))
 

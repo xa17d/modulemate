@@ -9,14 +9,14 @@ object DefaultVariables {
     fun create(
         repository: GitRepository,
         modules: Modules,
-        variablesConfig: VariablesConfig
+        variablesConfig: VariablesConfig,
     ) = VariableSet().apply {
         add(Variable("GIT_OWNER") { repository.getRemoteOrigin().owner })
         add(Variable("GIT_HOST") { repository.getRemoteOrigin().host })
         add(
             Variable("GIT_HOST_SUBSTITUTED") {
                 getHostSubstituted(variablesConfig, repository.getRemoteOrigin().host)
-            }
+            },
         )
         add(Variable("GIT_REPOSITORY_NAME") { repository.getRemoteOrigin().repositoryName })
         add(Variable("GIT_BRANCH_NAME") { repository.getBranch() })
@@ -24,7 +24,7 @@ object DefaultVariables {
             Variable("JIRA_TICKET") {
                 Regex("[A-Z]+\\-[0-9]+").find(repository.getBranch())?.value
                     ?: error("Cannot identify ticket.")
-            }
+            },
         )
 
         add(Variable(ACTIVE_MODULE) { get(HOT_MODULE) }) // Deprecated TODO remove
@@ -34,20 +34,20 @@ object DefaultVariables {
             Variable(HOT_MODULE) {
                 val hotModule = modules.getHotModule()
                 hotModule.path
-            }
+            },
         )
 
         add(
             Variable(HOT_MODULE_FOLDER) {
                 val hotModule = modules.getByPath(get(HOT_MODULE))
                 hotModule.absolutePath
-            }
+            },
         )
 
         add(Variable("MODULEMATE_HOME") { Modulemate.home.absolutePath })
     }
 
-    fun COMMAND_ARG(index: Int): String = "COMMAND_ARG_$index"
+    fun getCommandArgVariableName(index: Int): String = "COMMAND_ARG_$index"
 
     const val ACTIVE_MODULE_FOLDER: String = "ACTIVE_MODULE_FOLDER" // Note: Deprecated
     const val ACTIVE_MODULE: String = "ACTIVE_MODULE" // Note: Deprecated

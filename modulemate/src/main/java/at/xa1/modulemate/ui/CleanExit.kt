@@ -14,7 +14,7 @@ class CleanExit {
             val context = ui.createScreenContext()
             context.print(
                 CliFormat.cursorDown(2) + CliFormat.cursorLeft(context.size.columns) +
-                    CliFormat.CLEAR_UNTIL_END_OF_SCREEN
+                    CliFormat.CLEAR_UNTIL_END_OF_SCREEN,
             )
             context.flush()
             context.print("${CliEmoji.WAVING_HAND} bye\n")

@@ -12,7 +12,6 @@ import java.time.Duration
 import java.time.ZonedDateTime
 
 class ActiveWork : CommandStep {
-
     override fun run(context: CommandContext): CommandResult {
         val repository = context.repository
         val limit = ZonedDateTime.now().minus(ACTIVE_TIME_SPAN)
@@ -39,7 +38,7 @@ class ActiveWork : CommandStep {
                         refName,
                         formatting = "$BOLD$BACKGROUND_BLUE",
                         addendum = " by $authorsString",
-                        addendumFormatting = "$WHITE$BACKGROUND_BLUE"
+                        addendumFormatting = "$WHITE$BACKGROUND_BLUE",
                     )
                     changedModules.forEach { module ->
                         Cli.line("  - " + formatModule(module))
